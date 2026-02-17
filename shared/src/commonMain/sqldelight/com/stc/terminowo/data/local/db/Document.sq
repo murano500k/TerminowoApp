@@ -1,0 +1,36 @@
+CREATE TABLE DocumentEntity (
+    id TEXT NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    imagePath TEXT NOT NULL,
+    thumbnailPath TEXT NOT NULL,
+    expiryDate TEXT,
+    rawOcrResponse TEXT,
+    confidence REAL,
+    reminderDays TEXT NOT NULL DEFAULT '90,30,7,1',
+    createdAt TEXT NOT NULL
+);
+
+getAllDocuments:
+SELECT *
+FROM DocumentEntity
+ORDER BY
+    CASE WHEN expiryDate IS NULL THEN 1 ELSE 0 END,
+    expiryDate ASC;
+
+getDocumentById:
+SELECT *
+FROM DocumentEntity
+WHERE id = ?;
+
+insertDocument:
+INSERT INTO DocumentEntity(id, name, imagePath, thumbnailPath, expiryDate, rawOcrResponse, confidence, reminderDays, createdAt)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+updateDocument:
+UPDATE DocumentEntity
+SET name = ?, expiryDate = ?, reminderDays = ?
+WHERE id = ?;
+
+deleteDocument:
+DELETE FROM DocumentEntity
+WHERE id = ?;

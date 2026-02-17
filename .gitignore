@@ -1,0 +1,19 @@
+*.iml
+.gradle
+.idea
+.DS_Store
+.cxx
+.externalNativeBuild
+.kotlin
+
+local.properties
+client_secret*.json
+*.jks
+*.apk
+*.aab
+
+# Build directories (all modules)
+build/
+**/build/
+
+/captures
