@@ -22,8 +22,7 @@ class TerminowoApp : Application() {
                         DocumentAiConfig(
                             projectId = BuildConfig.DOCUMENT_AI_PROJECT_ID,
                             location = BuildConfig.DOCUMENT_AI_LOCATION,
-                            processorId = BuildConfig.DOCUMENT_AI_PROCESSOR_ID,
-                            apiKey = BuildConfig.DOCUMENT_AI_API_KEY
+                            processorId = BuildConfig.DOCUMENT_AI_PROCESSOR_ID
                         )
                     }
                 }

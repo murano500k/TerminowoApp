@@ -54,7 +54,7 @@ val dataModule = module {
 
     single { DocumentAiMapper() }
 
-    single { DocumentAiService(get(), get()) }
+    single { DocumentAiService(get(), get(), get()) }
 
     single<DocumentRepository> { DocumentRepositoryImpl(get()) }
 

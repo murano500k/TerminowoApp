@@ -44,7 +44,7 @@ fun MainScreen(
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "Document Scanner",
+                        text = "Terminowo",
                         style = MaterialTheme.typography.titleLarge
                     )
                 }

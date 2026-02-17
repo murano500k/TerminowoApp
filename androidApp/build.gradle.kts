@@ -27,6 +27,7 @@ kotlin {
         androidMain.dependencies {
             implementation(project(":shared"))
             implementation(libs.androidx.activity.compose)
+            implementation(libs.google.play.services.auth)
 
             // Koin for Android
             implementation(project.dependencies.platform(libs.koin.bom))
@@ -51,7 +52,6 @@ android {
         buildConfigField("String", "DOCUMENT_AI_PROJECT_ID", "\"${localProperty("DOCUMENT_AI_PROJECT_ID")}\"")
         buildConfigField("String", "DOCUMENT_AI_LOCATION", "\"${localProperty("DOCUMENT_AI_LOCATION", "us")}\"")
         buildConfigField("String", "DOCUMENT_AI_PROCESSOR_ID", "\"${localProperty("DOCUMENT_AI_PROCESSOR_ID")}\"")
-        buildConfigField("String", "DOCUMENT_AI_API_KEY", "\"${localProperty("DOCUMENT_AI_API_KEY")}\"")
     }
 
     signingConfigs {

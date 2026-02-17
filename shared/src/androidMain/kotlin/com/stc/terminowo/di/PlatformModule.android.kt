@@ -1,6 +1,7 @@
 package com.stc.terminowo.di
 
 import com.stc.terminowo.data.local.DatabaseDriverFactory
+import com.stc.terminowo.platform.GoogleAuthProvider
 import com.stc.terminowo.platform.ImageStorage
 import com.stc.terminowo.platform.NotificationScheduler
 import com.stc.terminowo.platform.PlatformContext
@@ -13,4 +14,5 @@ actual fun platformModule(): Module = module {
     single { DatabaseDriverFactory(androidContext()) }
     single { ImageStorage(androidContext()) }
     single { NotificationScheduler(androidContext()) }
+    single { GoogleAuthProvider(androidContext()) }
 }
