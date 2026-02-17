@@ -25,6 +25,7 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.daysUntil
 import kotlinx.datetime.todayIn
+import kotlinx.datetime.Clock as DateTimeClock
 
 @Composable
 fun DocumentListItem(
@@ -32,8 +33,9 @@ fun DocumentListItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val today = kotlinx.datetime.Clock.System.todayIn(TimeZone.currentSystemDefault())
+    val today = DateTimeClock.System.todayIn(TimeZone.currentSystemDefault())
     val daysUntilExpiry = document.expiryDate?.let { today.daysUntil(it) }
+    val isExpired = daysUntilExpiry != null && daysUntilExpiry < 0
     val expiryColor = when {
         daysUntilExpiry == null -> MaterialTheme.colorScheme.onSurfaceVariant
         daysUntilExpiry < 0 -> MaterialTheme.colorScheme.error
@@ -47,7 +49,14 @@ fun DocumentListItem(
             .fillMaxWidth()
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        colors = if (isExpired) {
+            CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.errorContainer
+            )
+        } else {
+            CardDefaults.cardColors()
+        }
     ) {
         Row(
             modifier = Modifier.padding(16.dp),
