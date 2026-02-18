@@ -1,9 +1,11 @@
 package com.stc.terminowo.presentation.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -14,14 +16,23 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.stc.terminowo.domain.model.Document
 import com.stc.terminowo.domain.model.DocumentCategory
+import com.stc.terminowo.platform.ImageStorage
+import com.stc.terminowo.platform.decodeImageBitmap
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.daysUntil
@@ -29,6 +40,7 @@ import kotlinx.datetime.todayIn
 import kotlinx.datetime.Clock as DateTimeClock
 import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.koinInject
 import terminowo.shared.generated.resources.Res
 import terminowo.shared.generated.resources.expired_with_date
 import terminowo.shared.generated.resources.expires_in_days
@@ -43,6 +55,15 @@ fun DocumentListItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val imageStorage: ImageStorage = koinInject()
+    var thumbnailBitmap by remember { mutableStateOf<ImageBitmap?>(null) }
+
+    LaunchedEffect(document.thumbnailPath) {
+        thumbnailBitmap = document.thumbnailPath?.let { path ->
+            imageStorage.readImage(path)?.let { decodeImageBitmap(it) }
+        }
+    }
+
     val today = DateTimeClock.System.todayIn(TimeZone.currentSystemDefault())
     val daysUntilExpiry = document.expiryDate?.let { today.daysUntil(it) }
     val isExpired = daysUntilExpiry != null && daysUntilExpiry < 0
@@ -72,7 +93,7 @@ fun DocumentListItem(
             modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Thumbnail placeholder
+            // Thumbnail
             Card(
                 modifier = Modifier
                     .size(56.dp)
@@ -81,7 +102,14 @@ fun DocumentListItem(
                     containerColor = MaterialTheme.colorScheme.surfaceVariant
                 )
             ) {
-                // Thumbnail image would go here
+                thumbnailBitmap?.let { bitmap ->
+                    Image(
+                        bitmap = bitmap,
+                        contentDescription = document.name,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.width(16.dp))
