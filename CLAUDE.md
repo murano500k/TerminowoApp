@@ -17,6 +17,8 @@ Mobile app (Terminowo) that scans insurance documents, extracts expiry dates via
 ./run.sh                                               # Build + install + launch (checks for connected device)
 ```
 
+**Manual testing**: Always use `./run.sh` to deploy and test on a connected Android device. It builds, installs, and launches the app in one step.
+
 ## Tech Stack
 
 Kotlin Multiplatform (2.1.10) + Compose Multiplatform (1.7.3), Gradle 8.11.1, AGP 8.9.1, compileSdk 36, minSdk 26, JVM target 17. Key libraries: Ktor 3.1.1, SQLDelight 2.0.2, Koin BOM 4.0.2, CameraK 0.2.0, Navigation Compose 2.8.0-alpha10, kotlinx-datetime 0.6.2. Versions managed in `gradle/libs.versions.toml`.
@@ -26,13 +28,13 @@ Kotlin Multiplatform (2.1.10) + Compose Multiplatform (1.7.3), Gradle 8.11.1, AG
 Clean Architecture in two Gradle modules: `:shared` (KMP) and `:androidApp`. Package: `com.stc.terminowo`. Android app package: `com.stc.terminowo.android`.
 
 **Shared module layers** (`shared/src/commonMain/kotlin/com/stc/terminowo/`):
-- **domain/** — models (`Document`, `ScanResult`, `ReminderInterval`), repository interfaces, usecases (each single-responsibility: `ScanDocumentUseCase`, `GetDocumentsUseCase`, `SaveDocumentUseCase`, `UpdateDocumentUseCase`, `DeleteDocumentUseCase`, `ScheduleRemindersUseCase`)
+- **domain/** — models (`Document`, `ScanResult`, `ReminderInterval`, `DocumentCategory`), repository interfaces, usecases (each single-responsibility: `ScanDocumentUseCase`, `GetDocumentsUseCase`, `SaveDocumentUseCase`, `UpdateDocumentUseCase`, `DeleteDocumentUseCase`, `ScheduleRemindersUseCase`)
 - **data/** — repository implementations, SQLDelight `DatabaseDriverFactory` (expect/actual), Ktor-based `DocumentAiService` + DTOs + `DocumentAiMapper` for OCR response parsing
 - **presentation/** — Compose screens (main, camera, preview, detail), ViewModels, `NavGraph.kt` with `Screen` sealed interface using `@Serializable` routes, Material3 theme, reusable components
-- **platform/** — expect declarations for `ImageStorage`, `NotificationScheduler`, `PlatformContext`, `ImageDecoder`
+- **platform/** — expect declarations for `ImageStorage`, `NotificationScheduler`, `PlatformContext`, `ImageDecoder`, `GoogleAuthProvider`
 - **di/** — Koin modules split by layer: `DataModule`, `DomainModule`, `PresentationModule`, `PlatformModule` (expect/actual). All assembled in `AppModule.kt` as `appModules` list.
 
-**Platform actuals** (`shared/src/androidMain/`): SQLite driver, file-based image storage, AlarmManager + BroadcastReceiver notifications.
+**Platform actuals** (`shared/src/androidMain/`): SQLite driver, file-based image storage, AlarmManager + BroadcastReceiver notifications, Google Play Services OAuth2 (`GoogleAuthProvider`).
 
 **Android app module** (`androidApp/src/androidMain/`): `MainActivity`, `TerminowoApp` (Application class, initializes Koin), `ReminderReceiver` (BroadcastReceiver). Document AI credentials injected from `local.properties` via BuildConfig.
 
@@ -40,11 +42,15 @@ Clean Architecture in two Gradle modules: `:shared` (KMP) and `:androidApp`. Pac
 
 ## Database
 
-SQLDelight schema at `shared/src/commonMain/sqldelight/com/stc/terminowo/data/local/db/Document.sq`. Generated database class: `DocumentDatabase`. Dates stored as ISO 8601 text. Reminder days stored as CSV string (e.g., `"90,30,7,1"`).
+SQLDelight schema at `shared/src/commonMain/sqldelight/com/stc/terminowo/data/local/db/Document.sq`. Generated database class: `DocumentDatabase` (version 2, migration in `sqldelight/migrations/1.sqm`). Dates stored as ISO 8601 text. Reminder days stored as CSV string (e.g., `"90,30,7,1"`). Category stored as text key (e.g., `"insurance"`, `"other"`).
 
 ## Document AI OCR
 
-`DocumentAiMapper` date extraction priority: (1) structured `dateValue` fields, (2) ISO parse from `normalizedValue.text`, (3) regex on `mentionText` (DD/MM/YYYY, YYYY-MM-DD). Credentials in `local.properties`, injected via BuildConfig fields: `DOCUMENT_AI_PROJECT_ID`, `DOCUMENT_AI_LOCATION`, `DOCUMENT_AI_PROCESSOR_ID`, `DOCUMENT_AI_API_KEY`.
+`DocumentAiMapper` date extraction priority: (1) structured `dateValue` fields, (2) ISO parse from `normalizedValue.text`, (3) regex on `mentionText` (DD/MM/YYYY, YYYY-MM-DD). Auto-detects document category from OCR full text via multilingual keyword matching (PL, RU, UA, EN) with priority: technical_inspection > driver_license > insurance > agreement > payment. Authentication uses Google OAuth2 via `GoogleAuthProvider` (expect/actual) — on Android this uses Google Play Services Identity with `cloud-platform` scope. `MainActivity` wires an activity result launcher for OAuth2 consent via static properties on `GoogleAuthProvider`. Config in `local.properties`, injected via BuildConfig fields: `DOCUMENT_AI_PROJECT_ID`, `DOCUMENT_AI_LOCATION`, `DOCUMENT_AI_PROCESSOR_ID`.
+
+## Document Categories
+
+`DocumentCategory` enum (`shared/.../domain/model/DocumentCategory.kt`): `INSURANCE`, `PAYMENT`, `AGREEMENT`, `DRIVER_LICENSE`, `TECHNICAL_INSPECTION`, `OTHER`. Stored in DB as `category TEXT` column using the `key` field (e.g., `"insurance"`). Auto-detected by `DocumentAiMapper.extractCategory()` from OCR text. Users can override via dropdown on the detail screen. `OTHER` is the default and is hidden on the document list.
 
 ## Gotchas
 
@@ -54,7 +60,7 @@ SQLDelight schema at `shared/src/commonMain/sqldelight/com/stc/terminowo/data/lo
 - **CameraK requires compileSdk 36**: Transitively pulls `activity-compose:1.11.0`.
 - **iOS targets**: Configured in shared/build.gradle.kts but only compile on macOS (skipped on Linux).
 - **Alarmee removed**: Required Kotlin 2.2.20+. Notifications use native AlarmManager via expect/actual instead.
-- **ProGuard**: Release builds have minification enabled. Rules keep Ktor, kotlinx-serialization, and serializer classes (`androidApp/proguard-rules.pro`).
+- **ProGuard**: Release builds have minification enabled. Rules keep Ktor, kotlinx-serialization, and serializer classes (`androidApp/proguard-rules.pro`). **Bug**: ProGuard rules still reference `com.docscanner.**` instead of `com.stc.terminowo.**` — needs fixing before release builds work correctly.
 
 ## What's Not Done Yet
 

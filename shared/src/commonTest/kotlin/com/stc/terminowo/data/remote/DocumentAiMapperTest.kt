@@ -1,5 +1,6 @@
 package com.stc.terminowo.data.remote
 
+import com.stc.terminowo.domain.model.DocumentCategory
 import kotlinx.datetime.LocalDate
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -119,5 +120,29 @@ class DocumentAiMapperTest {
 
         val result = mapper.mapToScanResult(response, null)
         assertEquals("Health Insurance", result.extractedName)
+    }
+
+    @Test
+    fun `detects insurance category from Polish text`() {
+        val result = mapper.extractCategory("Polisa ubezpieczeniowa OC na samochód osobowy")
+        assertEquals(DocumentCategory.INSURANCE, result)
+    }
+
+    @Test
+    fun `detects driver_license category`() {
+        val result = mapper.extractCategory("Prawo jazdy kategorii B wydane dnia 01.05.2020")
+        assertEquals(DocumentCategory.DRIVER_LICENSE, result)
+    }
+
+    @Test
+    fun `returns null when no keywords match`() {
+        val result = mapper.extractCategory("Random text with no relevant keywords 12345")
+        assertNull(result)
+    }
+
+    @Test
+    fun `returns null when fullText is null`() {
+        val result = mapper.extractCategory(null)
+        assertNull(result)
     }
 }

@@ -1,0 +1,87 @@
+<resources>
+    <!-- App -->
+    <string name="app_title">Terminowo</string>
+
+    <!-- Main screen -->
+    <string name="scan_document">Skanuj dokument</string>
+    <string name="no_documents_yet">Brak dokument\u00F3w</string>
+    <string name="empty_state_hint">Naci\u015Bnij +, aby zeskanowa\u0107\npierwszy dokument</string>
+    <string name="delete_document_confirm_title">Usun\u0105\u0107 dokument?</string>
+    <string name="delete_document_confirm_message">Czy na pewno chcesz usun\u0105\u0107 \"%1$s\"? Tej operacji nie mo\u017Cna cofn\u0105\u0107.</string>
+    <string name="delete">Usu\u0144</string>
+    <string name="cancel">Anuluj</string>
+
+    <!-- Detail screen -->
+    <string name="new_document">Nowy dokument</string>
+    <string name="document_details">Szczeg\u00F3\u0142y dokumentu</string>
+    <string name="back">Wstecz</string>
+    <string name="document_name">Nazwa dokumentu</string>
+    <string name="category">Kategoria</string>
+    <string name="expiry_date_format">Data wa\u017Cno\u015Bci (RRRR-MM-DD)</string>
+    <string name="ocr_confidence">Pewno\u015B\u0107 OCR: %1$d%%</string>
+    <string name="reminders">Przypomnienia</string>
+    <string name="save_document">Zapisz dokument</string>
+    <string name="update_document">Aktualizuj dokument</string>
+    <string name="delete_document">Usu\u0144 dokument</string>
+
+    <!-- Camera screen -->
+    <string name="camera_permission_required">Wymagane uprawnienie do kamery, aby skanowa\u0107 dokumenty.</string>
+    <string name="go_back">Wr\u00F3\u0107</string>
+    <string name="failed_read_captured_image">Nie uda\u0142o si\u0119 odczyta\u0107 zdj\u0119cia</string>
+    <string name="capture_failed">B\u0142\u0105d przechwytywania</string>
+    <string name="scan">Skanuj</string>
+
+    <!-- Image preview screen -->
+    <string name="review_image">Przegl\u0105d zdj\u0119cia</string>
+    <string name="captured_document">Zeskanowany dokument</string>
+    <string name="failed_load_image">Nie uda\u0142o si\u0119 za\u0142adowa\u0107 zdj\u0119cia</string>
+    <string name="retake">Powt\u00F3rz</string>
+    <string name="get_expiry_date">Pobierz dat\u0119 wa\u017Cno\u015Bci</string>
+    <string name="failed_read_image">Nie uda\u0142o si\u0119 odczyta\u0107 zdj\u0119cia</string>
+    <string name="ocr_processing_failed">B\u0142\u0105d przetwarzania OCR</string>
+    <string name="extracting_expiry_date">Rozpoznawanie daty wa\u017Cno\u015Bci\u2026</string>
+
+    <!-- Document list item -->
+    <string name="no_expiry_date">Brak daty wa\u017Cno\u015Bci</string>
+    <string name="expired_with_date">Wygas\u0142 (%1$s)</string>
+    <string name="expires_today">Wygasa dzisiaj</string>
+    <string name="expires_tomorrow">Wygasa jutro</string>
+    <string name="expires_on_date">Wygasa %1$s</string>
+
+    <!-- Loading -->
+    <string name="processing">Przetwarzanie\u2026</string>
+
+    <!-- ViewModel defaults -->
+    <string name="default_document_name">Dokument</string>
+    <string name="failed_to_save">Nie uda\u0142o si\u0119 zapisa\u0107</string>
+    <string name="failed_to_delete">Nie uda\u0142o si\u0119 usun\u0105\u0107</string>
+
+    <!-- Categories -->
+    <string name="category_insurance">Ubezpieczenie</string>
+    <string name="category_payment">P\u0142atno\u015B\u0107</string>
+    <string name="category_agreement">Umowa</string>
+    <string name="category_driver_license">Prawo jazdy</string>
+    <string name="category_technical_inspection">Przegl\u0105d techniczny</string>
+    <string name="category_other">Inne</string>
+
+    <!-- Reminder intervals -->
+    <string name="reminder_90_days">90 dni wcze\u015Bniej</string>
+    <string name="reminder_30_days">30 dni wcze\u015Bniej</string>
+    <string name="reminder_7_days">7 dni wcze\u015Bniej</string>
+    <string name="reminder_1_day">1 dzie\u0144 wcze\u015Bniej</string>
+    <string name="reminder_day_of">W dniu wyga\u015Bni\u0119cia</string>
+
+    <!-- Plurals -->
+    <plurals name="expired_days_ago">
+        <item quantity="one">Ten dokument wygas\u0142 %1$d dzie\u0144 temu</item>
+        <item quantity="few">Ten dokument wygas\u0142 %1$d dni temu</item>
+        <item quantity="many">Ten dokument wygas\u0142 %1$d dni temu</item>
+        <item quantity="other">Ten dokument wygas\u0142 %1$d dni temu</item>
+    </plurals>
+    <plurals name="expires_in_days">
+        <item quantity="one">Wygasa za %1$d dzie\u0144</item>
+        <item quantity="few">Wygasa za %1$d dni</item>
+        <item quantity="many">Wygasa za %1$d dni</item>
+        <item quantity="other">Wygasa za %1$d dni</item>
+    </plurals>
+</resources>

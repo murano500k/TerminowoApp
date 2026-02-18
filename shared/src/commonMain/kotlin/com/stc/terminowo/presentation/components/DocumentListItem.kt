@@ -21,11 +21,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.stc.terminowo.domain.model.Document
+import com.stc.terminowo.domain.model.DocumentCategory
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.daysUntil
 import kotlinx.datetime.todayIn
 import kotlinx.datetime.Clock as DateTimeClock
+import org.jetbrains.compose.resources.pluralStringResource
+import org.jetbrains.compose.resources.stringResource
+import terminowo.shared.generated.resources.Res
+import terminowo.shared.generated.resources.expired_with_date
+import terminowo.shared.generated.resources.expires_in_days
+import terminowo.shared.generated.resources.expires_on_date
+import terminowo.shared.generated.resources.expires_today
+import terminowo.shared.generated.resources.expires_tomorrow
+import terminowo.shared.generated.resources.no_expiry_date
 
 @Composable
 fun DocumentListItem(
@@ -85,9 +95,17 @@ fun DocumentListItem(
                     overflow = TextOverflow.Ellipsis
                 )
 
+                if (document.category != DocumentCategory.OTHER) {
+                    Text(
+                        text = stringResource(document.category.labelRes),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+
                 Text(
                     text = document.expiryDate?.let { formatExpiryDate(it, daysUntilExpiry) }
-                        ?: "No expiry date",
+                        ?: stringResource(Res.string.no_expiry_date),
                     style = MaterialTheme.typography.bodyMedium,
                     color = expiryColor
                 )
@@ -96,14 +114,15 @@ fun DocumentListItem(
     }
 }
 
+@Composable
 private fun formatExpiryDate(date: LocalDate, daysUntil: Int?): String {
     val dateStr = "${date.dayOfMonth}/${date.monthNumber}/${date.year}"
     return when {
         daysUntil == null -> dateStr
-        daysUntil < 0 -> "Expired ($dateStr)"
-        daysUntil == 0 -> "Expires today"
-        daysUntil == 1 -> "Expires tomorrow"
-        daysUntil <= 30 -> "Expires in $daysUntil days"
-        else -> "Expires $dateStr"
+        daysUntil < 0 -> stringResource(Res.string.expired_with_date, dateStr)
+        daysUntil == 0 -> stringResource(Res.string.expires_today)
+        daysUntil == 1 -> stringResource(Res.string.expires_tomorrow)
+        daysUntil <= 30 -> pluralStringResource(Res.plurals.expires_in_days, daysUntil, daysUntil)
+        else -> stringResource(Res.string.expires_on_date, dateStr)
     }
 }

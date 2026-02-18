@@ -1,5 +1,6 @@
 package com.stc.terminowo.domain.model
 
+import com.stc.terminowo.domain.model.DocumentCategory
 import kotlinx.datetime.LocalDate
 
 data class ScanResult(
@@ -7,5 +8,6 @@ data class ScanResult(
     val expiryDate: LocalDate?,
     val confidence: Float?,
     val fullText: String?,
-    val rawResponse: String?
+    val rawResponse: String?,
+    val detectedCategory: DocumentCategory? = null
 )

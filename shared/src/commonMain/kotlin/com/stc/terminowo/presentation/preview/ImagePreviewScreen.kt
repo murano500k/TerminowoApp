@@ -45,7 +45,19 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
+import terminowo.shared.generated.resources.Res
+import terminowo.shared.generated.resources.back
+import terminowo.shared.generated.resources.captured_document
+import terminowo.shared.generated.resources.extracting_expiry_date
+import terminowo.shared.generated.resources.failed_load_image
+import terminowo.shared.generated.resources.failed_read_image
+import terminowo.shared.generated.resources.get_expiry_date
+import terminowo.shared.generated.resources.ocr_processing_failed
+import terminowo.shared.generated.resources.retake
+import terminowo.shared.generated.resources.review_image
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -61,7 +73,8 @@ fun ImagePreviewScreen(
         imagePath: String,
         thumbnailPath: String,
         rawOcrResponse: String?,
-        documentId: String
+        documentId: String,
+        category: String?
     ) -> Unit,
     onBack: () -> Unit
 ) {
@@ -87,12 +100,12 @@ fun ImagePreviewScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Review Image") },
+                title = { Text(stringResource(Res.string.review_image)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back"
+                            contentDescription = stringResource(Res.string.back)
                         )
                     }
                 }
@@ -118,14 +131,14 @@ fun ImagePreviewScreen(
                         imageBitmap != null -> {
                             Image(
                                 bitmap = imageBitmap!!,
-                                contentDescription = "Captured document",
+                                contentDescription = stringResource(Res.string.captured_document),
                                 modifier = Modifier.fillMaxSize(),
                                 contentScale = ContentScale.Fit
                             )
                         }
                         imageLoadError -> {
                             Text(
-                                text = "Failed to load image",
+                                text = stringResource(Res.string.failed_load_image),
                                 style = MaterialTheme.typography.bodyLarge,
                                 color = MaterialTheme.colorScheme.error
                             )
@@ -147,16 +160,19 @@ fun ImagePreviewScreen(
                         modifier = Modifier.weight(1f),
                         enabled = !isProcessing
                     ) {
-                        Text("Retake")
+                        Text(stringResource(Res.string.retake))
                     }
 
                     Button(
                         onClick = {
                             isProcessing = true
                             scope.launch {
+                                val failedReadMsg = getString(Res.string.failed_read_image)
+                                val ocrFailedMsg = getString(Res.string.ocr_processing_failed)
+
                                 val imageBytes = imageStorage.readImage(imagePath)
                                 if (imageBytes == null) {
-                                    snackbarHostState.showSnackbar("Failed to read image")
+                                    snackbarHostState.showSnackbar(failedReadMsg)
                                     isProcessing = false
                                     return@launch
                                 }
@@ -176,12 +192,13 @@ fun ImagePreviewScreen(
                                             imagePath,
                                             thumbnailPath,
                                             scanResult.rawResponse,
-                                            docId
+                                            docId,
+                                            scanResult.detectedCategory?.key
                                         )
                                     },
                                     onFailure = { error ->
                                         snackbarHostState.showSnackbar(
-                                            error.message ?: "OCR processing failed"
+                                            error.message ?: ocrFailedMsg
                                         )
                                         isProcessing = false
                                     }
@@ -191,7 +208,7 @@ fun ImagePreviewScreen(
                         modifier = Modifier.weight(1f),
                         enabled = !isProcessing
                     ) {
-                        Text("Get Expiry Date")
+                        Text(stringResource(Res.string.get_expiry_date))
                     }
                 }
 
@@ -199,7 +216,7 @@ fun ImagePreviewScreen(
             }
 
             if (isProcessing) {
-                LoadingOverlay(message = "Extracting expiry date...")
+                LoadingOverlay(message = stringResource(Res.string.extracting_expiry_date))
             }
         }
     }

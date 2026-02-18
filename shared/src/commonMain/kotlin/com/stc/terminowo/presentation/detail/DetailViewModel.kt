@@ -3,6 +3,7 @@ package com.stc.terminowo.presentation.detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.stc.terminowo.domain.model.Document
+import com.stc.terminowo.domain.model.DocumentCategory
 import com.stc.terminowo.domain.model.ReminderInterval
 import com.stc.terminowo.domain.repository.DocumentRepository
 import com.stc.terminowo.domain.usecase.DeleteDocumentUseCase
@@ -19,6 +20,10 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import org.jetbrains.compose.resources.getString
+import terminowo.shared.generated.resources.Res
+import terminowo.shared.generated.resources.failed_to_delete
+import terminowo.shared.generated.resources.failed_to_save
 
 data class DetailUiState(
     val isNewDocument: Boolean = true,
@@ -29,6 +34,7 @@ data class DetailUiState(
     val imagePath: String = "",
     val thumbnailPath: String = "",
     val selectedReminderDays: Set<Int> = setOf(90, 30, 7, 1),
+    val category: DocumentCategory = DocumentCategory.OTHER,
     val rawOcrResponse: String? = null,
     val isSaving: Boolean = false,
     val isDeleting: Boolean = false,
@@ -60,7 +66,8 @@ class DetailViewModel(
                     confidence = document.confidence,
                     imagePath = document.imagePath,
                     thumbnailPath = document.thumbnailPath,
-                    selectedReminderDays = document.reminderDays.toSet()
+                    selectedReminderDays = document.reminderDays.toSet(),
+                    category = document.category
                 )
             }
         }
@@ -68,23 +75,26 @@ class DetailViewModel(
 
     fun initNewDocument(
         name: String?,
+        defaultName: String,
         expiryDate: LocalDate?,
         confidence: Float?,
         imagePath: String,
         thumbnailPath: String,
         rawOcrResponse: String?,
-        documentId: String
+        documentId: String,
+        category: String? = null
     ) {
         _uiState.update {
             it.copy(
                 isNewDocument = true,
                 documentId = documentId,
-                name = name ?: "Insurance Document",
+                name = name ?: defaultName,
                 expiryDate = expiryDate,
                 confidence = confidence,
                 imagePath = imagePath,
                 thumbnailPath = thumbnailPath,
-                rawOcrResponse = rawOcrResponse
+                rawOcrResponse = rawOcrResponse,
+                category = DocumentCategory.fromKey(category)
             )
         }
     }
@@ -95,6 +105,10 @@ class DetailViewModel(
 
     fun updateExpiryDate(date: LocalDate?) {
         _uiState.update { it.copy(expiryDate = date) }
+    }
+
+    fun updateCategory(category: DocumentCategory) {
+        _uiState.update { it.copy(category = category) }
     }
 
     fun toggleReminder(days: Int) {
@@ -120,6 +134,7 @@ class DetailViewModel(
                     expiryDate = state.expiryDate,
                     confidence = state.confidence,
                     reminderDays = state.selectedReminderDays.toList().sorted(),
+                    category = state.category,
                     createdAt = now
                 )
 
@@ -134,8 +149,9 @@ class DetailViewModel(
 
                 _uiState.update { it.copy(isSaving = false, savedSuccessfully = true) }
             } catch (e: Exception) {
+                val fallback = getString(Res.string.failed_to_save)
                 _uiState.update {
-                    it.copy(isSaving = false, error = e.message ?: "Failed to save")
+                    it.copy(isSaving = false, error = e.message ?: fallback)
                 }
             }
         }
@@ -152,8 +168,9 @@ class DetailViewModel(
                 deleteDocumentUseCase(state.documentId)
                 _uiState.update { it.copy(isDeleting = false, deletedSuccessfully = true) }
             } catch (e: Exception) {
+                val fallback = getString(Res.string.failed_to_delete)
                 _uiState.update {
-                    it.copy(isDeleting = false, error = e.message ?: "Failed to delete")
+                    it.copy(isDeleting = false, error = e.message ?: fallback)
                 }
             }
         }

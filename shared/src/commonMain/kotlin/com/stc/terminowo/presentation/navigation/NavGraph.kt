@@ -47,7 +47,7 @@ fun NavGraph() {
                         popUpTo<Screen.ImagePreview> { inclusive = true }
                     }
                 },
-                onScanResult = { name, expiryDate, confidence, imgPath, thumbPath, rawResponse, docId ->
+                onScanResult = { name, expiryDate, confidence, imgPath, thumbPath, rawResponse, docId, category ->
                     navController.navigate(
                         Screen.DetailNew(
                             name = name,
@@ -56,7 +56,8 @@ fun NavGraph() {
                             imagePath = imgPath,
                             thumbnailPath = thumbPath,
                             rawOcrResponse = rawResponse,
-                            documentId = docId
+                            documentId = docId,
+                            category = category
                         )
                     ) {
                         popUpTo<Screen.Main>()
@@ -78,6 +79,7 @@ fun NavGraph() {
                 newDocThumbnailPath = route.thumbnailPath,
                 newDocRawResponse = route.rawOcrResponse,
                 newDocId = route.documentId,
+                newDocCategory = route.category,
                 onSaved = {
                     navController.navigate(Screen.Main) {
                         popUpTo<Screen.Main> { inclusive = true }
@@ -104,6 +106,7 @@ fun NavGraph() {
                 newDocThumbnailPath = null,
                 newDocRawResponse = null,
                 newDocId = null,
+                newDocCategory = null,
                 onSaved = { navController.popBackStack() },
                 onDeleted = {
                     navController.navigate(Screen.Main) {

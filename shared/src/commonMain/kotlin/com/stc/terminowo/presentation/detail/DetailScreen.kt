@@ -19,10 +19,14 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -34,17 +38,37 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.stc.terminowo.domain.model.DocumentCategory
 import com.stc.terminowo.presentation.components.ReminderChips
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.daysUntil
 import kotlinx.datetime.todayIn
 import kotlinx.datetime.Clock as DateTimeClock
+import org.jetbrains.compose.resources.pluralStringResource
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+import terminowo.shared.generated.resources.Res
+import terminowo.shared.generated.resources.back
+import terminowo.shared.generated.resources.category
+import terminowo.shared.generated.resources.default_document_name
+import terminowo.shared.generated.resources.delete
+import terminowo.shared.generated.resources.delete_document
+import terminowo.shared.generated.resources.document_details
+import terminowo.shared.generated.resources.document_name
+import terminowo.shared.generated.resources.expired_days_ago
+import terminowo.shared.generated.resources.expiry_date_format
+import terminowo.shared.generated.resources.new_document
+import terminowo.shared.generated.resources.ocr_confidence
+import terminowo.shared.generated.resources.reminders
+import terminowo.shared.generated.resources.save_document
+import terminowo.shared.generated.resources.update_document
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -58,6 +82,7 @@ fun DetailScreen(
     newDocThumbnailPath: String?,
     newDocRawResponse: String?,
     newDocId: String?,
+    newDocCategory: String? = null,
     onSaved: () -> Unit,
     onDeleted: () -> Unit,
     onBack: () -> Unit,
@@ -65,11 +90,13 @@ fun DetailScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
+    val defaultDocName = stringResource(Res.string.default_document_name)
 
     LaunchedEffect(Unit) {
         if (isNew && newDocId != null) {
             viewModel.initNewDocument(
                 name = newDocName,
+                defaultName = defaultDocName,
                 expiryDate = newDocExpiryDate?.let {
                     try { LocalDate.parse(it) } catch (_: Exception) { null }
                 },
@@ -77,7 +104,8 @@ fun DetailScreen(
                 imagePath = newDocImagePath ?: "",
                 thumbnailPath = newDocThumbnailPath ?: "",
                 rawOcrResponse = newDocRawResponse,
-                documentId = newDocId
+                documentId = newDocId,
+                category = newDocCategory
             )
         } else if (!isNew && documentId != null) {
             viewModel.loadExistingDocument(documentId)
@@ -103,13 +131,13 @@ fun DetailScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(if (isNew) "New Document" else "Document Details")
+                    Text(if (isNew) stringResource(Res.string.new_document) else stringResource(Res.string.document_details))
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back"
+                            contentDescription = stringResource(Res.string.back)
                         )
                     }
                 },
@@ -121,7 +149,7 @@ fun DetailScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Delete,
-                                contentDescription = "Delete",
+                                contentDescription = stringResource(Res.string.delete),
                                 tint = MaterialTheme.colorScheme.error
                             )
                         }
@@ -142,10 +170,42 @@ fun DetailScreen(
             OutlinedTextField(
                 value = uiState.name,
                 onValueChange = { viewModel.updateName(it) },
-                label = { Text("Document Name") },
+                label = { Text(stringResource(Res.string.document_name)) },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true
             )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Category dropdown
+            var categoryExpanded by remember { mutableStateOf(false) }
+            ExposedDropdownMenuBox(
+                expanded = categoryExpanded,
+                onExpandedChange = { categoryExpanded = it }
+            ) {
+                OutlinedTextField(
+                    value = stringResource(uiState.category.labelRes),
+                    onValueChange = {},
+                    readOnly = true,
+                    label = { Text(stringResource(Res.string.category)) },
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = categoryExpanded) },
+                    modifier = Modifier.fillMaxWidth().menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
+                )
+                ExposedDropdownMenu(
+                    expanded = categoryExpanded,
+                    onDismissRequest = { categoryExpanded = false }
+                ) {
+                    DocumentCategory.entries.forEach { category ->
+                        DropdownMenuItem(
+                            text = { Text(stringResource(category.labelRes)) },
+                            onClick = {
+                                viewModel.updateCategory(category)
+                                categoryExpanded = false
+                            }
+                        )
+                    }
+                }
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -156,12 +216,12 @@ fun DetailScreen(
                     val date = try { LocalDate.parse(input) } catch (_: Exception) { null }
                     viewModel.updateExpiryDate(date)
                 },
-                label = { Text("Expiry Date (YYYY-MM-DD)") },
+                label = { Text(stringResource(Res.string.expiry_date_format)) },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
                 supportingText = {
                     uiState.confidence?.let {
-                        Text("OCR confidence: ${(it * 100).toInt()}%")
+                        Text(stringResource(Res.string.ocr_confidence, (it * 100).toInt()))
                     }
                 }
             )
@@ -171,6 +231,7 @@ fun DetailScreen(
                 val today = DateTimeClock.System.todayIn(TimeZone.currentSystemDefault())
                 val daysOverdue = today.daysUntil(expiryDate)
                 if (daysOverdue < 0) {
+                    val daysAgo = -daysOverdue
                     Spacer(modifier = Modifier.height(8.dp))
                     Card(
                         modifier = Modifier.fillMaxWidth(),
@@ -190,7 +251,7 @@ fun DetailScreen(
                             )
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
-                                text = "This document expired ${-daysOverdue} day${if (daysOverdue != -1) "s" else ""} ago",
+                                text = pluralStringResource(Res.plurals.expired_days_ago, daysAgo, daysAgo),
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onErrorContainer
                             )
@@ -203,7 +264,7 @@ fun DetailScreen(
 
             // Reminder configuration
             Text(
-                text = "Reminders",
+                text = stringResource(Res.string.reminders),
                 style = MaterialTheme.typography.titleMedium
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -220,7 +281,7 @@ fun DetailScreen(
                 modifier = Modifier.fillMaxWidth(),
                 enabled = !uiState.isSaving && uiState.name.isNotBlank()
             ) {
-                Text(if (isNew) "Save Document" else "Update Document")
+                Text(if (isNew) stringResource(Res.string.save_document) else stringResource(Res.string.update_document))
             }
 
             if (!isNew) {
@@ -233,7 +294,7 @@ fun DetailScreen(
                         contentColor = MaterialTheme.colorScheme.error
                     )
                 ) {
-                    Text("Delete Document")
+                    Text(stringResource(Res.string.delete_document))
                 }
             }
         }

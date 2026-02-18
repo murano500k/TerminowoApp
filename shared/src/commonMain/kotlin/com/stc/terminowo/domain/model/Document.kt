@@ -11,5 +11,6 @@ data class Document(
     val expiryDate: LocalDate?,
     val confidence: Float?,
     val reminderDays: List<Int>,
+    val category: DocumentCategory = DocumentCategory.OTHER,
     val createdAt: LocalDateTime
 )

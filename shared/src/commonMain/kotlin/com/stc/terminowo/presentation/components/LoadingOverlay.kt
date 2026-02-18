@@ -14,10 +14,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import org.jetbrains.compose.resources.stringResource
+import terminowo.shared.generated.resources.Res
+import terminowo.shared.generated.resources.processing
 
 @Composable
 fun LoadingOverlay(
-    message: String = "Processing...",
+    message: String = stringResource(Res.string.processing),
     modifier: Modifier = Modifier
 ) {
     Box(

@@ -1,0 +1,8 @@
+<resources>
+    <string name="notification_channel_name">Przypomnienia o dokumentach</string>
+    <string name="notification_channel_description">Przypomnienia o wygasaj\u0105cych dokumentach</string>
+    <string name="notification_title">Dokument wkr\u00F3tce wygasa</string>
+    <string name="notification_expires_today">%1$s wygasa dzisiaj!</string>
+    <string name="notification_expires_tomorrow">%1$s wygasa jutro!</string>
+    <string name="notification_expires_in_days">%1$s wygasa za %2$d dni</string>
+</resources>

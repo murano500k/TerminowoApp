@@ -3,8 +3,12 @@ package com.stc.terminowo.platform
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
+import android.media.ExifInterface
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 
@@ -19,10 +23,51 @@ actual class ImageStorage(
 
     actual suspend fun saveImage(imageBytes: ByteArray, fileName: String): String =
         withContext(Dispatchers.IO) {
+            val normalized = normalizeImageRotation(imageBytes)
             val file = File(imagesDir, fileName)
-            file.writeBytes(imageBytes)
+            file.writeBytes(normalized)
             file.absolutePath
         }
+
+    private fun normalizeImageRotation(imageBytes: ByteArray): ByteArray {
+        val exif = ExifInterface(ByteArrayInputStream(imageBytes))
+        val orientation = exif.getAttributeInt(
+            ExifInterface.TAG_ORIENTATION,
+            ExifInterface.ORIENTATION_NORMAL
+        )
+
+        if (orientation == ExifInterface.ORIENTATION_NORMAL ||
+            orientation == ExifInterface.ORIENTATION_UNDEFINED
+        ) {
+            return imageBytes
+        }
+
+        val matrix = Matrix()
+        when (orientation) {
+            ExifInterface.ORIENTATION_ROTATE_90 -> matrix.postRotate(90f)
+            ExifInterface.ORIENTATION_ROTATE_180 -> matrix.postRotate(180f)
+            ExifInterface.ORIENTATION_ROTATE_270 -> matrix.postRotate(270f)
+            ExifInterface.ORIENTATION_FLIP_HORIZONTAL -> matrix.postScale(-1f, 1f)
+            ExifInterface.ORIENTATION_FLIP_VERTICAL -> matrix.postScale(1f, -1f)
+            ExifInterface.ORIENTATION_TRANSPOSE -> {
+                matrix.postRotate(90f)
+                matrix.postScale(-1f, 1f)
+            }
+            ExifInterface.ORIENTATION_TRANSVERSE -> {
+                matrix.postRotate(270f)
+                matrix.postScale(-1f, 1f)
+            }
+        }
+
+        val original = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+            ?: return imageBytes
+        val rotated = Bitmap.createBitmap(original, 0, 0, original.width, original.height, matrix, true)
+        val output = ByteArrayOutputStream()
+        rotated.compress(Bitmap.CompressFormat.JPEG, 95, output)
+        if (rotated !== original) rotated.recycle()
+        original.recycle()
+        return output.toByteArray()
+    }
 
     actual suspend fun saveThumbnail(imageBytes: ByteArray, fileName: String): String =
         withContext(Dispatchers.IO) {

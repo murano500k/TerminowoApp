@@ -4,6 +4,7 @@ import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import com.stc.terminowo.data.local.db.DocumentDatabase
 import com.stc.terminowo.domain.model.Document
+import com.stc.terminowo.domain.model.DocumentCategory
 import com.stc.terminowo.domain.repository.DocumentRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -41,6 +42,7 @@ class DocumentRepositoryImpl(
                 rawOcrResponse = null,
                 confidence = document.confidence?.toDouble(),
                 reminderDays = document.reminderDays.joinToString(","),
+                category = document.category.key,
                 createdAt = document.createdAt.toString()
             )
         }
@@ -52,6 +54,7 @@ class DocumentRepositoryImpl(
                 name = document.name,
                 expiryDate = document.expiryDate?.toString(),
                 reminderDays = document.reminderDays.joinToString(","),
+                category = document.category.key,
                 id = document.id
             )
         }
@@ -73,6 +76,7 @@ private fun com.stc.terminowo.data.local.db.DocumentEntity.toDomain(): Document 
         expiryDate = expiryDate?.let { LocalDate.parse(it) },
         confidence = confidence?.toFloat(),
         reminderDays = reminderDays.split(",").mapNotNull { it.trim().toIntOrNull() },
+        category = DocumentCategory.fromKey(category),
         createdAt = LocalDateTime.parse(createdAt)
     )
 }

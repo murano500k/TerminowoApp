@@ -1,5 +1,6 @@
 package com.stc.terminowo.data.remote
 
+import com.stc.terminowo.domain.model.DocumentCategory
 import com.stc.terminowo.domain.model.ScanResult
 import kotlinx.datetime.LocalDate
 
@@ -14,12 +15,15 @@ class DocumentAiMapper {
         val expiryDate = expiryEntity?.let { extractDate(it) }
         val documentName = nameEntity?.let { extractName(it) }
 
+        val detectedCategory = extractCategory(response.document?.text)
+
         return ScanResult(
             extractedName = documentName,
             expiryDate = expiryDate,
             confidence = expiryEntity?.confidence,
             fullText = response.document?.text,
-            rawResponse = rawJson
+            rawResponse = rawJson,
+            detectedCategory = detectedCategory
         )
     }
 
@@ -88,5 +92,46 @@ class DocumentAiMapper {
         } catch (_: Exception) {
             null
         }
+    }
+
+    fun extractCategory(fullText: String?): DocumentCategory? {
+        if (fullText.isNullOrBlank()) return null
+        val text = fullText.lowercase()
+
+        // Priority order: more specific categories first
+        val categoryKeywords = listOf(
+            DocumentCategory.TECHNICAL_INSPECTION to listOf(
+                "przegląd techniczny", "badanie techniczne", "stacja kontroli pojazdów",
+                "diagnostic station", "technical inspection", "vehicle inspection", "mot test",
+                "технический осмотр", "техосмотр", "діагностична картка", "технічний огляд"
+            ),
+            DocumentCategory.DRIVER_LICENSE to listOf(
+                "prawo jazdy", "prawa jazdy", "driver's license", "driver license", "driving licence",
+                "водительское удостоверение", "водійське посвідчення", "посвідчення водія"
+            ),
+            DocumentCategory.INSURANCE to listOf(
+                "ubezpieczenie", "polisa", "oc ", " oc ", "ac ", " ac ", "polisa ubezpieczeniowa",
+                "insurance", "policy", "insurer", "coverage",
+                "страхование", "страховка", "полис", "страхування", "поліс"
+            ),
+            DocumentCategory.AGREEMENT to listOf(
+                "umowa", "kontrakt", "porozumienie",
+                "agreement", "contract",
+                "договор", "контракт", "договір"
+            ),
+            DocumentCategory.PAYMENT to listOf(
+                "faktura", "rachunek", "płatność", "opłata",
+                "invoice", "receipt", "payment", "bill",
+                "счёт", "оплата", "платёж", "рахунок", "оплата"
+            )
+        )
+
+        for ((category, keywords) in categoryKeywords) {
+            if (keywords.any { it in text }) {
+                return category
+            }
+        }
+
+        return null
     }
 }

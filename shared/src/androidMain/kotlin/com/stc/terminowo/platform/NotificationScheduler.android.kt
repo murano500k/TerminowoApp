@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import com.stc.terminowo.shared.R
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
@@ -19,7 +20,6 @@ actual class NotificationScheduler(
 ) {
     companion object {
         const val CHANNEL_ID = "document_reminders"
-        const val CHANNEL_NAME = "Document Reminders"
         const val EXTRA_DOC_ID = "document_id"
         const val EXTRA_DOC_NAME = "document_name"
         const val EXTRA_DAYS_BEFORE = "days_before"
@@ -33,10 +33,10 @@ actual class NotificationScheduler(
     private fun createNotificationChannel() {
         val channel = NotificationChannel(
             CHANNEL_ID,
-            CHANNEL_NAME,
+            context.getString(R.string.notification_channel_name),
             NotificationManager.IMPORTANCE_HIGH
         ).apply {
-            description = "Reminders for expiring documents"
+            description = context.getString(R.string.notification_channel_description)
         }
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
@@ -114,11 +114,11 @@ class ReminderReceiver : BroadcastReceiver() {
         val daysBefore = intent.getIntExtra(NotificationScheduler.EXTRA_DAYS_BEFORE, 0)
         val notificationId = intent.getIntExtra(NotificationScheduler.EXTRA_NOTIFICATION_ID, 0)
 
-        val title = "Document Expiring Soon"
+        val title = context.getString(R.string.notification_title)
         val body = when (daysBefore) {
-            0 -> "$documentName expires today!"
-            1 -> "$documentName expires tomorrow!"
-            else -> "$documentName expires in $daysBefore days"
+            0 -> context.getString(R.string.notification_expires_today, documentName)
+            1 -> context.getString(R.string.notification_expires_tomorrow, documentName)
+            else -> context.getString(R.string.notification_expires_in_days, documentName, daysBefore)
         }
 
         val notification = NotificationCompat.Builder(context, NotificationScheduler.CHANNEL_ID)

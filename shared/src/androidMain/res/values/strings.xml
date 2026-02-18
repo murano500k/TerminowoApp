@@ -1,0 +1,8 @@
+<resources>
+    <string name="notification_channel_name">Document Reminders</string>
+    <string name="notification_channel_description">Reminders for expiring documents</string>
+    <string name="notification_title">Document Expiring Soon</string>
+    <string name="notification_expires_today">%1$s expires today!</string>
+    <string name="notification_expires_tomorrow">%1$s expires tomorrow!</string>
+    <string name="notification_expires_in_days">%1$s expires in %2$d days</string>
+</resources>

@@ -20,7 +20,8 @@ sealed interface Screen {
         val imagePath: String,
         val thumbnailPath: String,
         val rawOcrResponse: String?,
-        val documentId: String
+        val documentId: String,
+        val category: String? = null
     ) : Screen
 
     @Serializable

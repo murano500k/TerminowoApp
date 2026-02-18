@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.stc.terminowo.domain.model.ReminderInterval
+import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -26,7 +27,7 @@ fun ReminderChips(
             FilterChip(
                 selected = selectedDays.contains(interval.days),
                 onClick = { onToggle(interval.days) },
-                label = { Text(interval.label) }
+                label = { Text(stringResource(interval.labelRes)) }
             )
         }
     }

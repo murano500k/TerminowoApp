@@ -1,0 +1,83 @@
+<resources>
+    <!-- App -->
+    <string name="app_title">Terminowo</string>
+
+    <!-- Main screen -->
+    <string name="scan_document">Scan Document</string>
+    <string name="no_documents_yet">No documents yet</string>
+    <string name="empty_state_hint">Tap the + button to scan\nyour first document</string>
+    <string name="delete_document_confirm_title">Delete document?</string>
+    <string name="delete_document_confirm_message">Are you sure you want to delete \"%1$s\"? This action cannot be undone.</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- Detail screen -->
+    <string name="new_document">New Document</string>
+    <string name="document_details">Document Details</string>
+    <string name="back">Back</string>
+    <string name="document_name">Document Name</string>
+    <string name="category">Category</string>
+    <string name="expiry_date_format">Expiry Date (YYYY-MM-DD)</string>
+    <string name="ocr_confidence">OCR confidence: %1$d%%</string>
+    <string name="reminders">Reminders</string>
+    <string name="save_document">Save Document</string>
+    <string name="update_document">Update Document</string>
+    <string name="delete_document">Delete Document</string>
+
+    <!-- Camera screen -->
+    <string name="camera_permission_required">Camera permission is required to scan documents.</string>
+    <string name="go_back">Go Back</string>
+    <string name="failed_read_captured_image">Failed to read captured image</string>
+    <string name="capture_failed">Capture failed</string>
+    <string name="scan">Scan</string>
+
+    <!-- Image preview screen -->
+    <string name="review_image">Review Image</string>
+    <string name="captured_document">Captured document</string>
+    <string name="failed_load_image">Failed to load image</string>
+    <string name="retake">Retake</string>
+    <string name="get_expiry_date">Get Expiry Date</string>
+    <string name="failed_read_image">Failed to read image</string>
+    <string name="ocr_processing_failed">OCR processing failed</string>
+    <string name="extracting_expiry_date">Extracting expiry date...</string>
+
+    <!-- Document list item -->
+    <string name="no_expiry_date">No expiry date</string>
+    <string name="expired_with_date">Expired (%1$s)</string>
+    <string name="expires_today">Expires today</string>
+    <string name="expires_tomorrow">Expires tomorrow</string>
+    <string name="expires_on_date">Expires %1$s</string>
+
+    <!-- Loading -->
+    <string name="processing">Processing...</string>
+
+    <!-- ViewModel defaults -->
+    <string name="default_document_name">Document</string>
+    <string name="failed_to_save">Failed to save</string>
+    <string name="failed_to_delete">Failed to delete</string>
+
+    <!-- Categories -->
+    <string name="category_insurance">Insurance</string>
+    <string name="category_payment">Payment</string>
+    <string name="category_agreement">Agreement</string>
+    <string name="category_driver_license">Driver License</string>
+    <string name="category_technical_inspection">Technical Inspection</string>
+    <string name="category_other">Other</string>
+
+    <!-- Reminder intervals -->
+    <string name="reminder_90_days">90 days before</string>
+    <string name="reminder_30_days">30 days before</string>
+    <string name="reminder_7_days">7 days before</string>
+    <string name="reminder_1_day">1 day before</string>
+    <string name="reminder_day_of">Day of expiry</string>
+
+    <!-- Plurals -->
+    <plurals name="expired_days_ago">
+        <item quantity="one">This document expired %1$d day ago</item>
+        <item quantity="other">This document expired %1$d days ago</item>
+    </plurals>
+    <plurals name="expires_in_days">
+        <item quantity="one">Expires in %1$d day</item>
+        <item quantity="other">Expires in %1$d days</item>
+    </plurals>
+</resources>

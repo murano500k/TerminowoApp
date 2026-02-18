@@ -42,7 +42,16 @@ import com.kashif.cameraK.state.CameraKState
 import com.stc.terminowo.platform.ImageStorage
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock as DateTimeClock
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
+import terminowo.shared.generated.resources.Res
+import terminowo.shared.generated.resources.back
+import terminowo.shared.generated.resources.camera_permission_required
+import terminowo.shared.generated.resources.capture_failed
+import terminowo.shared.generated.resources.failed_read_captured_image
+import terminowo.shared.generated.resources.go_back
+import terminowo.shared.generated.resources.scan
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,13 +72,13 @@ fun CameraScreen(
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
-                        text = "Camera permission is required to scan documents.",
+                        text = stringResource(Res.string.camera_permission_required),
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Button(onClick = onBack) {
-                        Text("Go Back")
+                        Text(stringResource(Res.string.go_back))
                     }
                 }
             }
@@ -107,6 +116,8 @@ fun CameraScreen(
                     isCapturing = true
                     errorMessage = null
                     scope.launch {
+                        val failedReadMsg = getString(Res.string.failed_read_captured_image)
+                        val captureFailedMsg = getString(Res.string.capture_failed)
                         try {
                             when (val result = readyState.controller.takePictureToFile()) {
                                 is ImageCaptureResult.SuccessWithFile -> {
@@ -117,7 +128,7 @@ fun CameraScreen(
                                         val savedPath = imageStorage.saveImage(fileBytes, fileName)
                                         onImageCaptured(savedPath)
                                     } else {
-                                        errorMessage = "Failed to read captured image"
+                                        errorMessage = failedReadMsg
                                         isCapturing = false
                                     }
                                 }
@@ -127,12 +138,12 @@ fun CameraScreen(
                                     onImageCaptured(savedPath)
                                 }
                                 is ImageCaptureResult.Error -> {
-                                    errorMessage = result.exception.message ?: "Capture failed"
+                                    errorMessage = result.exception.message ?: captureFailedMsg
                                     isCapturing = false
                                 }
                             }
                         } catch (e: Exception) {
-                            errorMessage = e.message ?: "Capture failed"
+                            errorMessage = e.message ?: captureFailedMsg
                             isCapturing = false
                         }
                     }
@@ -154,7 +165,7 @@ fun CameraScreen(
                         strokeWidth = 2.dp
                     )
                 } else {
-                    Text("Scan")
+                    Text(stringResource(Res.string.scan))
                 }
             }
 
@@ -177,7 +188,7 @@ fun CameraScreen(
                     IconButton(onClick = onBack) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
+                            contentDescription = stringResource(Res.string.back),
                             tint = Color.White
                         )
                     }
