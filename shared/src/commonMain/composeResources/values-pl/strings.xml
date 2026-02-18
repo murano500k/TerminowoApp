@@ -18,7 +18,7 @@
     <string name="document_name">Nazwa dokumentu</string>
     <string name="category">Kategoria</string>
     <string name="expiry_date_format">Data wa\u017Cno\u015Bci (RRRR-MM-DD)</string>
-    <string name="ocr_confidence">Pewno\u015B\u0107 OCR: %1$d%%</string>
+    <string name="ocr_confidence">Pewno\u015B\u0107 OCR: %1$d%</string>
     <string name="reminders">Przypomnienia</string>
     <string name="save_document">Zapisz dokument</string>
     <string name="update_document">Aktualizuj dokument</string>
@@ -55,6 +55,10 @@
     <string name="default_document_name">Dokument</string>
     <string name="failed_to_save">Nie uda\u0142o si\u0119 zapisa\u0107</string>
     <string name="failed_to_delete">Nie uda\u0142o si\u0119 usun\u0105\u0107</string>
+
+    <!-- Category list screen -->
+    <string name="all_documents">Wszystkie dokumenty</string>
+    <string name="documents_count">%1$d</string>
 
     <!-- Categories -->
     <string name="category_insurance">Ubezpieczenie</string>

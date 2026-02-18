@@ -4,7 +4,10 @@ import kotlinx.serialization.Serializable
 
 sealed interface Screen {
     @Serializable
-    data object Main : Screen
+    data object Categories : Screen
+
+    @Serializable
+    data class DocumentList(val categoryKey: String? = null) : Screen
 
     @Serializable
     data object Camera : Screen

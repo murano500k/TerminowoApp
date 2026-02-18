@@ -6,8 +6,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.stc.terminowo.presentation.camera.CameraScreen
+import com.stc.terminowo.presentation.categories.CategoryListScreen
 import com.stc.terminowo.presentation.detail.DetailScreen
-import com.stc.terminowo.presentation.main.MainScreen
+import com.stc.terminowo.presentation.main.DocumentListScreen
 import com.stc.terminowo.presentation.preview.ImagePreviewScreen
 
 @Composable
@@ -16,14 +17,26 @@ fun NavGraph() {
 
     NavHost(
         navController = navController,
-        startDestination = Screen.Main
+        startDestination = Screen.Categories
     ) {
-        composable<Screen.Main> {
-            MainScreen(
+        composable<Screen.Categories> {
+            CategoryListScreen(
+                onScanClick = { navController.navigate(Screen.Camera) },
+                onCategoryClick = { categoryKey ->
+                    navController.navigate(Screen.DocumentList(categoryKey))
+                }
+            )
+        }
+
+        composable<Screen.DocumentList> { backStackEntry ->
+            val route = backStackEntry.toRoute<Screen.DocumentList>()
+            DocumentListScreen(
+                categoryKey = route.categoryKey,
                 onScanClick = { navController.navigate(Screen.Camera) },
                 onDocumentClick = { documentId ->
                     navController.navigate(Screen.DetailEdit(documentId))
-                }
+                },
+                onBack = { navController.popBackStack() }
             )
         }
 
@@ -60,7 +73,7 @@ fun NavGraph() {
                             category = category
                         )
                     ) {
-                        popUpTo<Screen.Main>()
+                        popUpTo<Screen.Categories>()
                     }
                 },
                 onBack = { navController.popBackStack() }
@@ -81,13 +94,13 @@ fun NavGraph() {
                 newDocId = route.documentId,
                 newDocCategory = route.category,
                 onSaved = {
-                    navController.navigate(Screen.Main) {
-                        popUpTo<Screen.Main> { inclusive = true }
+                    navController.navigate(Screen.Categories) {
+                        popUpTo<Screen.Categories> { inclusive = true }
                     }
                 },
                 onDeleted = {
-                    navController.navigate(Screen.Main) {
-                        popUpTo<Screen.Main> { inclusive = true }
+                    navController.navigate(Screen.Categories) {
+                        popUpTo<Screen.Categories> { inclusive = true }
                     }
                 },
                 onBack = { navController.popBackStack() }
@@ -109,8 +122,8 @@ fun NavGraph() {
                 newDocCategory = null,
                 onSaved = { navController.popBackStack() },
                 onDeleted = {
-                    navController.navigate(Screen.Main) {
-                        popUpTo<Screen.Main> { inclusive = true }
+                    navController.navigate(Screen.Categories) {
+                        popUpTo<Screen.Categories> { inclusive = true }
                     }
                 },
                 onBack = { navController.popBackStack() }

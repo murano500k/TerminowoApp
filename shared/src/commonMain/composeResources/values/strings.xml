@@ -18,7 +18,7 @@
     <string name="document_name">Document Name</string>
     <string name="category">Category</string>
     <string name="expiry_date_format">Expiry Date (YYYY-MM-DD)</string>
-    <string name="ocr_confidence">OCR confidence: %1$d%%</string>
+    <string name="ocr_confidence">OCR confidence: %1$d%</string>
     <string name="reminders">Reminders</string>
     <string name="save_document">Save Document</string>
     <string name="update_document">Update Document</string>
@@ -55,6 +55,10 @@
     <string name="default_document_name">Document</string>
     <string name="failed_to_save">Failed to save</string>
     <string name="failed_to_delete">Failed to delete</string>
+
+    <!-- Category list screen -->
+    <string name="all_documents">All Documents</string>
+    <string name="documents_count">%1$d</string>
 
     <!-- Categories -->
     <string name="category_insurance">Insurance</string>

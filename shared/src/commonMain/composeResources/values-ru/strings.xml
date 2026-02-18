@@ -18,7 +18,7 @@
     <string name="document_name">\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u0430</string>
     <string name="category">\u041A\u0430\u0442\u0435\u0433\u043E\u0440\u0438\u044F</string>
     <string name="expiry_date_format">\u0414\u0430\u0442\u0430 \u0438\u0441\u0442\u0435\u0447\u0435\u043D\u0438\u044F (YYYY-MM-DD)</string>
-    <string name="ocr_confidence">\u0422\u043E\u0447\u043D\u043E\u0441\u0442\u044C OCR: %1$d%%</string>
+    <string name="ocr_confidence">\u0422\u043E\u0447\u043D\u043E\u0441\u0442\u044C OCR: %1$d%</string>
     <string name="reminders">\u041D\u0430\u043F\u043E\u043C\u0438\u043D\u0430\u043D\u0438\u044F</string>
     <string name="save_document">\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C \u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442</string>
     <string name="update_document">\u041E\u0431\u043D\u043E\u0432\u0438\u0442\u044C \u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442</string>
@@ -55,6 +55,10 @@
     <string name="default_document_name">\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442</string>
     <string name="failed_to_save">\u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u0441\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C</string>
     <string name="failed_to_delete">\u041D\u0435 \u0443\u0434\u0430\u043B\u043E\u0441\u044C \u0443\u0434\u0430\u043B\u0438\u0442\u044C</string>
+
+    <!-- Category list screen -->
+    <string name="all_documents">\u0412\u0441\u0435 \u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B</string>
+    <string name="documents_count">%1$d</string>
 
     <!-- Categories -->
     <string name="category_insurance">\u0421\u0442\u0440\u0430\u0445\u043E\u0432\u043A\u0430</string>
