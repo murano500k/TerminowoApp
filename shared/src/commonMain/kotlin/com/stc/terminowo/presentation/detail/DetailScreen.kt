@@ -1,6 +1,8 @@
 package com.stc.terminowo.presentation.detail
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,7 +16,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -22,6 +23,8 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
@@ -38,6 +41,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TimePicker
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -51,10 +55,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.stc.terminowo.domain.model.DocumentCategory
 import com.stc.terminowo.presentation.components.ReminderChips
+import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.daysUntil
+import kotlinx.datetime.toLocalDateTime
 import kotlinx.datetime.todayIn
 import kotlinx.datetime.Clock as DateTimeClock
 import org.jetbrains.compose.resources.pluralStringResource
@@ -66,13 +73,14 @@ import terminowo.shared.generated.resources.category
 import terminowo.shared.generated.resources.confirm
 import terminowo.shared.generated.resources.cancel
 import terminowo.shared.generated.resources.default_document_name
-import terminowo.shared.generated.resources.delete
 import terminowo.shared.generated.resources.delete_document
 import terminowo.shared.generated.resources.document_details
 import terminowo.shared.generated.resources.document_name
 import terminowo.shared.generated.resources.expired_days_ago
 import terminowo.shared.generated.resources.expiry_date_format
+import terminowo.shared.generated.resources.expiry_date_required
 import terminowo.shared.generated.resources.new_document
+import terminowo.shared.generated.resources.select_expiry_date
 import terminowo.shared.generated.resources.notification_time
 import terminowo.shared.generated.resources.ocr_confidence
 import terminowo.shared.generated.resources.reminders
@@ -136,6 +144,7 @@ fun DetailScreen(
         }
     }
 
+    var showDatePicker by remember { mutableStateOf(false) }
     var showTimePicker by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -152,20 +161,6 @@ fun DetailScreen(
                         )
                     }
                 },
-                actions = {
-                    if (!isNew) {
-                        IconButton(
-                            onClick = { viewModel.delete() },
-                            enabled = !uiState.isDeleting
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Delete,
-                                contentDescription = stringResource(Res.string.delete),
-                                tint = MaterialTheme.colorScheme.error
-                            )
-                        }
-                    }
-                }
             )
         },
         snackbarHost = { SnackbarHost(snackbarHostState) }
@@ -220,22 +215,63 @@ fun DetailScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Expiry date display
-            OutlinedTextField(
-                value = uiState.expiryDate?.toString() ?: "",
-                onValueChange = { input ->
-                    val date = try { LocalDate.parse(input) } catch (_: Exception) { null }
-                    viewModel.updateExpiryDate(date)
-                },
-                label = { Text(stringResource(Res.string.expiry_date_format)) },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true,
-                supportingText = {
-                    uiState.confidence?.let {
-                        Text(stringResource(Res.string.ocr_confidence, (it * 100).toInt()))
+            // Expiry date picker
+            Box {
+                OutlinedTextField(
+                    value = uiState.expiryDate?.toString() ?: "",
+                    onValueChange = {},
+                    readOnly = true,
+                    label = { Text(stringResource(Res.string.expiry_date_format)) },
+                    modifier = Modifier.fillMaxWidth(),
+                    supportingText = {
+                        if (uiState.expiryDate == null) {
+                            Text(stringResource(Res.string.expiry_date_required))
+                        } else {
+                            uiState.confidence?.let {
+                                Text(stringResource(Res.string.ocr_confidence, (it * 100).toInt()))
+                            }
+                        }
                     }
+                )
+                Box(
+                    modifier = Modifier
+                        .matchParentSize()
+                        .clickable(
+                            indication = null,
+                            interactionSource = remember { MutableInteractionSource() }
+                        ) { showDatePicker = true }
+                )
+            }
+
+            if (showDatePicker) {
+                val datePickerState = rememberDatePickerState(
+                    initialSelectedDateMillis = uiState.expiryDate
+                        ?.atStartOfDayIn(TimeZone.UTC)
+                        ?.toEpochMilliseconds()
+                )
+                DatePickerDialog(
+                    onDismissRequest = { showDatePicker = false },
+                    confirmButton = {
+                        TextButton(onClick = {
+                            datePickerState.selectedDateMillis?.let { millis ->
+                                val date = Instant.fromEpochMilliseconds(millis)
+                                    .toLocalDateTime(TimeZone.UTC).date
+                                viewModel.updateExpiryDate(date)
+                            }
+                            showDatePicker = false
+                        }) {
+                            Text(stringResource(Res.string.confirm))
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = { showDatePicker = false }) {
+                            Text(stringResource(Res.string.cancel))
+                        }
+                    }
+                ) {
+                    DatePicker(state = datePickerState)
                 }
-            )
+            }
 
             // Expired date warning
             uiState.expiryDate?.let { expiryDate ->
@@ -287,20 +323,23 @@ fun DetailScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             // Notification time picker
-            Text(
-                text = stringResource(Res.string.notification_time),
-                style = MaterialTheme.typography.titleMedium
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            OutlinedTextField(
-                value = "%02d:%02d".format(uiState.reminderTime.hour, uiState.reminderTime.minute),
-                onValueChange = {},
-                readOnly = true,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { showTimePicker = true },
-                enabled = false
-            )
+            Box {
+                OutlinedTextField(
+                    value = "%02d:%02d".format(uiState.reminderTime.hour, uiState.reminderTime.minute),
+                    onValueChange = {},
+                    readOnly = true,
+                    label = { Text(stringResource(Res.string.notification_time)) },
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Box(
+                    modifier = Modifier
+                        .matchParentSize()
+                        .clickable(
+                            indication = null,
+                            interactionSource = remember { MutableInteractionSource() }
+                        ) { showTimePicker = true }
+                )
+            }
 
             if (showTimePicker) {
                 val timePickerState = rememberTimePickerState(
@@ -337,7 +376,7 @@ fun DetailScreen(
             Button(
                 onClick = { viewModel.save() },
                 modifier = Modifier.fillMaxWidth(),
-                enabled = !uiState.isSaving && uiState.name.isNotBlank()
+                enabled = !uiState.isSaving && uiState.name.isNotBlank() && uiState.expiryDate != null
             ) {
                 Text(if (isNew) stringResource(Res.string.save_document) else stringResource(Res.string.update_document))
             }

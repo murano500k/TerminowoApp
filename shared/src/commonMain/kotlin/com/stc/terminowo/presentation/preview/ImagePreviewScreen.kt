@@ -197,10 +197,21 @@ fun ImagePreviewScreen(
                                         )
                                     },
                                     onFailure = { error ->
-                                        snackbarHostState.showSnackbar(
-                                            error.message ?: ocrFailedMsg
+                                        val docId = Uuid.random().toString()
+                                        val thumbnailPath = imageStorage.saveThumbnail(
+                                            imageBytes,
+                                            "$docId.jpg"
                                         )
-                                        isProcessing = false
+                                        onScanResult(
+                                            null,
+                                            null,
+                                            null,
+                                            imagePath,
+                                            thumbnailPath,
+                                            null,
+                                            docId,
+                                            null
+                                        )
                                     }
                                 )
                             }
