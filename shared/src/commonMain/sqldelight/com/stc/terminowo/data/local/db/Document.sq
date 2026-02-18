@@ -6,9 +6,10 @@ CREATE TABLE DocumentEntity (
     expiryDate TEXT,
     rawOcrResponse TEXT,
     confidence REAL,
-    reminderDays TEXT NOT NULL DEFAULT '90,30,7,1',
+    reminderDays TEXT NOT NULL DEFAULT '14,7,1,0',
     category TEXT NOT NULL DEFAULT 'other',
-    createdAt TEXT NOT NULL
+    createdAt TEXT NOT NULL,
+    reminderTime TEXT NOT NULL DEFAULT '09:00'
 );
 
 getAllDocuments:
@@ -24,12 +25,12 @@ FROM DocumentEntity
 WHERE id = ?;
 
 insertDocument:
-INSERT INTO DocumentEntity(id, name, imagePath, thumbnailPath, expiryDate, rawOcrResponse, confidence, reminderDays, category, createdAt)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+INSERT INTO DocumentEntity(id, name, imagePath, thumbnailPath, expiryDate, rawOcrResponse, confidence, reminderDays, category, createdAt, reminderTime)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 updateDocument:
 UPDATE DocumentEntity
-SET name = ?, expiryDate = ?, reminderDays = ?, category = ?
+SET name = ?, expiryDate = ?, reminderDays = ?, category = ?, reminderTime = ?
 WHERE id = ?;
 
 deleteDocument:

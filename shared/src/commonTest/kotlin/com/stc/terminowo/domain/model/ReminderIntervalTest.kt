@@ -8,8 +8,7 @@ class ReminderIntervalTest {
 
     @Test
     fun `fromDays returns correct interval`() {
-        assertEquals(ReminderInterval.NINETY_DAYS, ReminderInterval.fromDays(90))
-        assertEquals(ReminderInterval.THIRTY_DAYS, ReminderInterval.fromDays(30))
+        assertEquals(ReminderInterval.FOURTEEN_DAYS, ReminderInterval.fromDays(14))
         assertEquals(ReminderInterval.SEVEN_DAYS, ReminderInterval.fromDays(7))
         assertEquals(ReminderInterval.ONE_DAY, ReminderInterval.fromDays(1))
         assertEquals(ReminderInterval.DAY_OF, ReminderInterval.fromDays(0))
@@ -17,8 +16,9 @@ class ReminderIntervalTest {
 
     @Test
     fun `fromDays returns null for unknown interval`() {
+        assertNull(ReminderInterval.fromDays(90))
+        assertNull(ReminderInterval.fromDays(30))
         assertNull(ReminderInterval.fromDays(15))
-        assertNull(ReminderInterval.fromDays(60))
         assertNull(ReminderInterval.fromDays(-1))
     }
 
@@ -26,6 +26,6 @@ class ReminderIntervalTest {
     fun `default intervals are correct`() {
         val defaults = ReminderInterval.DEFAULT
         assertEquals(4, defaults.size)
-        assertEquals(listOf(90, 30, 7, 1), defaults.map { it.days })
+        assertEquals(listOf(14, 7, 1, 0), defaults.map { it.days })
     }
 }

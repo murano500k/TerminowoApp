@@ -1,5 +1,6 @@
 package com.stc.terminowo.presentation.detail
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -33,7 +35,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TimePicker
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -47,6 +52,7 @@ import androidx.compose.ui.unit.dp
 import com.stc.terminowo.domain.model.DocumentCategory
 import com.stc.terminowo.presentation.components.ReminderChips
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.daysUntil
 import kotlinx.datetime.todayIn
@@ -57,6 +63,8 @@ import org.koin.compose.viewmodel.koinViewModel
 import terminowo.shared.generated.resources.Res
 import terminowo.shared.generated.resources.back
 import terminowo.shared.generated.resources.category
+import terminowo.shared.generated.resources.confirm
+import terminowo.shared.generated.resources.cancel
 import terminowo.shared.generated.resources.default_document_name
 import terminowo.shared.generated.resources.delete
 import terminowo.shared.generated.resources.delete_document
@@ -65,6 +73,7 @@ import terminowo.shared.generated.resources.document_name
 import terminowo.shared.generated.resources.expired_days_ago
 import terminowo.shared.generated.resources.expiry_date_format
 import terminowo.shared.generated.resources.new_document
+import terminowo.shared.generated.resources.notification_time
 import terminowo.shared.generated.resources.ocr_confidence
 import terminowo.shared.generated.resources.reminders
 import terminowo.shared.generated.resources.save_document
@@ -126,6 +135,8 @@ fun DetailScreen(
             viewModel.clearError()
         }
     }
+
+    var showTimePicker by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -272,6 +283,53 @@ fun DetailScreen(
                 selectedDays = uiState.selectedReminderDays,
                 onToggle = { viewModel.toggleReminder(it) }
             )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Notification time picker
+            Text(
+                text = stringResource(Res.string.notification_time),
+                style = MaterialTheme.typography.titleMedium
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            OutlinedTextField(
+                value = "%02d:%02d".format(uiState.reminderTime.hour, uiState.reminderTime.minute),
+                onValueChange = {},
+                readOnly = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { showTimePicker = true },
+                enabled = false
+            )
+
+            if (showTimePicker) {
+                val timePickerState = rememberTimePickerState(
+                    initialHour = uiState.reminderTime.hour,
+                    initialMinute = uiState.reminderTime.minute,
+                    is24Hour = true
+                )
+                AlertDialog(
+                    onDismissRequest = { showTimePicker = false },
+                    confirmButton = {
+                        TextButton(onClick = {
+                            viewModel.updateReminderTime(
+                                LocalTime(timePickerState.hour, timePickerState.minute)
+                            )
+                            showTimePicker = false
+                        }) {
+                            Text(stringResource(Res.string.confirm))
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = { showTimePicker = false }) {
+                            Text(stringResource(Res.string.cancel))
+                        }
+                    },
+                    text = {
+                        TimePicker(state = timePickerState)
+                    }
+                )
+            }
 
             Spacer(modifier = Modifier.height(32.dp))
 

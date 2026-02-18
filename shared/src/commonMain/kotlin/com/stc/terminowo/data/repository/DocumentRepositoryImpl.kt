@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.LocalTime
 
 class DocumentRepositoryImpl(
     private val database: DocumentDatabase
@@ -43,7 +44,8 @@ class DocumentRepositoryImpl(
                 confidence = document.confidence?.toDouble(),
                 reminderDays = document.reminderDays.joinToString(","),
                 category = document.category.key,
-                createdAt = document.createdAt.toString()
+                createdAt = document.createdAt.toString(),
+                reminderTime = document.reminderTime.toString()
             )
         }
     }
@@ -55,6 +57,7 @@ class DocumentRepositoryImpl(
                 expiryDate = document.expiryDate?.toString(),
                 reminderDays = document.reminderDays.joinToString(","),
                 category = document.category.key,
+                reminderTime = document.reminderTime.toString(),
                 id = document.id
             )
         }
@@ -77,6 +80,7 @@ private fun com.stc.terminowo.data.local.db.DocumentEntity.toDomain(): Document 
         confidence = confidence?.toFloat(),
         reminderDays = reminderDays.split(",").mapNotNull { it.trim().toIntOrNull() },
         category = DocumentCategory.fromKey(category),
+        reminderTime = try { LocalTime.parse(reminderTime) } catch (_: Exception) { LocalTime(9, 0) },
         createdAt = LocalDateTime.parse(createdAt)
     )
 }

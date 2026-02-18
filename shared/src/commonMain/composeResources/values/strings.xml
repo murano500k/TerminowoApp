@@ -65,11 +65,14 @@
     <string name="category_other">Other</string>
 
     <!-- Reminder intervals -->
-    <string name="reminder_90_days">90 days before</string>
-    <string name="reminder_30_days">30 days before</string>
+    <string name="reminder_14_days">14 days before</string>
     <string name="reminder_7_days">7 days before</string>
     <string name="reminder_1_day">1 day before</string>
     <string name="reminder_day_of">Day of expiry</string>
+
+    <!-- Time picker -->
+    <string name="notification_time">Notification time</string>
+    <string name="confirm">Confirm</string>
 
     <!-- Plurals -->
     <plurals name="expired_days_ago">

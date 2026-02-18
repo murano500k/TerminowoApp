@@ -65,11 +65,14 @@
     <string name="category_other">Inne</string>
 
     <!-- Reminder intervals -->
-    <string name="reminder_90_days">90 dni wcze\u015Bniej</string>
-    <string name="reminder_30_days">30 dni wcze\u015Bniej</string>
+    <string name="reminder_14_days">14 dni wcze\u015Bniej</string>
     <string name="reminder_7_days">7 dni wcze\u015Bniej</string>
     <string name="reminder_1_day">1 dzie\u0144 wcze\u015Bniej</string>
     <string name="reminder_day_of">W dniu wyga\u015Bni\u0119cia</string>
+
+    <!-- Time picker -->
+    <string name="notification_time">Czas powiadomienia</string>
+    <string name="confirm">Zatwierd\u017A</string>
 
     <!-- Plurals -->
     <plurals name="expired_days_ago">

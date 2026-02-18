@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -156,7 +157,8 @@ fun CameraScreen(
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.primary
                 ),
-                enabled = !isCapturing
+                enabled = !isCapturing,
+                contentPadding = PaddingValues(0.dp)
             ) {
                 if (isCapturing) {
                     CircularProgressIndicator(
@@ -165,7 +167,10 @@ fun CameraScreen(
                         strokeWidth = 2.dp
                     )
                 } else {
-                    Text(stringResource(Res.string.scan))
+                    Text(
+                        text = stringResource(Res.string.scan),
+                        maxLines = 1
+                    )
                 }
             }
 

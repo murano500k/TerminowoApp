@@ -116,7 +116,7 @@ sqldelight {
     databases {
         create("DocumentDatabase") {
             packageName.set("com.stc.terminowo.data.local.db")
-            version = 2
+            version = 3
         }
     }
 }

@@ -89,7 +89,7 @@ actual class NotificationScheduler(
     actual fun cancelReminders(documentId: String) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         // Cancel all possible reminder intervals for this document
-        listOf(0, 1, 7, 30, 90).forEach { daysBefore ->
+        listOf(0, 1, 7, 14).forEach { daysBefore ->
             val notificationId = "${documentId}_$daysBefore".hashCode()
             val intent = Intent(context, ReminderReceiver::class.java)
             val pendingIntent = PendingIntent.getBroadcast(

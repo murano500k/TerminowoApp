@@ -18,6 +18,7 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock as DateTimeClock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.resources.getString
@@ -33,8 +34,9 @@ data class DetailUiState(
     val confidence: Float? = null,
     val imagePath: String = "",
     val thumbnailPath: String = "",
-    val selectedReminderDays: Set<Int> = setOf(90, 30, 7, 1),
+    val selectedReminderDays: Set<Int> = setOf(14, 7, 1, 0),
     val category: DocumentCategory = DocumentCategory.OTHER,
+    val reminderTime: LocalTime = LocalTime(9, 0),
     val rawOcrResponse: String? = null,
     val isSaving: Boolean = false,
     val isDeleting: Boolean = false,
@@ -67,7 +69,8 @@ class DetailViewModel(
                     imagePath = document.imagePath,
                     thumbnailPath = document.thumbnailPath,
                     selectedReminderDays = document.reminderDays.toSet(),
-                    category = document.category
+                    category = document.category,
+                    reminderTime = document.reminderTime
                 )
             }
         }
@@ -111,6 +114,10 @@ class DetailViewModel(
         _uiState.update { it.copy(category = category) }
     }
 
+    fun updateReminderTime(time: LocalTime) {
+        _uiState.update { it.copy(reminderTime = time) }
+    }
+
     fun toggleReminder(days: Int) {
         _uiState.update { state ->
             val current = state.selectedReminderDays.toMutableSet()
@@ -135,6 +142,7 @@ class DetailViewModel(
                     confidence = state.confidence,
                     reminderDays = state.selectedReminderDays.toList().sorted(),
                     category = state.category,
+                    reminderTime = state.reminderTime,
                     createdAt = now
                 )
 
