@@ -11,10 +11,10 @@
 -keepclasseswithmembers class kotlinx.serialization.json.** {
     kotlinx.serialization.KSerializer serializer(...);
 }
--keep,includedescriptorclasses class com.docscanner.**$$serializer { *; }
--keepclassmembers class com.docscanner.** {
+-keep,includedescriptorclasses class com.stc.terminowo.**$$serializer { *; }
+-keepclassmembers class com.stc.terminowo.** {
     *** Companion;
 }
--keepclasseswithmembers class com.docscanner.** {
+-keepclasseswithmembers class com.stc.terminowo.** {
     kotlinx.serialization.KSerializer serializer(...);
 }
