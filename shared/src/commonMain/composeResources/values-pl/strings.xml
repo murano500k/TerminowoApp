@@ -58,6 +58,13 @@
     <string name="auth_login_failed">Logowanie nie powiod\u0142o si\u0119. Spr\u00F3buj ponownie.</string>
     <string name="enter_manually">Wprowad\u017A r\u0119cznie</string>
 
+    <!-- Account menu -->
+    <string name="account">Konto</string>
+    <string name="sign_out">Wyloguj si\u0119</string>
+    <string name="not_signed_in">Nie zalogowano</string>
+    <string name="sign_in_for_ocr">Zaloguj si\u0119, aby automatycznie odczytywa\u0107 daty przez OCR</string>
+    <string name="google_api_access_granted">Dost\u0119p do Google API: Przyznany</string>
+
     <!-- Loading -->
     <string name="processing">Przetwarzanie\u2026</string>
 

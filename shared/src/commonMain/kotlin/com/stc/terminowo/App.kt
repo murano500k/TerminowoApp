@@ -39,7 +39,7 @@ fun App() {
             )
         }
 
-        NavGraph(isAuthenticated = authState.isAuthenticated)
+        NavGraph(authViewModel = authViewModel)
     }
 }
 

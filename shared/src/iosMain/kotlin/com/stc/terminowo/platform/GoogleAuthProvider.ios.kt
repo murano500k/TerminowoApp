@@ -22,6 +22,10 @@ actual class GoogleAuthProvider {
 
     private var cachedToken: String? = null
 
+    actual fun clearToken() {
+        cachedToken = null
+    }
+
     actual suspend fun getAccessToken(): String {
         cachedToken?.let { return it }
 

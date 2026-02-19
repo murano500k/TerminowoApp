@@ -58,6 +58,13 @@
     <string name="auth_login_failed">Login failed. Please try again.</string>
     <string name="enter_manually">Enter Manually</string>
 
+    <!-- Account menu -->
+    <string name="account">Account</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="not_signed_in">Not signed in</string>
+    <string name="sign_in_for_ocr">Sign in to enable automatic date extraction via OCR</string>
+    <string name="google_api_access_granted">Google API access: Granted</string>
+
     <!-- Loading -->
     <string name="processing">Processing...</string>
 

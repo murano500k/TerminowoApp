@@ -31,11 +31,20 @@ actual class GoogleAuthProvider(
 
     private var cachedToken: String? = null
 
+    actual fun clearToken() {
+        cachedToken = null
+    }
+
     actual suspend fun getAccessToken(): String {
         cachedToken?.let { return it }
 
         return suspendCancellableCoroutine { continuation ->
-            val scopes = listOf(Scope("https://www.googleapis.com/auth/cloud-platform"))
+            val scopes = listOf(
+                Scope("https://www.googleapis.com/auth/cloud-platform"),
+                Scope("openid"),
+                Scope("https://www.googleapis.com/auth/userinfo.email"),
+                Scope("https://www.googleapis.com/auth/userinfo.profile")
+            )
             val request = AuthorizationRequest.builder()
                 .setRequestedScopes(scopes)
                 .build()

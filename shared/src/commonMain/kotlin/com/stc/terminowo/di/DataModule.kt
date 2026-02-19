@@ -5,6 +5,7 @@ import com.stc.terminowo.data.local.db.DocumentDatabase
 import com.stc.terminowo.data.remote.DocumentAiConfig
 import com.stc.terminowo.data.remote.DocumentAiMapper
 import com.stc.terminowo.data.remote.DocumentAiService
+import com.stc.terminowo.data.remote.UserProfileService
 import com.stc.terminowo.data.repository.DocumentRepositoryImpl
 import com.stc.terminowo.data.repository.OcrRepositoryImpl
 import com.stc.terminowo.domain.repository.DocumentRepository
@@ -51,6 +52,8 @@ val dataModule = module {
         val driverFactory: DatabaseDriverFactory = get()
         DocumentDatabase(driverFactory.createDriver())
     }
+
+    single { UserProfileService(get()) }
 
     single { DocumentAiMapper() }
 
