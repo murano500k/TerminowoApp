@@ -50,6 +50,14 @@
     <string name="expires_tomorrow">Expires tomorrow</string>
     <string name="expires_on_date">Expires %1$s</string>
 
+    <!-- Auth dialog -->
+    <string name="auth_dialog_title">Enable Document Scanning?</string>
+    <string name="auth_dialog_message">Sign in with Google to automatically extract expiry dates from your documents using OCR. You can skip this and enter data manually.</string>
+    <string name="auth_login">Sign In</string>
+    <string name="auth_skip">Skip</string>
+    <string name="auth_login_failed">Login failed. Please try again.</string>
+    <string name="enter_manually">Enter Manually</string>
+
     <!-- Loading -->
     <string name="processing">Processing...</string>
 

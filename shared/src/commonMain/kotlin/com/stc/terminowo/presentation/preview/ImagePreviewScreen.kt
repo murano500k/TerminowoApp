@@ -36,21 +36,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import com.stc.terminowo.domain.model.ScanResult
 import com.stc.terminowo.domain.usecase.ScanDocumentUseCase
 import com.stc.terminowo.platform.ImageStorage
 import com.stc.terminowo.platform.decodeImageBitmap
 import com.stc.terminowo.presentation.components.LoadingOverlay
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import terminowo.shared.generated.resources.Res
 import terminowo.shared.generated.resources.back
 import terminowo.shared.generated.resources.captured_document
+import terminowo.shared.generated.resources.enter_manually
 import terminowo.shared.generated.resources.extracting_expiry_date
 import terminowo.shared.generated.resources.failed_load_image
 import terminowo.shared.generated.resources.failed_read_image
@@ -65,6 +62,7 @@ import kotlin.uuid.Uuid
 @Composable
 fun ImagePreviewScreen(
     imagePath: String,
+    isAuthenticated: Boolean = false,
     onRetake: () -> Unit,
     onScanResult: (
         name: String?,
@@ -163,63 +161,95 @@ fun ImagePreviewScreen(
                         Text(stringResource(Res.string.retake))
                     }
 
-                    Button(
-                        onClick = {
-                            isProcessing = true
-                            scope.launch {
-                                val failedReadMsg = getString(Res.string.failed_read_image)
-                                val ocrFailedMsg = getString(Res.string.ocr_processing_failed)
+                    if (isAuthenticated) {
+                        Button(
+                            onClick = {
+                                isProcessing = true
+                                scope.launch {
+                                    val failedReadMsg = getString(Res.string.failed_read_image)
 
-                                val imageBytes = imageStorage.readImage(imagePath)
-                                if (imageBytes == null) {
-                                    snackbarHostState.showSnackbar(failedReadMsg)
-                                    isProcessing = false
-                                    return@launch
-                                }
-
-                                val result = scanDocumentUseCase(imageBytes, "image/jpeg")
-                                result.fold(
-                                    onSuccess = { scanResult ->
-                                        val docId = Uuid.random().toString()
-                                        val thumbnailPath = imageStorage.saveThumbnail(
-                                            imageBytes,
-                                            "$docId.jpg"
-                                        )
-                                        onScanResult(
-                                            scanResult.extractedName,
-                                            scanResult.expiryDate?.toString(),
-                                            scanResult.confidence,
-                                            imagePath,
-                                            thumbnailPath,
-                                            scanResult.rawResponse,
-                                            docId,
-                                            scanResult.detectedCategory?.key
-                                        )
-                                    },
-                                    onFailure = { error ->
-                                        val docId = Uuid.random().toString()
-                                        val thumbnailPath = imageStorage.saveThumbnail(
-                                            imageBytes,
-                                            "$docId.jpg"
-                                        )
-                                        onScanResult(
-                                            null,
-                                            null,
-                                            null,
-                                            imagePath,
-                                            thumbnailPath,
-                                            null,
-                                            docId,
-                                            null
-                                        )
+                                    val imageBytes = imageStorage.readImage(imagePath)
+                                    if (imageBytes == null) {
+                                        snackbarHostState.showSnackbar(failedReadMsg)
+                                        isProcessing = false
+                                        return@launch
                                     }
-                                )
-                            }
-                        },
-                        modifier = Modifier.weight(1f),
-                        enabled = !isProcessing
-                    ) {
-                        Text(stringResource(Res.string.get_expiry_date))
+
+                                    val result = scanDocumentUseCase(imageBytes, "image/jpeg")
+                                    result.fold(
+                                        onSuccess = { scanResult ->
+                                            val docId = Uuid.random().toString()
+                                            val thumbnailPath = imageStorage.saveThumbnail(
+                                                imageBytes,
+                                                "$docId.jpg"
+                                            )
+                                            onScanResult(
+                                                scanResult.extractedName,
+                                                scanResult.expiryDate?.toString(),
+                                                scanResult.confidence,
+                                                imagePath,
+                                                thumbnailPath,
+                                                scanResult.rawResponse,
+                                                docId,
+                                                scanResult.detectedCategory?.key
+                                            )
+                                        },
+                                        onFailure = { error ->
+                                            val docId = Uuid.random().toString()
+                                            val thumbnailPath = imageStorage.saveThumbnail(
+                                                imageBytes,
+                                                "$docId.jpg"
+                                            )
+                                            onScanResult(
+                                                null,
+                                                null,
+                                                null,
+                                                imagePath,
+                                                thumbnailPath,
+                                                null,
+                                                docId,
+                                                null
+                                            )
+                                        }
+                                    )
+                                }
+                            },
+                            modifier = Modifier.weight(1f),
+                            enabled = !isProcessing
+                        ) {
+                            Text(stringResource(Res.string.get_expiry_date))
+                        }
+                    } else {
+                        Button(
+                            onClick = {
+                                scope.launch {
+                                    val failedReadMsg = getString(Res.string.failed_read_image)
+                                    val imageBytes = imageStorage.readImage(imagePath)
+                                    if (imageBytes == null) {
+                                        snackbarHostState.showSnackbar(failedReadMsg)
+                                        return@launch
+                                    }
+                                    val docId = Uuid.random().toString()
+                                    val thumbnailPath = imageStorage.saveThumbnail(
+                                        imageBytes,
+                                        "$docId.jpg"
+                                    )
+                                    onScanResult(
+                                        null,
+                                        null,
+                                        null,
+                                        imagePath,
+                                        thumbnailPath,
+                                        null,
+                                        docId,
+                                        null
+                                    )
+                                }
+                            },
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text(stringResource(Res.string.enter_manually))
+                        }
                     }
                 }
 

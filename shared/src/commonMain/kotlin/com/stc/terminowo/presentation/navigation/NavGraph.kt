@@ -12,7 +12,7 @@ import com.stc.terminowo.presentation.main.DocumentListScreen
 import com.stc.terminowo.presentation.preview.ImagePreviewScreen
 
 @Composable
-fun NavGraph() {
+fun NavGraph(isAuthenticated: Boolean = false) {
     val navController = rememberNavController()
 
     NavHost(
@@ -55,6 +55,7 @@ fun NavGraph() {
             val route = backStackEntry.toRoute<Screen.ImagePreview>()
             ImagePreviewScreen(
                 imagePath = route.imagePath,
+                isAuthenticated = isAuthenticated,
                 onRetake = {
                     navController.navigate(Screen.Camera) {
                         popUpTo<Screen.ImagePreview> { inclusive = true }

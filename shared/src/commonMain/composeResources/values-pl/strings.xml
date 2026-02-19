@@ -50,6 +50,14 @@
     <string name="expires_tomorrow">Wygasa jutro</string>
     <string name="expires_on_date">Wygasa %1$s</string>
 
+    <!-- Auth dialog -->
+    <string name="auth_dialog_title">W\u0142\u0105czy\u0107 skanowanie?</string>
+    <string name="auth_dialog_message">Zaloguj si\u0119 przez Google, aby automatycznie odczytywa\u0107 daty wa\u017Cno\u015Bci z dokument\u00F3w za pomoc\u0105 OCR. Mo\u017Cesz pomin\u0105\u0107 i wprowadza\u0107 dane r\u0119cznie.</string>
+    <string name="auth_login">Zaloguj si\u0119</string>
+    <string name="auth_skip">Pomi\u0144</string>
+    <string name="auth_login_failed">Logowanie nie powiod\u0142o si\u0119. Spr\u00F3buj ponownie.</string>
+    <string name="enter_manually">Wprowad\u017A r\u0119cznie</string>
+
     <!-- Loading -->
     <string name="processing">Przetwarzanie\u2026</string>
 
