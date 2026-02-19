@@ -17,7 +17,9 @@
     <string name="back">Back</string>
     <string name="document_name">Document Name</string>
     <string name="category">Category</string>
-    <string name="expiry_date_format">Expiry Date (YYYY-MM-DD)</string>
+    <string name="expiry_date_format">Expiry Date</string>
+    <string name="select_expiry_date">Select Expiry Date</string>
+    <string name="expiry_date_required">Expiry date is required</string>
     <string name="ocr_confidence">OCR confidence: %1$d%</string>
     <string name="reminders">Reminders</string>
     <string name="save_document">Save Document</string>

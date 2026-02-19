@@ -17,7 +17,9 @@
     <string name="back">Wstecz</string>
     <string name="document_name">Nazwa dokumentu</string>
     <string name="category">Kategoria</string>
-    <string name="expiry_date_format">Data wa\u017Cno\u015Bci (RRRR-MM-DD)</string>
+    <string name="expiry_date_format">Data wa\u017Cno\u015Bci</string>
+    <string name="select_expiry_date">Wybierz dat\u0119 wa\u017Cno\u015Bci</string>
+    <string name="expiry_date_required">Data wa\u017Cno\u015Bci jest wymagana</string>
     <string name="ocr_confidence">Pewno\u015B\u0107 OCR: %1$d%</string>
     <string name="reminders">Przypomnienia</string>
     <string name="save_document">Zapisz dokument</string>
