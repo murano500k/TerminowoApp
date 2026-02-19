@@ -1,5 +1,8 @@
 package com.stc.terminowo.android
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -7,12 +10,17 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.common.api.ApiException
 import com.stc.terminowo.App
 import com.stc.terminowo.platform.GoogleAuthProvider
 
 class MainActivity : ComponentActivity() {
+
+    private val notificationPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { /* no-op — permission result doesn't need handling */ }
 
     private val authConsentLauncher = registerForActivityResult(
         ActivityResultContracts.StartIntentSenderForResult()
@@ -39,6 +47,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         GoogleAuthProvider.consentLauncher = { request: IntentSenderRequest ->
             authConsentLauncher.launch(request)
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED
+        ) {
+            notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
         enableEdgeToEdge()
         setContent {
