@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What This App Does
 
-Mobile app (Terminowo) that scans insurance documents, extracts expiry dates via Google Document AI OCR, stores documents locally with SQLDelight, and sends reminder notifications before expiry. No manual date entry — OCR handles it.
+Mobile app (Terminowo) that scans documents, extracts expiry dates via OCR, stores them locally, and sends reminder notifications. See [ARCHITECTURE.md](ARCHITECTURE.md) for full system design.
 
 ## Build & Test Commands
 
@@ -25,32 +25,19 @@ Kotlin Multiplatform (2.1.10) + Compose Multiplatform (1.7.3), Gradle 8.11.1, AG
 
 ## Architecture
 
-Clean Architecture in two Gradle modules: `:shared` (KMP) and `:androidApp`. Package: `com.stc.terminowo`. Android app package: `com.stc.terminowo.android`.
-
-**Shared module layers** (`shared/src/commonMain/kotlin/com/stc/terminowo/`):
-- **domain/** — models (`Document`, `ScanResult`, `ReminderInterval`, `DocumentCategory`), repository interfaces, usecases (each single-responsibility: `ScanDocumentUseCase`, `GetDocumentsUseCase`, `SaveDocumentUseCase`, `UpdateDocumentUseCase`, `DeleteDocumentUseCase`, `ScheduleRemindersUseCase`)
-- **data/** — repository implementations, SQLDelight `DatabaseDriverFactory` (expect/actual), Ktor-based `DocumentAiService` + DTOs + `DocumentAiMapper` for OCR response parsing
-- **presentation/** — Compose screens (main, camera, preview, detail), ViewModels, `NavGraph.kt` with `Screen` sealed interface using `@Serializable` routes, Material3 theme, reusable components
-- **platform/** — expect declarations for `ImageStorage`, `NotificationScheduler`, `PlatformContext`, `ImageDecoder`, `GoogleAuthProvider`
-- **di/** — Koin modules split by layer: `DataModule`, `DomainModule`, `PresentationModule`, `PlatformModule` (expect/actual). All assembled in `AppModule.kt` as `appModules` list.
-
-**Platform actuals** (`shared/src/androidMain/`): SQLite driver, file-based image storage, AlarmManager + BroadcastReceiver notifications, Google Play Services OAuth2 (`GoogleAuthProvider`).
-
-**Android app module** (`androidApp/src/androidMain/`): `MainActivity`, `TerminowoApp` (Application class, initializes Koin), `ReminderReceiver` (BroadcastReceiver). Document AI credentials injected from `local.properties` via BuildConfig.
-
-**Navigation flow**: Main (document list) → Camera → ImagePreview → Detail (new/edit dual-mode).
+Clean Architecture in `:shared` (KMP) and `:androidApp` modules. Package: `com.stc.terminowo`. Four layers: domain, data, presentation, platform + Koin DI. See [ARCHITECTURE.md](ARCHITECTURE.md) for layer details, data flows, navigation graph, and file tree.
 
 ## Database
 
-SQLDelight schema at `shared/src/commonMain/sqldelight/com/stc/terminowo/data/local/db/Document.sq`. Generated database class: `DocumentDatabase` (version 2, migration in `sqldelight/migrations/1.sqm`). Dates stored as ISO 8601 text. Reminder days stored as CSV string (e.g., `"90,30,7,1"`). Category stored as text key (e.g., `"insurance"`, `"other"`).
+SQLDelight schema at `shared/src/commonMain/sqldelight/.../Document.sq`. Schema version 3. Dates as ISO 8601, reminders as CSV, category as text key. See [ARCHITECTURE.md](ARCHITECTURE.md#database-schema) for full schema.
 
 ## Document AI OCR
 
-`DocumentAiMapper` date extraction priority: (1) structured `dateValue` fields, (2) ISO parse from `normalizedValue.text`, (3) regex on `mentionText` (DD/MM/YYYY, YYYY-MM-DD). Auto-detects document category from OCR full text via multilingual keyword matching (PL, RU, UA, EN) with priority: technical_inspection > driver_license > insurance > agreement > payment. Authentication uses Google OAuth2 via `GoogleAuthProvider` (expect/actual) — on Android this uses Google Play Services Identity with `cloud-platform` scope. `MainActivity` wires an activity result launcher for OAuth2 consent via static properties on `GoogleAuthProvider`. Config in `local.properties`, injected via BuildConfig fields: `DOCUMENT_AI_PROJECT_ID`, `DOCUMENT_AI_LOCATION`, `DOCUMENT_AI_PROCESSOR_ID`.
+Backend proxy (GCP Cloud Function) → `DocumentAiMapper` with 3-strategy date extraction + multilingual category detection. See [ARCHITECTURE.md](ARCHITECTURE.md#ocr-pipeline) for pipeline details.
 
 ## Document Categories
 
-`DocumentCategory` enum (`shared/.../domain/model/DocumentCategory.kt`): `INSURANCE`, `PAYMENT`, `AGREEMENT`, `DRIVER_LICENSE`, `TECHNICAL_INSPECTION`, `OTHER`. Stored in DB as `category TEXT` column using the `key` field (e.g., `"insurance"`). Auto-detected by `DocumentAiMapper.extractCategory()` from OCR text. Users can override via dropdown on the detail screen. `OTHER` is the default and is hidden on the document list.
+`DocumentCategory` enum: `INSURANCE`, `PAYMENT`, `AGREEMENT`, `DRIVER_LICENSE`, `TECHNICAL_INSPECTION`, `OTHER` (default, hidden on list). Auto-detected from OCR text, user-overridable. See [ARCHITECTURE.md](ARCHITECTURE.md#domain-layer).
 
 ## Gotchas
 
