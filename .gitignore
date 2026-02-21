@@ -9,6 +9,8 @@
 local.properties
 client_secret*.json
 client_*.plist
+**/assets/service-account*.json
+documentscanner-*.json
 *.jks
 *.apk
 *.aab

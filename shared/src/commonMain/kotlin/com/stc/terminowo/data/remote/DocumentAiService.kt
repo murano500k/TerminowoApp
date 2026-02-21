@@ -1,6 +1,5 @@
 package com.stc.terminowo.data.remote
 
-import com.stc.terminowo.platform.GoogleAuthProvider
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.header
@@ -13,14 +12,12 @@ import kotlin.io.encoding.ExperimentalEncodingApi
 
 class DocumentAiService(
     private val httpClient: HttpClient,
-    private val config: DocumentAiConfig,
-    private val authProvider: GoogleAuthProvider
+    private val config: ProxyConfig
 ) {
     @OptIn(ExperimentalEncodingApi::class)
     suspend fun processDocument(imageBytes: ByteArray, mimeType: String): ProcessResponse {
         println("DocScanner-OCR: processDocument called, imageBytes=${imageBytes.size}, mimeType=$mimeType")
-        println("DocScanner-OCR: endpoint=${config.endpoint}")
-        println("DocScanner-OCR: projectId=${config.projectId}, location=${config.location}, processorId=${config.processorId}")
+        println("DocScanner-OCR: endpoint=${config.url}")
 
         val base64Content = Base64.encode(imageBytes)
         println("DocScanner-OCR: base64 encoded, length=${base64Content.length}")
@@ -32,13 +29,11 @@ class DocumentAiService(
             )
         )
 
-        println("DocScanner-OCR: obtaining access token...")
-        val token = authProvider.getAccessToken()
-        println("DocScanner-OCR: got token (length=${token.length}), sending POST request...")
+        println("DocScanner-OCR: sending POST request...")
 
         val response = try {
-            httpClient.post(config.endpoint) {
-                header("Authorization", "Bearer $token")
+            httpClient.post(config.url) {
+                header("X-API-Key", config.apiKey)
                 contentType(ContentType.Application.Json)
                 setBody(request)
             }

@@ -1,7 +1,7 @@
 package com.stc.terminowo.android
 
 import android.app.Application
-import com.stc.terminowo.data.remote.DocumentAiConfig
+import com.stc.terminowo.data.remote.ProxyConfig
 import com.stc.terminowo.di.appModules
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -19,10 +19,9 @@ class TerminowoApp : Application() {
             modules(
                 appModules + module {
                     single {
-                        DocumentAiConfig(
-                            projectId = BuildConfig.DOCUMENT_AI_PROJECT_ID,
-                            location = BuildConfig.DOCUMENT_AI_LOCATION,
-                            processorId = BuildConfig.DOCUMENT_AI_PROCESSOR_ID
+                        ProxyConfig(
+                            url = BuildConfig.PROXY_URL,
+                            apiKey = BuildConfig.PROXY_API_KEY
                         )
                     }
                 }

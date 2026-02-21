@@ -2,10 +2,9 @@ package com.stc.terminowo.di
 
 import com.stc.terminowo.data.local.DatabaseDriverFactory
 import com.stc.terminowo.data.local.db.DocumentDatabase
-import com.stc.terminowo.data.remote.DocumentAiConfig
 import com.stc.terminowo.data.remote.DocumentAiMapper
 import com.stc.terminowo.data.remote.DocumentAiService
-import com.stc.terminowo.data.remote.UserProfileService
+import com.stc.terminowo.data.remote.ProxyConfig
 import com.stc.terminowo.data.repository.DocumentRepositoryImpl
 import com.stc.terminowo.data.repository.OcrRepositoryImpl
 import com.stc.terminowo.domain.repository.DocumentRepository
@@ -53,11 +52,9 @@ val dataModule = module {
         DocumentDatabase(driverFactory.createDriver())
     }
 
-    single { UserProfileService(get()) }
-
     single { DocumentAiMapper() }
 
-    single { DocumentAiService(get(), get(), get()) }
+    single { DocumentAiService(get(), get<ProxyConfig>()) }
 
     single<DocumentRepository> { DocumentRepositoryImpl(get()) }
 

@@ -1,12 +1,17 @@
 package com.stc.terminowo.presentation.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -75,6 +80,8 @@ fun DocumentListItem(
         else -> MaterialTheme.colorScheme.primary
     }
 
+    val accentColor = if (isExpired) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
+
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -89,54 +96,62 @@ fun DocumentListItem(
             CardDefaults.cardColors()
         }
     ) {
-        Row(
-            modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // Thumbnail
-            Card(
+        Row(modifier = Modifier.height(IntrinsicSize.Min)) {
+            Box(
                 modifier = Modifier
-                    .size(56.dp)
-                    .clip(RoundedCornerShape(8.dp)),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant
-                )
+                    .fillMaxHeight()
+                    .width(4.dp)
+                    .background(accentColor)
+            )
+            Row(
+                modifier = Modifier.padding(16.dp).weight(1f),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                thumbnailBitmap?.let { bitmap ->
-                    Image(
-                        bitmap = bitmap,
-                        contentDescription = document.name,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.fillMaxSize()
+                // Thumbnail
+                Card(
+                    modifier = Modifier
+                        .size(56.dp)
+                        .clip(RoundedCornerShape(8.dp)),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant
                     )
+                ) {
+                    thumbnailBitmap?.let { bitmap ->
+                        Image(
+                            bitmap = bitmap,
+                            contentDescription = document.name,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
                 }
-            }
 
-            Spacer(modifier = Modifier.width(16.dp))
+                Spacer(modifier = Modifier.width(16.dp))
 
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = document.name,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-
-                if (document.category != DocumentCategory.OTHER) {
+                Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = stringResource(document.category.labelRes),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.primary
+                        text = document.name,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+
+                    if (document.category != DocumentCategory.OTHER) {
+                        Text(
+                            text = stringResource(document.category.labelRes),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+
+                    Text(
+                        text = document.expiryDate?.let { formatExpiryDate(it, daysUntilExpiry) }
+                            ?: stringResource(Res.string.no_expiry_date),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = expiryColor
                     )
                 }
-
-                Text(
-                    text = document.expiryDate?.let { formatExpiryDate(it, daysUntilExpiry) }
-                        ?: stringResource(Res.string.no_expiry_date),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = expiryColor
-                )
             }
         }
     }

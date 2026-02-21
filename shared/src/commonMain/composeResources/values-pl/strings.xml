@@ -50,6 +50,11 @@
     <string name="expires_tomorrow">Wygasa jutro</string>
     <string name="expires_on_date">Wygasa %1$s</string>
 
+    <!-- Auth info dialog -->
+    <string name="auth_info_title">Jak to działa</string>
+    <string name="auth_info_message">Aplikacja skanuje dokumenty i automatycznie odczytuje daty ważności za pomocą OCR.\n\nAby włączyć skanowanie, zaloguj się przez Google. Bez logowania możesz dodawać dokumenty ręcznie.</string>
+    <string name="auth_info_ok">Dalej</string>
+
     <!-- Auth dialog -->
     <string name="auth_dialog_title">W\u0142\u0105czy\u0107 skanowanie?</string>
     <string name="auth_dialog_message">Zaloguj si\u0119 przez Google, aby automatycznie odczytywa\u0107 daty wa\u017Cno\u015Bci z dokument\u00F3w za pomoc\u0105 OCR. Mo\u017Cesz pomin\u0105\u0107 i wprowadza\u0107 dane r\u0119cznie.</string>

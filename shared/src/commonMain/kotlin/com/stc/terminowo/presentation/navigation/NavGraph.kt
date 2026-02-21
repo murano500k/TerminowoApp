@@ -5,9 +5,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import com.stc.terminowo.presentation.auth.AuthViewModel
 import com.stc.terminowo.presentation.camera.CameraScreen
 import com.stc.terminowo.presentation.categories.CategoryListScreen
 import com.stc.terminowo.presentation.detail.DetailScreen
@@ -15,9 +12,7 @@ import com.stc.terminowo.presentation.main.DocumentListScreen
 import com.stc.terminowo.presentation.preview.ImagePreviewScreen
 
 @Composable
-fun NavGraph(authViewModel: AuthViewModel) {
-    val authState by authViewModel.uiState.collectAsState()
-    val isAuthenticated = authState.isAuthenticated
+fun NavGraph() {
     val navController = rememberNavController()
 
     NavHost(
@@ -26,7 +21,6 @@ fun NavGraph(authViewModel: AuthViewModel) {
     ) {
         composable<Screen.Categories> {
             CategoryListScreen(
-                authViewModel = authViewModel,
                 onScanClick = { navController.navigate(Screen.Camera) },
                 onCategoryClick = { categoryKey ->
                     navController.navigate(Screen.DocumentList(categoryKey))
@@ -61,7 +55,6 @@ fun NavGraph(authViewModel: AuthViewModel) {
             val route = backStackEntry.toRoute<Screen.ImagePreview>()
             ImagePreviewScreen(
                 imagePath = route.imagePath,
-                isAuthenticated = isAuthenticated,
                 onRetake = {
                     navController.navigate(Screen.Camera) {
                         popUpTo<Screen.ImagePreview> { inclusive = true }

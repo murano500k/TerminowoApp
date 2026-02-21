@@ -35,8 +35,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.stc.terminowo.presentation.auth.AuthViewModel
-import com.stc.terminowo.presentation.components.AccountIconButton
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import terminowo.shared.generated.resources.Res
@@ -50,12 +48,10 @@ import terminowo.shared.generated.resources.scan_document
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoryListScreen(
-    authViewModel: AuthViewModel,
     onScanClick: () -> Unit,
     onCategoryClick: (String?) -> Unit,
     viewModel: CategoryListViewModel = koinViewModel()
 ) {
-    val authState by authViewModel.uiState.collectAsState()
     val uiState by viewModel.uiState.collectAsState()
 
     Scaffold(
@@ -66,15 +62,6 @@ fun CategoryListScreen(
                         text = stringResource(Res.string.app_title),
                         style = MaterialTheme.typography.titleLarge
                     )
-                },
-                actions = {
-                    if (authState.requiresUserAuth) {
-                        AccountIconButton(
-                            authState = authState,
-                            onSignIn = authViewModel::login,
-                            onSignOut = authViewModel::logout
-                        )
-                    }
                 }
             )
         },

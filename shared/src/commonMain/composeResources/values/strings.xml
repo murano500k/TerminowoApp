@@ -50,6 +50,11 @@
     <string name="expires_tomorrow">Expires tomorrow</string>
     <string name="expires_on_date">Expires %1$s</string>
 
+    <!-- Auth info dialog -->
+    <string name="auth_info_title">How It Works</string>
+    <string name="auth_info_message">This app scans your documents and automatically extracts expiry dates using OCR.\n\nTo enable scanning, you need to sign in with Google. Without signing in, you can still add documents manually.</string>
+    <string name="auth_info_ok">Continue</string>
+
     <!-- Auth dialog -->
     <string name="auth_dialog_title">Enable Document Scanning?</string>
     <string name="auth_dialog_message">Sign in with Google to automatically extract expiry dates from your documents using OCR. You can skip this and enter data manually.</string>

@@ -10,6 +10,7 @@ import com.stc.terminowo.domain.usecase.DeleteDocumentUseCase
 import com.stc.terminowo.domain.usecase.SaveDocumentUseCase
 import com.stc.terminowo.domain.usecase.ScheduleRemindersUseCase
 import com.stc.terminowo.domain.usecase.UpdateDocumentUseCase
+import com.stc.terminowo.platform.NotificationPermissionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -50,7 +51,8 @@ class DetailViewModel(
     private val saveDocumentUseCase: SaveDocumentUseCase,
     private val updateDocumentUseCase: UpdateDocumentUseCase,
     private val deleteDocumentUseCase: DeleteDocumentUseCase,
-    private val scheduleRemindersUseCase: ScheduleRemindersUseCase
+    private val scheduleRemindersUseCase: ScheduleRemindersUseCase,
+    private val notificationPermissionHandler: NotificationPermissionHandler
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(DetailUiState())
@@ -130,6 +132,16 @@ class DetailViewModel(
         val state = _uiState.value
         _uiState.update { it.copy(isSaving = true, error = null) }
 
+        if (state.selectedReminderDays.isNotEmpty() && !notificationPermissionHandler.hasPermission()) {
+            notificationPermissionHandler.requestPermission { _ ->
+                performSave(state)
+            }
+        } else {
+            performSave(state)
+        }
+    }
+
+    private fun performSave(state: DetailUiState) {
         viewModelScope.launch {
             try {
                 val now = DateTimeClock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
@@ -152,7 +164,6 @@ class DetailViewModel(
                     updateDocumentUseCase(document)
                 }
 
-                // Schedule reminders
                 scheduleRemindersUseCase(document)
 
                 _uiState.update { it.copy(isSaving = false, savedSuccessfully = true) }
