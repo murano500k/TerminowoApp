@@ -3,7 +3,7 @@ package com.stc.terminowo.presentation.categories
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.stc.terminowo.domain.model.DocumentCategory
-import com.stc.terminowo.domain.usecase.GetDocumentsUseCase
+import com.stc.terminowo.domain.repository.DocumentRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -21,10 +21,10 @@ data class CategoryListUiState(
 )
 
 class CategoryListViewModel(
-    getDocuments: GetDocumentsUseCase
+    documentRepository: DocumentRepository
 ) : ViewModel() {
 
-    val uiState: StateFlow<CategoryListUiState> = getDocuments()
+    val uiState: StateFlow<CategoryListUiState> = documentRepository.getAllDocuments()
         .map { docs ->
             val categories = docs
                 .groupBy { it.category }

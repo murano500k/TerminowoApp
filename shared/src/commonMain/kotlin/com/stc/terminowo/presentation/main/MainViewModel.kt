@@ -4,8 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.stc.terminowo.domain.model.Document
 import com.stc.terminowo.domain.model.DocumentCategory
-import com.stc.terminowo.domain.usecase.DeleteDocumentUseCase
-import com.stc.terminowo.domain.usecase.GetDocumentsUseCase
+import com.stc.terminowo.domain.repository.DocumentRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -21,15 +20,14 @@ data class DocumentListUiState(
 )
 
 class DocumentListViewModel(
-    getDocuments: GetDocumentsUseCase,
-    private val deleteDocumentUseCase: DeleteDocumentUseCase
+    private val documentRepository: DocumentRepository
 ) : ViewModel() {
 
     private val _categoryKey = MutableStateFlow<String?>(null)
     private val _documentToDelete = MutableStateFlow<Document?>(null)
 
     val uiState: StateFlow<DocumentListUiState> = combine(
-        getDocuments(),
+        documentRepository.getAllDocuments(),
         _categoryKey,
         _documentToDelete
     ) { docs, catKey, docToDelete ->
@@ -68,7 +66,7 @@ class DocumentListViewModel(
         _documentToDelete.value = null
         viewModelScope.launch {
             try {
-                deleteDocumentUseCase(document.id)
+                documentRepository.deleteDocument(document.id)
             } catch (_: Exception) {
                 // Document list updates reactively via Flow
             }

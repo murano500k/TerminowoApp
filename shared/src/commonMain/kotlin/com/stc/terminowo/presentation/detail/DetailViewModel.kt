@@ -6,10 +6,7 @@ import com.stc.terminowo.domain.model.Document
 import com.stc.terminowo.domain.model.DocumentCategory
 import com.stc.terminowo.domain.model.ReminderInterval
 import com.stc.terminowo.domain.repository.DocumentRepository
-import com.stc.terminowo.domain.usecase.DeleteDocumentUseCase
-import com.stc.terminowo.domain.usecase.SaveDocumentUseCase
 import com.stc.terminowo.domain.usecase.ScheduleRemindersUseCase
-import com.stc.terminowo.domain.usecase.UpdateDocumentUseCase
 import com.stc.terminowo.platform.NotificationPermissionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -49,9 +46,6 @@ data class DetailUiState(
 
 class DetailViewModel(
     private val documentRepository: DocumentRepository,
-    private val saveDocumentUseCase: SaveDocumentUseCase,
-    private val updateDocumentUseCase: UpdateDocumentUseCase,
-    private val deleteDocumentUseCase: DeleteDocumentUseCase,
     private val scheduleRemindersUseCase: ScheduleRemindersUseCase,
     private val notificationPermissionHandler: NotificationPermissionHandler
 ) : ViewModel() {
@@ -161,9 +155,9 @@ class DetailViewModel(
                 )
 
                 if (state.isNewDocument) {
-                    saveDocumentUseCase(document)
+                    documentRepository.insertDocument(document)
                 } else {
-                    updateDocumentUseCase(document)
+                    documentRepository.updateDocument(document)
                 }
 
                 scheduleRemindersUseCase(document)
@@ -186,7 +180,7 @@ class DetailViewModel(
 
         viewModelScope.launch {
             try {
-                deleteDocumentUseCase(state.documentId)
+                documentRepository.deleteDocument(state.documentId)
                 _uiState.update { it.copy(isDeleting = false, deletedSuccessfully = true) }
             } catch (e: Exception) {
                 val fallback = getString(Res.string.failed_to_delete)
