@@ -51,7 +51,4 @@ Backend proxy (GCP Cloud Function) → `DocumentAiMapper` with 3-strategy date e
 
 ## What's Not Done Yet
 
-- CameraScreen is a placeholder — needs CameraK composable wiring
-- Document AI processor not created in GCP yet
-- `local.properties` needs real Document AI credentials
 - iOS implementation (requires Mac)
