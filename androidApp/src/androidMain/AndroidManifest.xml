@@ -14,7 +14,7 @@
 
     <application
         android:name=".TerminowoApp"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="Terminowo"
         android:supportsRtl="true"
