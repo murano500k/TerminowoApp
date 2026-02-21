@@ -23,6 +23,9 @@ import terminowo.shared.generated.resources.auth_dialog_title
 import terminowo.shared.generated.resources.auth_login
 import terminowo.shared.generated.resources.auth_login_failed
 import terminowo.shared.generated.resources.auth_skip
+import terminowo.shared.generated.resources.auth_info_title
+import terminowo.shared.generated.resources.auth_info_message
+import terminowo.shared.generated.resources.auth_info_ok
 
 @Composable
 fun App() {
@@ -30,13 +33,20 @@ fun App() {
         val authViewModel: AuthViewModel = koinViewModel()
         val authState by authViewModel.uiState.collectAsState()
 
-        if (!authState.dialogDismissed) {
-            AuthDialog(
-                isLoggingIn = authState.isLoggingIn,
-                loginError = authState.loginError,
-                onLogin = authViewModel::login,
-                onSkip = authViewModel::skip
-            )
+        if (authState.requiresUserAuth && !authState.dialogDismissed && !authState.isCheckingAuth) {
+            if (!authState.showLoginDialog) {
+                AuthInfoDialog(
+                    onOk = authViewModel::proceedToLogin,
+                    onSkip = authViewModel::skip
+                )
+            } else {
+                AuthLoginDialog(
+                    isLoggingIn = authState.isLoggingIn,
+                    loginError = authState.loginError,
+                    onLogin = authViewModel::login,
+                    onSkip = authViewModel::skip
+                )
+            }
         }
 
         NavGraph(authViewModel = authViewModel)
@@ -44,7 +54,29 @@ fun App() {
 }
 
 @Composable
-private fun AuthDialog(
+private fun AuthInfoDialog(
+    onOk: () -> Unit,
+    onSkip: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onSkip,
+        title = { Text(stringResource(Res.string.auth_info_title)) },
+        text = { Text(stringResource(Res.string.auth_info_message)) },
+        confirmButton = {
+            TextButton(onClick = onOk) {
+                Text(stringResource(Res.string.auth_info_ok))
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onSkip) {
+                Text(stringResource(Res.string.auth_skip))
+            }
+        }
+    )
+}
+
+@Composable
+private fun AuthLoginDialog(
     isLoggingIn: Boolean,
     loginError: String?,
     onLogin: () -> Unit,
