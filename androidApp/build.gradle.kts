@@ -28,6 +28,7 @@ kotlin {
             implementation(project(":shared"))
             implementation(libs.androidx.activity.compose)
             implementation(libs.ktor.client.core)
+            implementation(libs.google.play.services.auth)
 
             // Koin for Android
             implementation(project.dependencies.platform(libs.koin.bom))

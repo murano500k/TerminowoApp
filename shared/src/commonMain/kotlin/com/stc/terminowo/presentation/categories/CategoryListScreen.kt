@@ -35,6 +35,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.stc.terminowo.config.FeatureFlags
+import com.stc.terminowo.presentation.auth.AuthViewModel
+import com.stc.terminowo.presentation.components.AccountIconButton
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import terminowo.shared.generated.resources.Res
@@ -54,6 +57,11 @@ fun CategoryListScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
+    val authViewModel: AuthViewModel? = if (FeatureFlags.GOOGLE_SIGN_IN_ENABLED) {
+        koinViewModel<AuthViewModel>()
+    } else null
+    val authState = authViewModel?.uiState?.collectAsState()
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -62,6 +70,15 @@ fun CategoryListScreen(
                         text = stringResource(Res.string.app_title),
                         style = MaterialTheme.typography.titleLarge
                     )
+                },
+                actions = {
+                    if (FeatureFlags.GOOGLE_SIGN_IN_ENABLED && authViewModel != null && authState != null) {
+                        AccountIconButton(
+                            authState = authState.value,
+                            onSignIn = { authViewModel.login() },
+                            onSignOut = { authViewModel.logout() }
+                        )
+                    }
                 }
             )
         },
