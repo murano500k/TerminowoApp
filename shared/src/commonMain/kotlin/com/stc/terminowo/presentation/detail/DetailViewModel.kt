@@ -38,6 +38,7 @@ data class DetailUiState(
     val selectedReminderDays: Set<Int> = setOf(14, 7, 1, 0),
     val category: DocumentCategory = DocumentCategory.OTHER,
     val reminderTime: LocalTime = LocalTime(9, 0),
+    val createdAt: LocalDateTime? = null,
     val rawOcrResponse: String? = null,
     val isSaving: Boolean = false,
     val isDeleting: Boolean = false,
@@ -72,7 +73,8 @@ class DetailViewModel(
                     thumbnailPath = document.thumbnailPath,
                     selectedReminderDays = document.reminderDays.toSet(),
                     category = document.category,
-                    reminderTime = document.reminderTime
+                    reminderTime = document.reminderTime,
+                    createdAt = document.createdAt
                 )
             }
         }
@@ -155,7 +157,7 @@ class DetailViewModel(
                     reminderDays = state.selectedReminderDays.toList().sorted(),
                     category = state.category,
                     reminderTime = state.reminderTime,
-                    createdAt = now
+                    createdAt = state.createdAt ?: now
                 )
 
                 if (state.isNewDocument) {
