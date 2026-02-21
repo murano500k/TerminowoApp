@@ -1,5 +1,6 @@
 package com.stc.terminowo.data.remote
 
+import com.stc.terminowo.platform.AppLogger
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.header
@@ -16,11 +17,11 @@ class DocumentAiService(
 ) {
     @OptIn(ExperimentalEncodingApi::class)
     suspend fun processDocument(imageBytes: ByteArray, mimeType: String): ProcessResponse {
-        println("DocScanner-OCR: processDocument called, imageBytes=${imageBytes.size}, mimeType=$mimeType")
-        println("DocScanner-OCR: endpoint=${config.url}")
+        AppLogger.d(TAG, "processDocument called, imageBytes=${imageBytes.size}, mimeType=$mimeType")
+        AppLogger.d(TAG, "endpoint=${config.url}")
 
         val base64Content = Base64.encode(imageBytes)
-        println("DocScanner-OCR: base64 encoded, length=${base64Content.length}")
+        AppLogger.d(TAG, "base64 encoded, length=${base64Content.length}")
 
         val request = ProcessRequest(
             rawDocument = RawDocument(
@@ -29,7 +30,7 @@ class DocumentAiService(
             )
         )
 
-        println("DocScanner-OCR: sending POST request...")
+        AppLogger.d(TAG, "sending POST request...")
 
         val response = try {
             httpClient.post(config.url) {
@@ -38,28 +39,30 @@ class DocumentAiService(
                 setBody(request)
             }
         } catch (e: Exception) {
-            println("DocScanner-OCR: HTTP request FAILED with exception: ${e::class.simpleName}: ${e.message}")
-            e.printStackTrace()
+            AppLogger.e(TAG, "HTTP request FAILED: ${e::class.simpleName}: ${e.message}", e)
             throw e
         }
 
-        println("DocScanner-OCR: HTTP response status=${response.status}")
+        AppLogger.d(TAG, "HTTP response status=${response.status}")
         val processResponse: ProcessResponse = try {
             response.body()
         } catch (e: Exception) {
-            println("DocScanner-OCR: Response deserialization FAILED: ${e::class.simpleName}: ${e.message}")
-            e.printStackTrace()
+            AppLogger.e(TAG, "Response deserialization FAILED: ${e::class.simpleName}: ${e.message}", e)
             throw e
         }
 
-        println("DocScanner-OCR: Parsed response, document=${processResponse.document != null}")
+        AppLogger.d(TAG, "Parsed response, document=${processResponse.document != null}")
         processResponse.document?.let { doc ->
-            println("DocScanner-OCR: text length=${doc.text?.length}, entities=${doc.entities?.size}")
+            AppLogger.d(TAG, "text length=${doc.text?.length}, entities=${doc.entities?.size}")
             doc.entities?.forEach { entity ->
-                println("DocScanner-OCR: entity type=${entity.type}, mentionText=${entity.mentionText}, confidence=${entity.confidence}")
+                AppLogger.d(TAG, "entity type=${entity.type}, mentionText=${entity.mentionText}, confidence=${entity.confidence}")
             }
         }
 
         return processResponse
+    }
+
+    companion object {
+        private const val TAG = "DocumentAiService"
     }
 }

@@ -52,6 +52,10 @@ android {
 
         buildConfigField("String", "PROXY_URL", "\"${localProperty("PROXY_URL")}\"")
         buildConfigField("String", "PROXY_API_KEY", "\"${localProperty("PROXY_API_KEY")}\"")
+
+        ndk {
+            debugSymbolLevel = "FULL"
+        }
     }
 
     signingConfigs {
@@ -68,15 +72,9 @@ android {
         buildConfig = true
     }
 
-    defaultConfig {
-        ndk {
-            debugSymbolLevel = "FULL"
-        }
-    }
-
     buildTypes {
         debug {
-            signingConfig = signingConfigs.getByName("release")
+            // Uses default debug keystore
         }
         release {
             signingConfig = signingConfigs.getByName("release")

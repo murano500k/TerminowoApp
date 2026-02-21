@@ -8,10 +8,9 @@ import kotlinx.serialization.json.Json
 
 class OcrRepositoryImpl(
     private val documentAiService: DocumentAiService,
-    private val mapper: DocumentAiMapper
+    private val mapper: DocumentAiMapper,
+    private val json: Json
 ) : OcrRepository {
-
-    private val json = Json { prettyPrint = true; ignoreUnknownKeys = true }
 
     override suspend fun processDocument(imageBytes: ByteArray, mimeType: String): ScanResult {
         val response = documentAiService.processDocument(imageBytes, mimeType)

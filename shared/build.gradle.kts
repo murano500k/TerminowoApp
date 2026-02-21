@@ -13,7 +13,6 @@ kotlin {
     androidTarget {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_17)
-            freeCompilerArgs.add("-Xexpect-actual-classes")
         }
     }
 
@@ -81,6 +80,7 @@ kotlin {
             implementation(libs.sqldelight.android.driver)
             implementation(libs.koin.android)
             implementation(libs.google.play.services.auth)
+            implementation(libs.timber)
         }
 
         if (isMacOS) {

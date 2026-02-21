@@ -35,13 +35,10 @@ val dataModule = module {
                 json(get())
             }
             install(Logging) {
-                level = LogLevel.ALL
+                level = LogLevel.HEADERS
                 logger = object : Logger {
                     override fun log(message: String) {
-                        // Split long messages (base64 bodies) to avoid Logcat truncation
-                        message.lines().forEach { line ->
-                            println("DocScanner-HTTP: $line")
-                        }
+                        com.stc.terminowo.platform.AppLogger.d("KtorHttp", message)
                     }
                 }
             }
@@ -59,7 +56,7 @@ val dataModule = module {
 
     single<DocumentRepository> { DocumentRepositoryImpl(get()) }
 
-    single<OcrRepository> { OcrRepositoryImpl(get(), get()) }
+    single<OcrRepository> { OcrRepositoryImpl(get(), get(), get()) }
 
     single { UserProfileService(get()) }
 }

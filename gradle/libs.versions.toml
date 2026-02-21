@@ -8,7 +8,6 @@ sqldelight = "2.0.2"
 ktor = "3.1.1"
 koin-bom = "4.0.2"
 camerak = "0.2.0"
-alarmee = "2.4.0"
 navigation-compose = "2.8.0-alpha10"
 kotlinx-datetime = "0.6.2"
 kotlinx-serialization = "1.7.3"
@@ -20,6 +19,7 @@ android-minSdk = "26"
 android-targetSdk = "35"
 androidx-activityCompose = "1.9.3"
 play-services-auth = "21.3.0"
+timber = "5.0.1"
 
 [libraries]
 # Koin (BOM)
@@ -45,9 +45,6 @@ sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", 
 # CameraK
 camerak = { module = "io.github.kashif-mehmood-km:camerak", version.ref = "camerak" }
 
-# Alarmee
-alarmee = { module = "io.github.tweener:alarmee", version.ref = "alarmee" }
-
 # Navigation
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigation-compose" }
 
@@ -59,6 +56,7 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 # Android
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 google-play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "play-services-auth" }
+timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 # Testing
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
