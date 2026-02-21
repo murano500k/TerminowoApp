@@ -6,6 +6,7 @@ import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atTime
 import kotlinx.datetime.minus
+import kotlinx.datetime.plus
 import kotlinx.datetime.Clock as DateTimeClock
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.datetime.todayIn
@@ -31,14 +32,8 @@ class ScheduleRemindersUseCase(
                 reminderDate == today && reminderTime > nowTime -> reminderDate.atTime(reminderTime)
                 reminderDate == today -> {
                     // Time already passed today — schedule 5 seconds from now
-                    val nowDateTime = DateTimeClock.System.now().toLocalDateTime(tz)
-                    val futureSecond = nowDateTime.second + 5
-                    val futureMinute = nowDateTime.minute + futureSecond / 60
-                    val futureHour = nowDateTime.hour + futureMinute / 60
-                    kotlinx.datetime.LocalDateTime(
-                        today.year, today.monthNumber, today.dayOfMonth,
-                        futureHour % 24, futureMinute % 60, futureSecond % 60
-                    )
+                    val futureInstant = DateTimeClock.System.now().plus(5, DateTimeUnit.SECOND)
+                    futureInstant.toLocalDateTime(tz)
                 }
                 else -> return@forEach // Past date, skip
             }
