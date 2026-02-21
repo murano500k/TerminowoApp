@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import com.stc.terminowo.domain.model.ReminderInterval
 import com.stc.terminowo.shared.R
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
@@ -89,7 +90,7 @@ actual class NotificationScheduler(
     actual fun cancelReminders(documentId: String) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         // Cancel all possible reminder intervals for this document
-        listOf(0, 1, 7, 14).forEach { daysBefore ->
+        ReminderInterval.entries.map { it.days }.forEach { daysBefore ->
             val notificationId = "${documentId}_$daysBefore".hashCode()
             val intent = Intent(context, ReminderReceiver::class.java)
             val pendingIntent = PendingIntent.getBroadcast(

@@ -1,5 +1,6 @@
 package com.stc.terminowo.platform
 
+import com.stc.terminowo.domain.model.ReminderInterval
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import platform.Foundation.NSDateComponents
@@ -65,7 +66,7 @@ actual class NotificationScheduler {
     }
 
     actual fun cancelReminders(documentId: String) {
-        val identifiers = listOf(0, 1, 7, 14).map { "${documentId}_$it" }
+        val identifiers = ReminderInterval.entries.map { "${documentId}_${it.days}" }
         center.removePendingNotificationRequestsWithIdentifiers(identifiers)
     }
 
