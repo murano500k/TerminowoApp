@@ -31,7 +31,7 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ExposedDropdownMenuAnchorType
+import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -195,7 +195,7 @@ fun DetailScreen(
                     readOnly = true,
                     label = { Text(stringResource(Res.string.category)) },
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = categoryExpanded) },
-                    modifier = Modifier.fillMaxWidth().menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
+                    modifier = Modifier.fillMaxWidth().menuAnchor(MenuAnchorType.PrimaryNotEditable)
                 )
                 ExposedDropdownMenu(
                     expanded = categoryExpanded,
@@ -325,7 +325,7 @@ fun DetailScreen(
             // Notification time picker
             Box {
                 OutlinedTextField(
-                    value = "%02d:%02d".format(uiState.reminderTime.hour, uiState.reminderTime.minute),
+                    value = "${uiState.reminderTime.hour.toString().padStart(2, '0')}:${uiState.reminderTime.minute.toString().padStart(2, '0')}",
                     onValueChange = {},
                     readOnly = true,
                     label = { Text(stringResource(Res.string.notification_time)) },

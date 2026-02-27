@@ -66,9 +66,6 @@ kotlin {
             // SQLDelight
             implementation(libs.sqldelight.coroutines)
 
-            // Camera
-            implementation(libs.camerak)
-
             // KotlinX
             implementation(libs.kotlinx.datetime)
             implementation(libs.kotlinx.serialization.json)
@@ -81,6 +78,7 @@ kotlin {
             implementation(libs.koin.android)
             implementation(libs.google.play.services.auth)
             implementation(libs.timber)
+            implementation(libs.camerak)
         }
 
         if (isMacOS) {

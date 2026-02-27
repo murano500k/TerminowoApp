@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalForeignApi::class)
+
 package com.stc.terminowo.platform
 
 import kotlinx.cinterop.ExperimentalForeignApi
@@ -19,13 +21,11 @@ import platform.UIKit.UIGraphicsEndImageContext
 import platform.UIKit.UIGraphicsGetImageFromCurrentImageContext
 import platform.UIKit.UIImage
 import platform.UIKit.UIImageJPEGRepresentation
-import platform.UIKit.UIImageOrientationUp
 import platform.posix.memcpy
 
 actual class ImageStorage {
     private val fileManager = NSFileManager.defaultManager
 
-    @OptIn(ExperimentalForeignApi::class)
     private fun getDocumentsDir(): String {
         val paths = NSSearchPathForDirectoriesInDomains(
             NSDocumentDirectory,
@@ -51,12 +51,10 @@ actual class ImageStorage {
         dir
     }
 
-    @OptIn(ExperimentalForeignApi::class)
     private fun ByteArray.toNSData(): NSData = usePinned { pinned ->
         NSData.create(bytes = pinned.addressOf(0), length = size.toULong())
     }
 
-    @OptIn(ExperimentalForeignApi::class)
     private fun NSData.toByteArray(): ByteArray {
         val size = length.toInt()
         if (size == 0) return ByteArray(0)
@@ -67,25 +65,19 @@ actual class ImageStorage {
         return bytes
     }
 
-    @OptIn(ExperimentalForeignApi::class)
     actual suspend fun saveImage(imageBytes: ByteArray, fileName: String): String =
         withContext(Dispatchers.Default) {
             val data = normalizeImageRotation(imageBytes)
             val path = "$imagesDir/$fileName"
-            data.writeToFile(path, atomically = true)
+            fileManager.createFileAtPath(path, contents = data, attributes = null)
             path
         }
 
-    @OptIn(ExperimentalForeignApi::class)
     private fun normalizeImageRotation(imageBytes: ByteArray): NSData {
         val nsData = imageBytes.toNSData()
         val image = UIImage(data = nsData) ?: return nsData
 
-        if (image.imageOrientation == UIImageOrientationUp) {
-            return nsData
-        }
-
-        // Draw into a new context to bake in the correct EXIF rotation
+        // Always normalize to bake in EXIF rotation
         val imageWidth = image.size.useContents { width }
         val imageHeight = image.size.useContents { height }
 
@@ -97,7 +89,6 @@ actual class ImageStorage {
         return normalizedImage?.let { UIImageJPEGRepresentation(it, 0.95) } ?: nsData
     }
 
-    @OptIn(ExperimentalForeignApi::class)
     actual suspend fun saveThumbnail(imageBytes: ByteArray, fileName: String): String =
         withContext(Dispatchers.Default) {
             val nsData = imageBytes.toNSData()
@@ -118,8 +109,11 @@ actual class ImageStorage {
             UIGraphicsEndImageContext()
 
             val path = "$thumbnailsDir/thumb_$fileName"
-            thumbnailImage?.let {
-                UIImageJPEGRepresentation(it, 0.80)?.writeToFile(path, atomically = true)
+            thumbnailImage?.let { img ->
+                val jpegData = UIImageJPEGRepresentation(img, 0.80)
+                if (jpegData != null) {
+                    fileManager.createFileAtPath(path, contents = jpegData, attributes = null)
+                }
             }
             path
         }
@@ -130,10 +124,9 @@ actual class ImageStorage {
         }
     }
 
-    @OptIn(ExperimentalForeignApi::class)
     actual suspend fun readImage(path: String): ByteArray? =
         withContext(Dispatchers.Default) {
             if (!fileManager.fileExistsAtPath(path)) return@withContext null
-            NSData.dataWithContentsOfFile(path)?.toByteArray()
+            fileManager.contentsAtPath(path)?.toByteArray()
         }
 }

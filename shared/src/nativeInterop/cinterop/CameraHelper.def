@@ -1,0 +1,16 @@
+package = com.stc.terminowo.interop
+language = Objective-C
+---
+#import <UIKit/UIKit.h>
+
+static inline UIImagePickerControllerSourceType getCameraSourceType(void) {
+    return UIImagePickerControllerSourceTypeCamera;
+}
+
+static inline BOOL isCameraAvailable(void) {
+    return [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera];
+}
+
+static inline void configurePickerForCamera(UIImagePickerController *picker) {
+    picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+}

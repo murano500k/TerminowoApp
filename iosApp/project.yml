@@ -1,0 +1,83 @@
+name: iosApp
+options:
+  bundleIdPrefix: com.stc
+  deploymentTarget:
+    iOS: "16.0"
+
+settings:
+  base:
+    ENABLE_USER_SCRIPT_SANDBOXING: "NO"
+
+targets:
+  iosApp:
+    type: application
+    platform: iOS
+    sources:
+      - path: iosApp
+    configFiles:
+      Debug: Secrets.xcconfig
+      Release: Secrets.xcconfig
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.stc.terminowo
+        INFOPLIST_FILE: iosApp/Info.plist
+        CODE_SIGN_IDENTITY: "Apple Development"
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: "64RYVQ9R2P"
+        FRAMEWORK_SEARCH_PATHS:
+          - "$(inherited)"
+          - "$(SRCROOT)/../shared/build/bin/iosArm64/debugFramework"
+          - "$(SRCROOT)/../shared/build/bin/iosSimulatorArm64/debugFramework"
+          - "$(SRCROOT)/../shared/build/bin/iosX64/debugFramework"
+        OTHER_LINKER_FLAGS:
+          - "$(inherited)"
+          - "-framework"
+          - "shared"
+        SWIFT_VERSION: "5.0"
+    dependencies:
+      - sdk: libsqlite3.tbd
+    preBuildScripts:
+      - name: "Validate Secrets"
+        script: |
+          if [ ! -f "$SRCROOT/Secrets.xcconfig" ]; then
+            echo "error: Secrets.xcconfig not found. Copy Secrets.xcconfig.template to Secrets.xcconfig and fill in real values."
+            exit 1
+          fi
+        basedOnDependencyAnalysis: false
+      - name: "Build Shared Framework"
+        script: |
+          if [ "$PLATFORM_NAME" = "iphonesimulator" ]; then
+            if [ "$CURRENT_ARCH" = "arm64" ]; then
+              KOTLIN_TARGET="IosSimulatorArm64"
+              KOTLIN_TARGET_LOWER="iosSimulatorArm64"
+            else
+              KOTLIN_TARGET="IosX64"
+              KOTLIN_TARGET_LOWER="iosX64"
+            fi
+          else
+            KOTLIN_TARGET="IosArm64"
+            KOTLIN_TARGET_LOWER="iosArm64"
+          fi
+          cd "$SRCROOT/.."
+          ./gradlew ":shared:linkDebugFramework${KOTLIN_TARGET}" ":shared:${KOTLIN_TARGET_LOWER}AggregateResources"
+        basedOnDependencyAnalysis: false
+    postCompileScripts:
+      - name: "Copy Compose Resources"
+        script: |
+          if [ "$PLATFORM_NAME" = "iphonesimulator" ]; then
+            if [ "$CURRENT_ARCH" = "arm64" ]; then
+              KOTLIN_TARGET_LOWER="iosSimulatorArm64"
+            else
+              KOTLIN_TARGET_LOWER="iosX64"
+            fi
+          else
+            KOTLIN_TARGET_LOWER="iosArm64"
+          fi
+          RESOURCES_SRC="$SRCROOT/../shared/build/kotlin-multiplatform-resources/aggregated-resources/${KOTLIN_TARGET_LOWER}"
+          RESOURCES_DST="${BUILT_PRODUCTS_DIR}/${CONTENTS_FOLDER_PATH}/compose-resources"
+          rm -rf "$RESOURCES_DST"
+          if [ -d "$RESOURCES_SRC" ]; then
+            mkdir -p "$RESOURCES_DST"
+            cp -R "$RESOURCES_SRC/." "$RESOURCES_DST/"
+          fi
+        basedOnDependencyAnalysis: false
