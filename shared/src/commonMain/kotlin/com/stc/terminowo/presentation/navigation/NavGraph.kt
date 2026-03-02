@@ -24,6 +24,9 @@ fun NavGraph() {
                 onScanClick = { navController.navigate(Screen.Camera) },
                 onCategoryClick = { categoryKey ->
                     navController.navigate(Screen.DocumentList(categoryKey))
+                },
+                onDocumentClick = { documentId ->
+                    navController.navigate(Screen.DetailEdit(documentId))
                 }
             )
         }

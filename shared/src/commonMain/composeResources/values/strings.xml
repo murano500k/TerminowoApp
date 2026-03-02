@@ -78,6 +78,10 @@
     <string name="failed_to_save">Failed to save</string>
     <string name="failed_to_delete">Failed to delete</string>
 
+    <!-- Search -->
+    <string name="search_documents">Search documents</string>
+    <string name="no_results">No documents found</string>
+
     <!-- Category list screen -->
     <string name="all_documents">All Documents</string>
     <string name="documents_count">%1$d</string>

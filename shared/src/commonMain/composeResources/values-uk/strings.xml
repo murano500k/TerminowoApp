@@ -78,6 +78,10 @@
     <string name="failed_to_save">\u041D\u0435 \u0432\u0434\u0430\u043B\u043E\u0441\u044F \u0437\u0431\u0435\u0440\u0435\u0433\u0442\u0438</string>
     <string name="failed_to_delete">\u041D\u0435 \u0432\u0434\u0430\u043B\u043E\u0441\u044F \u0432\u0438\u0434\u0430\u043B\u0438\u0442\u0438</string>
 
+    <!-- Search -->
+    <string name="search_documents">Пошук документів</string>
+    <string name="no_results">Документів не знайдено</string>
+
     <!-- Category list screen -->
     <string name="all_documents">\u0423\u0441\u0456 \u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u0438</string>
     <string name="documents_count">%1$d</string>

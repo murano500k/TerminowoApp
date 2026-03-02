@@ -78,6 +78,10 @@
     <string name="failed_to_save">Nie uda\u0142o si\u0119 zapisa\u0107</string>
     <string name="failed_to_delete">Nie uda\u0142o si\u0119 usun\u0105\u0107</string>
 
+    <!-- Search -->
+    <string name="search_documents">Szukaj dokument\u00F3w</string>
+    <string name="no_results">Nie znaleziono dokument\u00F3w</string>
+
     <!-- Category list screen -->
     <string name="all_documents">Wszystkie dokumenty</string>
     <string name="documents_count">%1$d</string>
