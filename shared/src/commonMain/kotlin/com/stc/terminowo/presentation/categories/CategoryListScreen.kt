@@ -22,8 +22,12 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -31,6 +35,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
@@ -58,12 +63,21 @@ import terminowo.shared.generated.resources.Res
 import terminowo.shared.generated.resources.all_documents
 import terminowo.shared.generated.resources.app_title
 import terminowo.shared.generated.resources.back
+import terminowo.shared.generated.resources.cancel
+import terminowo.shared.generated.resources.delete
+import terminowo.shared.generated.resources.delete_all_confirm_message
+import terminowo.shared.generated.resources.delete_all_confirm_title
+import terminowo.shared.generated.resources.delete_all_documents
 import terminowo.shared.generated.resources.documents_count
 import terminowo.shared.generated.resources.empty_state_hint
 import terminowo.shared.generated.resources.no_documents_yet
 import terminowo.shared.generated.resources.no_results
 import terminowo.shared.generated.resources.scan_document
 import terminowo.shared.generated.resources.search_documents
+import terminowo.shared.generated.resources.delete_files_confirm_message
+import terminowo.shared.generated.resources.delete_files_confirm_title
+import terminowo.shared.generated.resources.delete_files_only
+import terminowo.shared.generated.resources.settings
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -78,7 +92,22 @@ fun CategoryListScreen(
     val searchResults by viewModel.searchResults.collectAsState()
 
     var isSearchActive by remember { mutableStateOf(false) }
+    var isSettingsMenuExpanded by remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
+
+    if (uiState.showDeleteAllConfirmation) {
+        DeleteAllConfirmationDialog(
+            onConfirm = { viewModel.confirmDeleteAll() },
+            onDismiss = { viewModel.cancelDeleteAll() }
+        )
+    }
+
+    if (uiState.showDeleteFilesConfirmation) {
+        DeleteFilesConfirmationDialog(
+            onConfirm = { viewModel.confirmDeleteFiles() },
+            onDismiss = { viewModel.cancelDeleteFiles() }
+        )
+    }
 
     val authViewModel: AuthViewModel? = if (FeatureFlags.GOOGLE_SIGN_IN_ENABLED) {
         koinViewModel<AuthViewModel>()
@@ -140,6 +169,45 @@ fun CategoryListScreen(
                             text = stringResource(Res.string.app_title),
                             style = MaterialTheme.typography.titleLarge
                         )
+                    },
+                    navigationIcon = {
+                        Box {
+                            IconButton(onClick = { isSettingsMenuExpanded = true }) {
+                                Icon(
+                                    imageVector = Icons.Default.Settings,
+                                    contentDescription = stringResource(Res.string.settings)
+                                )
+                            }
+                            DropdownMenu(
+                                expanded = isSettingsMenuExpanded,
+                                onDismissRequest = { isSettingsMenuExpanded = false }
+                            ) {
+                                DropdownMenuItem(
+                                    text = {
+                                        Text(
+                                            text = stringResource(Res.string.delete_files_only),
+                                            color = MaterialTheme.colorScheme.error
+                                        )
+                                    },
+                                    onClick = {
+                                        isSettingsMenuExpanded = false
+                                        viewModel.requestDeleteFiles()
+                                    }
+                                )
+                                DropdownMenuItem(
+                                    text = {
+                                        Text(
+                                            text = stringResource(Res.string.delete_all_documents),
+                                            color = MaterialTheme.colorScheme.error
+                                        )
+                                    },
+                                    onClick = {
+                                        isSettingsMenuExpanded = false
+                                        viewModel.requestDeleteAll()
+                                    }
+                                )
+                            }
+                        }
                     },
                     actions = {
                         if (uiState.allDocumentsCount > 1) {
@@ -240,6 +308,56 @@ fun CategoryListScreen(
             }
         }
     }
+}
+
+@Composable
+private fun DeleteAllConfirmationDialog(
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(Res.string.delete_all_confirm_title)) },
+        text = { Text(stringResource(Res.string.delete_all_confirm_message)) },
+        confirmButton = {
+            TextButton(onClick = onConfirm) {
+                Text(
+                    text = stringResource(Res.string.delete),
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text(stringResource(Res.string.cancel))
+            }
+        }
+    )
+}
+
+@Composable
+private fun DeleteFilesConfirmationDialog(
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(Res.string.delete_files_confirm_title)) },
+        text = { Text(stringResource(Res.string.delete_files_confirm_message)) },
+        confirmButton = {
+            TextButton(onClick = onConfirm) {
+                Text(
+                    text = stringResource(Res.string.delete),
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text(stringResource(Res.string.cancel))
+            }
+        }
+    )
 }
 
 @Composable

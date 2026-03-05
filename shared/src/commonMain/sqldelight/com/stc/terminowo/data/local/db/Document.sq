@@ -36,3 +36,9 @@ WHERE id = ?;
 deleteDocument:
 DELETE FROM DocumentEntity
 WHERE id = ?;
+
+deleteAllDocuments:
+DELETE FROM DocumentEntity;
+
+clearAllFilePaths:
+UPDATE DocumentEntity SET imagePath = '', thumbnailPath = '' WHERE imagePath != '' OR thumbnailPath != '';

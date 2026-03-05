@@ -97,4 +97,11 @@ actual class ImageStorage(
             val file = File(path)
             if (file.exists()) file.readBytes() else null
         }
+
+    actual suspend fun saveRawFile(fileBytes: ByteArray, fileName: String): String =
+        withContext(Dispatchers.IO) {
+            val file = File(imagesDir, fileName)
+            file.writeBytes(fileBytes)
+            file.absolutePath
+        }
 }

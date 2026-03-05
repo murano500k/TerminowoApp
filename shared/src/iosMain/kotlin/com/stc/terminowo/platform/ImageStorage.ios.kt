@@ -129,4 +129,12 @@ actual class ImageStorage {
             if (!fileManager.fileExistsAtPath(path)) return@withContext null
             fileManager.contentsAtPath(path)?.toByteArray()
         }
+
+    actual suspend fun saveRawFile(fileBytes: ByteArray, fileName: String): String =
+        withContext(Dispatchers.Default) {
+            val path = "$imagesDir/$fileName"
+            val data = fileBytes.toNSData()
+            fileManager.createFileAtPath(path, contents = data, attributes = null)
+            path
+        }
 }

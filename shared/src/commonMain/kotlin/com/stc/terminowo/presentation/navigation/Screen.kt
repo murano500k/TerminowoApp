@@ -13,7 +13,7 @@ sealed interface Screen {
     data object Camera : Screen
 
     @Serializable
-    data class ImagePreview(val imagePath: String) : Screen
+    data class ImagePreview(val imagePath: String, val mimeType: String = "image/jpeg") : Screen
 
     @Serializable
     data class DetailNew(

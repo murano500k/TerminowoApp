@@ -25,6 +25,8 @@
     <string name="save_document">Zapisz dokument</string>
     <string name="update_document">Aktualizuj dokument</string>
     <string name="delete_document">Usu\u0144 dokument</string>
+    <string name="document_image">Zdj\u0119cie dokumentu</string>
+    <string name="close">Zamknij</string>
 
     <!-- Camera screen -->
     <string name="camera_permission_required">Wymagane uprawnienie do kamery, aby skanowa\u0107 dokumenty.</string>
@@ -82,6 +84,15 @@
     <string name="search_documents">Szukaj dokument\u00F3w</string>
     <string name="no_results">Nie znaleziono dokument\u00F3w</string>
 
+    <!-- Settings -->
+    <string name="settings">Ustawienia</string>
+    <string name="delete_all_documents">Usu\u0144 wszystkie dokumenty</string>
+    <string name="delete_all_confirm_title">Usun\u0105\u0107 wszystkie dokumenty?</string>
+    <string name="delete_all_confirm_message">Spowoduje to trwa\u0142e usuni\u0119cie wszystkich dokument\u00F3w i ich zdj\u0119\u0107. Tej operacji nie mo\u017Cna cofn\u0105\u0107.</string>
+    <string name="delete_files_only">Usu\u0144 tylko pliki</string>
+    <string name="delete_files_confirm_title">Usun\u0105\u0107 wszystkie pliki?</string>
+    <string name="delete_files_confirm_message">Spowoduje to usuni\u0119cie wszystkich zdj\u0119\u0107 i plik\u00F3w PDF, ale zachowa dane dokument\u00F3w (nazwy, daty, przypomnienia). Dokumenty b\u0119d\u0105 wy\u015Bwietla\u0107 zast\u0119pcze miniaturki.</string>
+
     <!-- Category list screen -->
     <string name="all_documents">Wszystkie dokumenty</string>
     <string name="documents_count">%1$d</string>
@@ -99,6 +110,11 @@
     <string name="reminder_7_days">7 dni wcze\u015Bniej</string>
     <string name="reminder_1_day">1 dzie\u0144 wcze\u015Bniej</string>
     <string name="reminder_day_of">W dniu wyga\u015Bni\u0119cia</string>
+
+    <!-- Add document bottom sheet -->
+    <string name="add_document">Dodaj dokument</string>
+    <string name="take_photo">Zr\u00F3b zdj\u0119cie</string>
+    <string name="choose_file">Wybierz plik</string>
 
     <!-- Time picker -->
     <string name="notification_time">Czas powiadomienia</string>

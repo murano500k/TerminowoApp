@@ -9,4 +9,6 @@ interface DocumentRepository {
     suspend fun insertDocument(document: Document)
     suspend fun updateDocument(document: Document)
     suspend fun deleteDocument(id: String)
+    suspend fun deleteAllDocuments()
+    suspend fun clearAllFilePaths()
 }

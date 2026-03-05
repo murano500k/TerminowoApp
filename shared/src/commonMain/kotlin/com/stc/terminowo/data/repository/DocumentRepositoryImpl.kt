@@ -68,6 +68,18 @@ class DocumentRepositoryImpl(
             queries.deleteDocument(id)
         }
     }
+
+    override suspend fun deleteAllDocuments() {
+        withContext(Dispatchers.Default) {
+            queries.deleteAllDocuments()
+        }
+    }
+
+    override suspend fun clearAllFilePaths() {
+        withContext(Dispatchers.Default) {
+            queries.clearAllFilePaths()
+        }
+    }
 }
 
 private fun com.stc.terminowo.data.local.db.DocumentEntity.toDomain(): Document {

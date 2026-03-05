@@ -12,12 +12,21 @@ import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.common.api.ApiException
 import com.stc.terminowo.App
 import com.stc.terminowo.config.FeatureFlags
+import com.stc.terminowo.platform.FilePicker
 import com.stc.terminowo.platform.GoogleAuthProvider
 import com.stc.terminowo.platform.NotificationPermissionHandler
 
 class MainActivity : ComponentActivity() {
 
     private var pendingPermissionCallback: ((Boolean) -> Unit)? = null
+    private var pendingFilePickCallback: ((android.net.Uri?) -> Unit)? = null
+
+    private val filePickerLauncher = registerForActivityResult(
+        ActivityResultContracts.OpenDocument()
+    ) { uri ->
+        pendingFilePickCallback?.invoke(uri)
+        pendingFilePickCallback = null
+    }
 
     private val notificationPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -53,6 +62,10 @@ class MainActivity : ComponentActivity() {
             pendingPermissionCallback = onResult
             notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
+        FilePicker.pickerLauncher = { onResult ->
+            pendingFilePickCallback = onResult
+            filePickerLauncher.launch(arrayOf("image/*", "application/pdf"))
+        }
         if (FeatureFlags.GOOGLE_SIGN_IN_ENABLED) {
             GoogleAuthProvider.consentLauncher = { request: IntentSenderRequest ->
                 authConsentLauncher.launch(request)
@@ -67,6 +80,7 @@ class MainActivity : ComponentActivity() {
     override fun onDestroy() {
         super.onDestroy()
         NotificationPermissionHandler.permissionLauncher = null
+        FilePicker.pickerLauncher = null
         if (FeatureFlags.GOOGLE_SIGN_IN_ENABLED) {
             GoogleAuthProvider.consentLauncher = null
         }

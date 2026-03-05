@@ -1,6 +1,7 @@
 package com.stc.terminowo.di
 
 import com.stc.terminowo.data.local.DatabaseDriverFactory
+import com.stc.terminowo.platform.FilePicker
 import com.stc.terminowo.platform.ImageStorage
 import com.stc.terminowo.platform.GoogleAuthProvider
 import com.stc.terminowo.platform.NotificationPermissionHandler
@@ -17,4 +18,5 @@ actual fun platformModule(): Module = module {
     single { NotificationScheduler(androidContext()) }
     single { NotificationPermissionHandler(androidContext()) }
     single { GoogleAuthProvider(androidContext()) }
+    single { FilePicker(androidContext()) }
 }

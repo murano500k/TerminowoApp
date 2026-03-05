@@ -6,10 +6,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
@@ -39,6 +41,8 @@ import androidx.compose.ui.unit.dp
 import com.stc.terminowo.domain.usecase.ScanDocumentUseCase
 import com.stc.terminowo.platform.ImageStorage
 import com.stc.terminowo.platform.decodeImageBitmap
+import com.stc.terminowo.platform.getPdfPageCount
+import com.stc.terminowo.platform.renderPdfPage
 import com.stc.terminowo.presentation.components.LoadingOverlay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
@@ -61,6 +65,7 @@ import kotlin.uuid.Uuid
 @Composable
 fun ImagePreviewScreen(
     imagePath: String,
+    mimeType: String = "image/jpeg",
     onRetake: () -> Unit,
     onScanResult: (
         name: String?,
@@ -80,16 +85,31 @@ fun ImagePreviewScreen(
     val snackbarHostState = remember { SnackbarHostState() }
 
     var isProcessing by remember { mutableStateOf(false) }
+    val isPdf = mimeType == "application/pdf"
+
+    // Image state (for non-PDF)
     var imageBitmap by remember { mutableStateOf<ImageBitmap?>(null) }
     var imageLoadError by remember { mutableStateOf(false) }
 
-    LaunchedEffect(imagePath) {
+    // PDF state
+    var pdfPageCount by remember { mutableStateOf(0) }
+    var pdfPageBitmaps by remember { mutableStateOf<Map<Int, ImageBitmap>>(emptyMap()) }
+    var pdfBytes by remember { mutableStateOf<ByteArray?>(null) }
+
+    LaunchedEffect(imagePath, mimeType) {
         val bytes = imageStorage.readImage(imagePath)
-        if (bytes != null) {
+        if (bytes == null) {
+            imageLoadError = true
+            return@LaunchedEffect
+        }
+
+        if (isPdf) {
+            pdfBytes = bytes
+            pdfPageCount = getPdfPageCount(bytes)
+            if (pdfPageCount == 0) imageLoadError = true
+        } else {
             imageBitmap = decodeImageBitmap(bytes)
             if (imageBitmap == null) imageLoadError = true
-        } else {
-            imageLoadError = true
         }
     }
 
@@ -116,7 +136,6 @@ fun ImagePreviewScreen(
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Image preview area
                 Box(
                     modifier = Modifier
                         .weight(1f)
@@ -124,19 +143,29 @@ fun ImagePreviewScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     when {
+                        imageLoadError -> {
+                            Text(
+                                text = stringResource(Res.string.failed_load_image),
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
+                        isPdf && pdfPageCount > 0 -> {
+                            PdfPagesPreview(
+                                pdfBytes = pdfBytes,
+                                pageCount = pdfPageCount,
+                                pageBitmaps = pdfPageBitmaps,
+                                onPageRendered = { index, bitmap ->
+                                    pdfPageBitmaps = pdfPageBitmaps + (index to bitmap)
+                                }
+                            )
+                        }
                         imageBitmap != null -> {
                             Image(
                                 bitmap = imageBitmap!!,
                                 contentDescription = stringResource(Res.string.captured_document),
                                 modifier = Modifier.fillMaxSize(),
                                 contentScale = ContentScale.Fit
-                            )
-                        }
-                        imageLoadError -> {
-                            Text(
-                                text = stringResource(Res.string.failed_load_image),
-                                style = MaterialTheme.typography.bodyLarge,
-                                color = MaterialTheme.colorScheme.error
                             )
                         }
                         else -> {
@@ -172,13 +201,21 @@ fun ImagePreviewScreen(
                                     return@launch
                                 }
 
-                                val result = scanDocumentUseCase(imageBytes, "image/jpeg")
+                                val result = scanDocumentUseCase(imageBytes, mimeType)
                                 val ocrFailedMsg = getString(Res.string.ocr_processing_failed)
                                 result.fold(
                                     onSuccess = { scanResult ->
                                         val docId = Uuid.random().toString()
+
+                                        // For PDFs, render first page as thumbnail source
+                                        val thumbnailSourceBytes = if (isPdf) {
+                                            renderPdfPage(imageBytes, 0) ?: imageBytes
+                                        } else {
+                                            imageBytes
+                                        }
+
                                         val thumbnailPath = imageStorage.saveThumbnail(
-                                            imageBytes,
+                                            thumbnailSourceBytes,
                                             "$docId.jpg"
                                         )
                                         onScanResult(
@@ -211,6 +248,56 @@ fun ImagePreviewScreen(
 
             if (isProcessing) {
                 LoadingOverlay(message = stringResource(Res.string.extracting_expiry_date))
+            }
+        }
+    }
+}
+
+@Composable
+private fun PdfPagesPreview(
+    pdfBytes: ByteArray?,
+    pageCount: Int,
+    pageBitmaps: Map<Int, ImageBitmap>,
+    onPageRendered: (Int, ImageBitmap) -> Unit
+) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(pageCount) { pageIndex ->
+            val bitmap = pageBitmaps[pageIndex]
+
+            LaunchedEffect(pageIndex) {
+                if (bitmap == null && pdfBytes != null) {
+                    val rendered = renderPdfPage(pdfBytes, pageIndex)
+                    if (rendered != null) {
+                        val decoded = decodeImageBitmap(rendered)
+                        if (decoded != null) {
+                            onPageRendered(pageIndex, decoded)
+                        }
+                    }
+                }
+            }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .let { mod ->
+                        if (bitmap != null) mod.aspectRatio(bitmap.width.toFloat() / bitmap.height.toFloat())
+                        else mod.height(400.dp)
+                    },
+                contentAlignment = Alignment.Center
+            ) {
+                if (bitmap != null) {
+                    Image(
+                        bitmap = bitmap,
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Fit
+                    )
+                } else {
+                    CircularProgressIndicator()
+                }
             }
         }
     }
