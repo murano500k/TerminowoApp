@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminowo — Skaner dokumentów z przypomnieniami</title>
+    <meta name="description" content="Skanuj dokumenty, wyodrębniaj daty ważności i otrzymuj przypomnienia. Prywatność przede wszystkim — dane na Twoim urządzeniu.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="img/app-icon.png" type="image/png">
+</head>
+<body>
+
+    <!-- Language Toggle -->
+    <button class="lang-toggle" id="langToggle" aria-label="Switch language">
+        <span lang="pl">EN</span>
+        <span lang="en">PL</span>
+    </button>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <img src="img/app-icon.png" alt="Terminowo" class="hero-icon" width="128" height="128">
+            <h1>Terminowo</h1>
+            <p class="tagline">
+                <span lang="pl">Skanuj dokumenty. Pilnuj terminów.</span>
+                <span lang="en">Scan documents. Never miss a deadline.</span>
+            </p>
+            <div class="store-buttons">
+                <a href="#" class="store-btn google-play" aria-label="Google Play">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M3.61 1.814L13.793 12 3.61 22.186a.996.996 0 0 1-.61-.92V2.734c0-.382.218-.72.61-.92zm1.393-.508L15.98 7.28 13.207 12l-8.204-10.694zM5.003 22.694L13.207 12l2.773 4.72L5.003 22.694zM20.16 10.834l-3.478 1.953L13.793 12l2.889-0.787 3.478-1.953c.777.436.777 1.138 0 1.574z"/></svg>
+                    <span>
+                        <small>
+                            <span lang="pl">Pobierz z</span>
+                            <span lang="en">Get it on</span>
+                        </small>
+                        Google Play
+                    </span>
+                </a>
+                <a href="#" class="store-btn app-store" aria-label="App Store">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                    <span>
+                        <small>
+                            <span lang="pl">Pobierz z</span>
+                            <span lang="en">Download on the</span>
+                        </small>
+                        App Store
+                    </span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2>
+                <span lang="pl">Funkcje</span>
+                <span lang="en">Features</span>
+            </h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 48 48" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="36" height="36" rx="4"/><path d="M6 18h36"/><circle cx="24" cy="30" r="5"/><path d="M24 25v5l3 2"/></svg>
+                    </div>
+                    <h3>
+                        <span lang="pl">Skanowanie dokumentów z OCR</span>
+                        <span lang="en">Document Scanning with OCR</span>
+                    </h3>
+                    <p>
+                        <span lang="pl">Zrób zdjęcie dokumentu, a aplikacja automatycznie rozpozna tekst.</span>
+                        <span lang="en">Take a photo of your document and the app automatically recognizes the text.</span>
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 48 48" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="4" width="32" height="40" rx="3"/><path d="M16 14h16M16 22h16M16 30h8"/><circle cx="34" cy="34" r="8" fill="none"/><path d="M34 30v4l2.5 1.5"/></svg>
+                    </div>
+                    <h3>
+                        <span lang="pl">Automatyczne wyodrębnianie dat</span>
+                        <span lang="en">Automatic Expiry Date Extraction</span>
+                    </h3>
+                    <p>
+                        <span lang="pl">Sztuczna inteligencja znajduje daty ważności w Twoich dokumentach.</span>
+                        <span lang="en">AI finds expiry dates in your documents automatically.</span>
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 48 48" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 12h32v28H8z"/><path d="M8 12l6-6h20l6 6"/><path d="M18 22h12M18 30h8"/><path d="M14 22v12"/></svg>
+                    </div>
+                    <h3>
+                        <span lang="pl">Inteligentna kategoryzacja</span>
+                        <span lang="en">Smart Document Categorization</span>
+                    </h3>
+                    <p>
+                        <span lang="pl">Dokumenty są automatycznie przypisywane do kategorii: ubezpieczenia, płatności, umowy i więcej.</span>
+                        <span lang="en">Documents are automatically categorized: insurance, payments, agreements, and more.</span>
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 48 48" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M24 6v4M24 38v4M6 24h4M38 24h4"/><circle cx="24" cy="24" r="14"/><path d="M24 16v8l5 5"/></svg>
+                    </div>
+                    <h3>
+                        <span lang="pl">Przypomnienia</span>
+                        <span lang="en">Reminder Notifications</span>
+                    </h3>
+                    <p>
+                        <span lang="pl">Otrzymuj powiadomienia przed wygaśnięciem dokumentów — nigdy nie przegapisz terminu.</span>
+                        <span lang="en">Get notified before your documents expire — never miss a deadline again.</span>
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 48 48" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="10" y="8" width="28" height="32" rx="4"/><path d="M18 20h12M18 28h12"/><circle cx="24" cy="24" r="16" stroke-dasharray="4 3"/></svg>
+                    </div>
+                    <h3>
+                        <span lang="pl">Prywatność przede wszystkim</span>
+                        <span lang="en">Privacy-First Local Storage</span>
+                    </h3>
+                    <p>
+                        <span lang="pl">Wszystkie dane przechowywane lokalnie na Twoim urządzeniu. Żadnych chmur, żadnego śledzenia.</span>
+                        <span lang="en">All data stored locally on your device. No cloud, no tracking.</span>
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 48 48" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="18"/><path d="M6 24h36M24 6c-5 5.5-8 11.5-8 18s3 12.5 8 18c5-5.5 8-11.5 8-18s-3-12.5-8-18z"/></svg>
+                    </div>
+                    <h3>
+                        <span lang="pl">Wiele języków</span>
+                        <span lang="en">Multi-Language Support</span>
+                    </h3>
+                    <p>
+                        <span lang="pl">Obsługa języków: polski, angielski, rosyjski i ukraiński.</span>
+                        <span lang="en">Available in Polish, English, Russian, and Ukrainian.</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works">
+        <div class="container">
+            <h2>
+                <span lang="pl">Jak to działa</span>
+                <span lang="en">How It Works</span>
+            </h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-icon">
+                        <svg viewBox="0 0 64 64" width="64" height="64" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="16" y="8" width="32" height="48" rx="4"/><circle cx="32" cy="30" r="10"/><path d="M32 22v8M28 34h8"/></svg>
+                    </div>
+                    <h3>
+                        <span lang="pl">Zeskanuj</span>
+                        <span lang="en">Scan</span>
+                    </h3>
+                    <p>
+                        <span lang="pl">Zrób zdjęcie dokumentu aparatem telefonu.</span>
+                        <span lang="en">Take a photo of your document with your phone camera.</span>
+                    </p>
+                </div>
+                <div class="step-arrow">
+                    <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-icon">
+                        <svg viewBox="0 0 64 64" width="64" height="64" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="10" y="12" width="44" height="40" rx="3"/><path d="M10 24h44"/><path d="M22 32h20M22 40h12"/><path d="M42 36l6-6 6 6M48 30v16"/></svg>
+                    </div>
+                    <h3>
+                        <span lang="pl">Wyodrębnij</span>
+                        <span lang="en">Extract</span>
+                    </h3>
+                    <p>
+                        <span lang="pl">AI automatycznie znajduje datę ważności i kategorię.</span>
+                        <span lang="en">AI automatically finds the expiry date and category.</span>
+                    </p>
+                </div>
+                <div class="step-arrow">
+                    <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-icon">
+                        <svg viewBox="0 0 64 64" width="64" height="64" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M32 8c-10 0-18 6-18 14 0 6 8 18 18 34 10-16 18-28 18-34 0-8-8-14-18-14z"/><circle cx="32" cy="22" r="6"/></svg>
+                    </div>
+                    <h3>
+                        <span lang="pl">Przypomnij</span>
+                        <span lang="en">Remind</span>
+                    </h3>
+                    <p>
+                        <span lang="pl">Otrzymaj powiadomienie zanim dokument straci ważność.</span>
+                        <span lang="en">Get a notification before your document expires.</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <h2>
+                <span lang="pl">Pobierz Terminowo</span>
+                <span lang="en">Download Terminowo</span>
+            </h2>
+            <p class="cta-subtitle">
+                <span lang="pl">Zacznij pilnować terminów swoich dokumentów już dziś.</span>
+                <span lang="en">Start tracking your document deadlines today.</span>
+            </p>
+            <div class="store-buttons">
+                <a href="#" class="store-btn google-play" aria-label="Google Play">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M3.61 1.814L13.793 12 3.61 22.186a.996.996 0 0 1-.61-.92V2.734c0-.382.218-.72.61-.92zm1.393-.508L15.98 7.28 13.207 12l-8.204-10.694zM5.003 22.694L13.207 12l2.773 4.72L5.003 22.694zM20.16 10.834l-3.478 1.953L13.793 12l2.889-0.787 3.478-1.953c.777.436.777 1.138 0 1.574z"/></svg>
+                    <span>
+                        <small>
+                            <span lang="pl">Pobierz z</span>
+                            <span lang="en">Get it on</span>
+                        </small>
+                        Google Play
+                    </span>
+                </a>
+                <a href="#" class="store-btn app-store" aria-label="App Store">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                    <span>
+                        <small>
+                            <span lang="pl">Pobierz z</span>
+                            <span lang="en">Download on the</span>
+                        </small>
+                        App Store
+                    </span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <nav class="footer-links">
+                <a href="docs/privacy-policy.html">
+                    <span lang="pl">Polityka prywatności</span>
+                    <span lang="en">Privacy Policy</span>
+                </a>
+                <a href="docs/terms-of-service.html">
+                    <span lang="pl">Regulamin</span>
+                    <span lang="en">Terms of Service</span>
+                </a>
+                <a href="docs/account-deletion.html">
+                    <span lang="pl">Usuwanie konta</span>
+                    <span lang="en">Account Deletion</span>
+                </a>
+            </nav>
+            <p class="footer-contact">
+                <a href="mailto:contact@terminowo.app">contact@terminowo.app</a>
+            </p>
+            <p class="footer-copy">&copy; 2025 Terminowo.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
