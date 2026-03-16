@@ -3,18 +3,19 @@ package com.stc.terminowo.presentation.main
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.stc.terminowo.domain.model.Document
+import com.stc.terminowo.domain.model.DocumentStatus
+import com.stc.terminowo.domain.model.status
 import com.stc.terminowo.domain.repository.DocumentRepository
 import com.stc.terminowo.platform.ImageStorage
+import com.stc.terminowo.presentation.components.DocumentSearchHelper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.daysUntil
 import kotlinx.datetime.todayIn
 import kotlinx.datetime.Clock as DateTimeClock
 
@@ -40,19 +41,11 @@ class DocumentsViewModel(
     private val _documentToDelete = MutableStateFlow<Document?>(null)
     private val _showDeleteAllConfirmation = MutableStateFlow(false)
     private val _showDeleteFilesConfirmation = MutableStateFlow(false)
-    private val _searchQuery = MutableStateFlow("")
-    val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
 
     private val allDocuments = documentRepository.getAllDocuments()
-
-    val searchResults: StateFlow<List<Document>> = combine(allDocuments, _searchQuery) { docs, query ->
-        if (query.isBlank()) emptyList()
-        else docs.filter { it.name.contains(query, ignoreCase = true) }
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = emptyList()
-    )
+    private val searchHelper = DocumentSearchHelper(allDocuments, viewModelScope)
+    val searchQuery: StateFlow<String> = searchHelper.searchQuery
+    val searchResults: StateFlow<List<Document>> = searchHelper.searchResults
 
     val uiState: StateFlow<DocumentsUiState> = combine(
         allDocuments,
@@ -63,18 +56,10 @@ class DocumentsViewModel(
     ) { docs, filter, docToDelete, showDeleteAll, showDeleteFiles ->
         val today = DateTimeClock.System.todayIn(TimeZone.currentSystemDefault())
 
-        val active = mutableListOf<Document>()
-        val urgent = mutableListOf<Document>()
-        val expired = mutableListOf<Document>()
-
-        for (doc in docs) {
-            val days = doc.expiryDate?.let { today.daysUntil(it) }
-            when {
-                days == null || days > 30 -> active.add(doc)
-                days in 0..30 -> urgent.add(doc)
-                else -> expired.add(doc)
-            }
-        }
+        val grouped = docs.groupBy { it.status(today) }
+        val active = grouped[DocumentStatus.ACTIVE].orEmpty()
+        val urgent = grouped[DocumentStatus.URGENT].orEmpty()
+        val expired = grouped[DocumentStatus.EXPIRED].orEmpty()
 
         val filtered = when (filter) {
             DocumentStatusFilter.ALL -> docs
@@ -106,7 +91,7 @@ class DocumentsViewModel(
     }
 
     fun onSearchQueryChange(query: String) {
-        _searchQuery.value = query
+        searchHelper.onSearchQueryChange(query)
     }
 
     fun requestDelete(document: Document) {

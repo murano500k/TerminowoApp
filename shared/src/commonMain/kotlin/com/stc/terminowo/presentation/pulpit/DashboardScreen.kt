@@ -26,6 +26,7 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -54,6 +55,7 @@ import com.stc.terminowo.platform.isIos
 import com.stc.terminowo.presentation.components.AppTopBar
 import com.stc.terminowo.presentation.components.DocumentListItem
 import com.stc.terminowo.presentation.main.DocumentStatusFilter
+import com.stc.terminowo.presentation.theme.LocalExtendedColors
 import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -491,7 +493,14 @@ private fun EmptyState(onAddClick: () -> Unit) {
             textAlign = TextAlign.Center
         )
         Spacer(modifier = Modifier.height(24.dp))
-        Button(onClick = onAddClick) {
+        Button(
+            onClick = onAddClick,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = LocalExtendedColors.current.accentRed,
+                contentColor = Color.White
+            ),
+            shape = RoundedCornerShape(24.dp)
+        ) {
             Text(text = stringResource(Res.string.add_document_button))
         }
     }

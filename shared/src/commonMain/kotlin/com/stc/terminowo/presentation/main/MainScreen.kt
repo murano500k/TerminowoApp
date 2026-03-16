@@ -1,29 +1,17 @@
 package com.stc.terminowo.presentation.main
 
-import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -37,49 +25,28 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.launch
-import kotlin.math.roundToInt
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import com.stc.terminowo.platform.isIos
 import com.stc.terminowo.presentation.components.AppTopBar
-import com.stc.terminowo.presentation.components.CategoryIconCircle
-import terminowo.shared.generated.resources.back
-import terminowo.shared.generated.resources.search_documents
+import com.stc.terminowo.presentation.components.ConfirmationDialog
 import com.stc.terminowo.presentation.components.DocumentListItem
+import com.stc.terminowo.presentation.components.FilterEmptyState
+import com.stc.terminowo.presentation.components.SearchOverlay
+import com.stc.terminowo.presentation.components.SwipeToRevealDeleteItem
+import com.stc.terminowo.presentation.theme.LocalExtendedColors
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import terminowo.shared.generated.resources.Res
-import terminowo.shared.generated.resources.cancel
-import terminowo.shared.generated.resources.delete
 import terminowo.shared.generated.resources.delete_all_confirm_message
 import terminowo.shared.generated.resources.delete_all_confirm_title
 import terminowo.shared.generated.resources.delete_all_documents
@@ -88,18 +55,7 @@ import terminowo.shared.generated.resources.delete_document_confirm_title
 import terminowo.shared.generated.resources.delete_files_confirm_message
 import terminowo.shared.generated.resources.delete_files_confirm_title
 import terminowo.shared.generated.resources.delete_files_only
-import terminowo.shared.generated.resources.add_document
-import terminowo.shared.generated.resources.empty_active_subtitle
-import terminowo.shared.generated.resources.empty_active_title
-import terminowo.shared.generated.resources.empty_expired_subtitle
-import terminowo.shared.generated.resources.empty_expired_title
-import terminowo.shared.generated.resources.empty_list_subtitle
-import terminowo.shared.generated.resources.empty_list_title
-import terminowo.shared.generated.resources.empty_urgent_subtitle
-import terminowo.shared.generated.resources.empty_urgent_title
 import terminowo.shared.generated.resources.nav_documents
-import terminowo.shared.generated.resources.no_documents_yet
-import terminowo.shared.generated.resources.no_results
 import terminowo.shared.generated.resources.scan_document
 import terminowo.shared.generated.resources.settings
 
@@ -111,7 +67,7 @@ fun DocumentsScreen(
     initialFilter: DocumentStatusFilter? = null,
     viewModel: DocumentsViewModel = koinViewModel()
 ) {
-    androidx.compose.runtime.LaunchedEffect(initialFilter) {
+    LaunchedEffect(initialFilter) {
         if (initialFilter != null) {
             viewModel.selectFilter(initialFilter)
         }
@@ -123,47 +79,32 @@ fun DocumentsScreen(
     var isSearchActive by remember { mutableStateOf(false) }
     var isSettingsMenuExpanded by remember { mutableStateOf(false) }
 
+    val accentRed = LocalExtendedColors.current.accentRed
+
     if (uiState.documentToDelete != null) {
-        DeleteConfirmationDialog(
-            documentName = uiState.documentToDelete!!.name,
+        ConfirmationDialog(
+            title = stringResource(Res.string.delete_document_confirm_title),
+            text = stringResource(Res.string.delete_document_confirm_message, uiState.documentToDelete!!.name),
             onConfirm = { viewModel.confirmDelete() },
             onDismiss = { viewModel.cancelDelete() }
         )
     }
 
     if (uiState.showDeleteAllConfirmation) {
-        AlertDialog(
-            onDismissRequest = { viewModel.cancelDeleteAll() },
-            title = { Text(stringResource(Res.string.delete_all_confirm_title)) },
-            text = { Text(stringResource(Res.string.delete_all_confirm_message)) },
-            confirmButton = {
-                TextButton(onClick = { viewModel.confirmDeleteAll() }) {
-                    Text(stringResource(Res.string.delete), color = MaterialTheme.colorScheme.error)
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { viewModel.cancelDeleteAll() }) {
-                    Text(stringResource(Res.string.cancel))
-                }
-            }
+        ConfirmationDialog(
+            title = stringResource(Res.string.delete_all_confirm_title),
+            text = stringResource(Res.string.delete_all_confirm_message),
+            onConfirm = { viewModel.confirmDeleteAll() },
+            onDismiss = { viewModel.cancelDeleteAll() }
         )
     }
 
     if (uiState.showDeleteFilesConfirmation) {
-        AlertDialog(
-            onDismissRequest = { viewModel.cancelDeleteFiles() },
-            title = { Text(stringResource(Res.string.delete_files_confirm_title)) },
-            text = { Text(stringResource(Res.string.delete_files_confirm_message)) },
-            confirmButton = {
-                TextButton(onClick = { viewModel.confirmDeleteFiles() }) {
-                    Text(stringResource(Res.string.delete), color = MaterialTheme.colorScheme.error)
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { viewModel.cancelDeleteFiles() }) {
-                    Text(stringResource(Res.string.cancel))
-                }
-            }
+        ConfirmationDialog(
+            title = stringResource(Res.string.delete_files_confirm_title),
+            text = stringResource(Res.string.delete_files_confirm_message),
+            onConfirm = { viewModel.confirmDeleteFiles() },
+            onDismiss = { viewModel.cancelDeleteFiles() }
         )
     }
 
@@ -230,8 +171,6 @@ fun DocumentsScreen(
                     val tabs = DocumentStatusFilter.entries
                     val selectedIndex = tabs.indexOf(uiState.selectedFilter)
 
-                    val tabAccentColor = Color(0xFFD32F2F)
-
                     TabRow(
                         selectedTabIndex = selectedIndex,
                         containerColor = Color.Transparent,
@@ -239,7 +178,7 @@ fun DocumentsScreen(
                             if (selectedIndex < tabPositions.size) {
                                 TabRowDefaults.SecondaryIndicator(
                                     modifier = Modifier.tabIndicatorOffset(tabPositions[selectedIndex]),
-                                    color = tabAccentColor
+                                    color = accentRed
                                 )
                             }
                         }
@@ -255,7 +194,7 @@ fun DocumentsScreen(
                             Tab(
                                 selected = isSelected,
                                 onClick = { viewModel.selectFilter(filter) },
-                                selectedContentColor = tabAccentColor,
+                                selectedContentColor = accentRed,
                                 unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
                                 text = {
                                     Text(
@@ -338,301 +277,4 @@ fun DocumentsScreen(
         )
     }
     } // close outer Box
-}
-
-@Composable
-private fun SearchOverlay(
-    query: String,
-    results: List<com.stc.terminowo.domain.model.Document>,
-    onQueryChange: (String) -> Unit,
-    onClose: () -> Unit,
-    onDocumentClick: (String) -> Unit
-) {
-    val focusRequester = remember { FocusRequester() }
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black.copy(alpha = 0.15f))
-            .clickable(
-                indication = null,
-                interactionSource = remember { MutableInteractionSource() }
-            ) { onClose() }
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable(
-                    indication = null,
-                    interactionSource = remember { MutableInteractionSource() }
-                ) { /* consume clicks so they don't dismiss */ }
-                .padding(horizontal = 12.dp, vertical = 8.dp)
-        ) {
-        // Search bar
-        Card(
-            shape = RoundedCornerShape(28.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                IconButton(onClick = onClose) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = stringResource(Res.string.back)
-                    )
-                }
-                TextField(
-                    value = query,
-                    onValueChange = onQueryChange,
-                    placeholder = { Text(stringResource(Res.string.search_documents)) },
-                    singleLine = true,
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedContainerColor = Color.Transparent,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent
-                    ),
-                    modifier = Modifier
-                        .weight(1f)
-                        .focusRequester(focusRequester)
-                )
-                if (query.isNotEmpty()) {
-                    IconButton(onClick = { onQueryChange("") }) {
-                        Icon(imageVector = Icons.Default.Close, contentDescription = null)
-                    }
-                }
-            }
-        }
-
-        // Results dropdown
-        if (query.isNotBlank() && results.isNotEmpty()) {
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(max = 400.dp),
-                shape = RoundedCornerShape(16.dp),
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White)
-            ) {
-                LazyColumn(
-                    contentPadding = PaddingValues(vertical = 8.dp)
-                ) {
-                    items(items = results, key = { it.id }) { document ->
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable { onDocumentClick(document.id) }
-                                .padding(horizontal = 16.dp, vertical = 10.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            CategoryIconCircle(
-                                category = document.category,
-                                size = 36.dp
-                            )
-                            Spacer(modifier = Modifier.width(12.dp))
-                            Column {
-                                Text(
-                                    text = document.name,
-                                    style = MaterialTheme.typography.titleSmall
-                                )
-                                Text(
-                                    text = stringResource(document.category.labelRes),
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-        } else if (query.isNotBlank() && results.isEmpty()) {
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(16.dp),
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(24.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = stringResource(Res.string.no_results),
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-            }
-        }
-        }
-    }
-
-    LaunchedEffect(Unit) {
-        focusRequester.requestFocus()
-    }
-}
-
-@Composable
-private fun SwipeToRevealDeleteItem(
-    onDeleteClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    content: @Composable () -> Unit
-) {
-    val revealWidthDp = 72.dp
-    val density = LocalDensity.current
-    val revealWidthPx = with(density) { revealWidthDp.toPx() }
-    val offsetX = remember { Animatable(0f) }
-    val scope = rememberCoroutineScope()
-
-    Box(
-        modifier = modifier.clip(RoundedCornerShape(12.dp))
-    ) {
-        // Delete button behind
-        Box(
-            modifier = Modifier
-                .matchParentSize()
-                .background(Color(0xFFD32F2F)),
-            contentAlignment = Alignment.CenterEnd
-        ) {
-            IconButton(
-                onClick = {
-                    scope.launch { offsetX.animateTo(0f) }
-                    onDeleteClick()
-                },
-                modifier = Modifier.width(revealWidthDp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = null,
-                    tint = Color.White
-                )
-            }
-        }
-
-        // Foreground content
-        Box(
-            modifier = Modifier
-                .offset { IntOffset(offsetX.value.roundToInt(), 0) }
-                .pointerInput(Unit) {
-                    detectHorizontalDragGestures(
-                        onDragEnd = {
-                            scope.launch {
-                                if (offsetX.value < -revealWidthPx / 2) {
-                                    offsetX.animateTo(-revealWidthPx)
-                                } else {
-                                    offsetX.animateTo(0f)
-                                }
-                            }
-                        },
-                        onHorizontalDrag = { change, dragAmount ->
-                            change.consume()
-                            scope.launch {
-                                val newOffset = (offsetX.value + dragAmount)
-                                    .coerceIn(-revealWidthPx, 0f)
-                                offsetX.snapTo(newOffset)
-                            }
-                        }
-                    )
-                }
-        ) {
-            content()
-        }
-    }
-}
-
-@Composable
-private fun DeleteConfirmationDialog(
-    documentName: String,
-    onConfirm: () -> Unit,
-    onDismiss: () -> Unit
-) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(stringResource(Res.string.delete_document_confirm_title)) },
-        text = { Text(stringResource(Res.string.delete_document_confirm_message, documentName)) },
-        confirmButton = {
-            TextButton(onClick = onConfirm) {
-                Text(stringResource(Res.string.delete), color = MaterialTheme.colorScheme.error)
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text(stringResource(Res.string.cancel))
-            }
-        }
-    )
-}
-
-@Composable
-private fun FilterEmptyState(
-    filter: DocumentStatusFilter,
-    hasAnyDocuments: Boolean,
-    onAddClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val (title, subtitle) = when {
-        !hasAnyDocuments -> Pair(
-            stringResource(Res.string.empty_list_title),
-            stringResource(Res.string.empty_list_subtitle)
-        )
-        filter == DocumentStatusFilter.ACTIVE -> Pair(
-            stringResource(Res.string.empty_active_title),
-            stringResource(Res.string.empty_active_subtitle)
-        )
-        filter == DocumentStatusFilter.URGENT -> Pair(
-            stringResource(Res.string.empty_urgent_title),
-            stringResource(Res.string.empty_urgent_subtitle)
-        )
-        filter == DocumentStatusFilter.EXPIRED -> Pair(
-            stringResource(Res.string.empty_expired_title),
-            stringResource(Res.string.empty_expired_subtitle)
-        )
-        else -> Pair(
-            stringResource(Res.string.empty_list_title),
-            stringResource(Res.string.empty_list_subtitle)
-        )
-    }
-
-    Box(
-        modifier = modifier,
-        contentAlignment = Alignment.Center
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(horizontal = 32.dp)
-        ) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.titleLarge,
-                textAlign = TextAlign.Center
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = subtitle,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center
-            )
-            if (!hasAnyDocuments) {
-                Spacer(modifier = Modifier.height(24.dp))
-                androidx.compose.material3.Button(
-                    onClick = onAddClick,
-                    colors = androidx.compose.material3.ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFFD32F2F)
-                    ),
-                    shape = RoundedCornerShape(24.dp)
-                ) {
-                    Text(
-                        text = "+ ${stringResource(Res.string.add_document)}",
-                        color = Color.White
-                    )
-                }
-            }
-        }
-    }
 }
