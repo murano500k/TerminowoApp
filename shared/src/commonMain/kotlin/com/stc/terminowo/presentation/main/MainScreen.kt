@@ -1,78 +1,138 @@
 package com.stc.terminowo.presentation.main
 
+import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SwipeToDismissBox
-import androidx.compose.material3.SwipeToDismissBoxValue
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
+import androidx.compose.material3.TabRowDefaults
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import com.stc.terminowo.domain.model.DocumentCategory
+import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import com.stc.terminowo.platform.isIos
+import com.stc.terminowo.presentation.components.AppTopBar
+import com.stc.terminowo.presentation.components.CategoryIconCircle
+import terminowo.shared.generated.resources.back
+import terminowo.shared.generated.resources.search_documents
 import com.stc.terminowo.presentation.components.DocumentListItem
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import terminowo.shared.generated.resources.Res
-import terminowo.shared.generated.resources.all_documents
-import terminowo.shared.generated.resources.back
 import terminowo.shared.generated.resources.cancel
 import terminowo.shared.generated.resources.delete
+import terminowo.shared.generated.resources.document_added
+import terminowo.shared.generated.resources.delete_all_confirm_message
+import terminowo.shared.generated.resources.delete_all_confirm_title
+import terminowo.shared.generated.resources.delete_all_documents
 import terminowo.shared.generated.resources.delete_document_confirm_message
 import terminowo.shared.generated.resources.delete_document_confirm_title
-import terminowo.shared.generated.resources.empty_state_hint
+import terminowo.shared.generated.resources.delete_files_confirm_message
+import terminowo.shared.generated.resources.delete_files_confirm_title
+import terminowo.shared.generated.resources.delete_files_only
+import terminowo.shared.generated.resources.add_document
+import terminowo.shared.generated.resources.empty_active_subtitle
+import terminowo.shared.generated.resources.empty_active_title
+import terminowo.shared.generated.resources.empty_expired_subtitle
+import terminowo.shared.generated.resources.empty_expired_title
+import terminowo.shared.generated.resources.empty_list_subtitle
+import terminowo.shared.generated.resources.empty_list_title
+import terminowo.shared.generated.resources.empty_urgent_subtitle
+import terminowo.shared.generated.resources.empty_urgent_title
+import terminowo.shared.generated.resources.nav_documents
 import terminowo.shared.generated.resources.no_documents_yet
+import terminowo.shared.generated.resources.no_results
 import terminowo.shared.generated.resources.scan_document
+import terminowo.shared.generated.resources.settings
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DocumentListScreen(
-    categoryKey: String?,
+fun DocumentsScreen(
     onScanClick: () -> Unit,
     onDocumentClick: (String) -> Unit,
-    onBack: () -> Unit,
-    viewModel: DocumentListViewModel = koinViewModel()
+    initialFilter: DocumentStatusFilter? = null,
+    showDocumentAdded: Boolean = false,
+    viewModel: DocumentsViewModel = koinViewModel()
 ) {
-    LaunchedEffect(categoryKey) {
-        viewModel.init(categoryKey)
+    val snackbarHostState = remember { androidx.compose.material3.SnackbarHostState() }
+    val documentAddedMsg = stringResource(Res.string.document_added)
+
+    LaunchedEffect(showDocumentAdded) {
+        if (showDocumentAdded) {
+            snackbarHostState.showSnackbar(documentAddedMsg)
+        }
     }
 
+    androidx.compose.runtime.LaunchedEffect(initialFilter) {
+        if (initialFilter != null) {
+            viewModel.selectFilter(initialFilter)
+        }
+    }
     val uiState by viewModel.uiState.collectAsState()
+    val searchQuery by viewModel.searchQuery.collectAsState()
+    val searchResults by viewModel.searchResults.collectAsState()
 
-    val title = if (categoryKey != null) {
-        stringResource(DocumentCategory.fromKey(categoryKey).labelRes)
-    } else {
-        stringResource(Res.string.all_documents)
-    }
+    var isSearchActive by remember { mutableStateOf(false) }
+    var isSettingsMenuExpanded by remember { mutableStateOf(false) }
 
     if (uiState.documentToDelete != null) {
         DeleteConfirmationDialog(
@@ -82,82 +142,185 @@ fun DocumentListScreen(
         )
     }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = title,
-                        style = MaterialTheme.typography.titleLarge
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = stringResource(Res.string.back)
-                        )
-                    }
+    if (uiState.showDeleteAllConfirmation) {
+        AlertDialog(
+            onDismissRequest = { viewModel.cancelDeleteAll() },
+            title = { Text(stringResource(Res.string.delete_all_confirm_title)) },
+            text = { Text(stringResource(Res.string.delete_all_confirm_message)) },
+            confirmButton = {
+                TextButton(onClick = { viewModel.confirmDeleteAll() }) {
+                    Text(stringResource(Res.string.delete), color = MaterialTheme.colorScheme.error)
                 }
-            )
+            },
+            dismissButton = {
+                TextButton(onClick = { viewModel.cancelDeleteAll() }) {
+                    Text(stringResource(Res.string.cancel))
+                }
+            }
+        )
+    }
+
+    if (uiState.showDeleteFilesConfirmation) {
+        AlertDialog(
+            onDismissRequest = { viewModel.cancelDeleteFiles() },
+            title = { Text(stringResource(Res.string.delete_files_confirm_title)) },
+            text = { Text(stringResource(Res.string.delete_files_confirm_message)) },
+            confirmButton = {
+                TextButton(onClick = { viewModel.confirmDeleteFiles() }) {
+                    Text(stringResource(Res.string.delete), color = MaterialTheme.colorScheme.error)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { viewModel.cancelDeleteFiles() }) {
+                    Text(stringResource(Res.string.cancel))
+                }
+            }
+        )
+    }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+    Scaffold(
+        modifier = if (isSearchActive) Modifier.blur(12.dp) else Modifier,
+        snackbarHost = { androidx.compose.material3.SnackbarHost(snackbarHostState) },
+        topBar = {
+            Column {
+                AppTopBar(
+                    isSearchActive = isSearchActive,
+                    searchQuery = searchQuery,
+                    onSearchQueryChange = { viewModel.onSearchQueryChange(it) },
+                    onSearchActiveChange = { isSearchActive = it },
+                    showSearchIcon = uiState.allCount > 1,
+                    trailingActions = {
+                        Box {
+                            IconButton(onClick = { isSettingsMenuExpanded = true }) {
+                                Icon(
+                                    imageVector = Icons.Default.MoreVert,
+                                    contentDescription = stringResource(Res.string.settings)
+                                )
+                            }
+                            DropdownMenu(
+                                expanded = isSettingsMenuExpanded,
+                                onDismissRequest = { isSettingsMenuExpanded = false }
+                            ) {
+                                DropdownMenuItem(
+                                    text = {
+                                        Text(
+                                            text = stringResource(Res.string.delete_files_only),
+                                            color = MaterialTheme.colorScheme.error
+                                        )
+                                    },
+                                    onClick = {
+                                        isSettingsMenuExpanded = false
+                                        viewModel.requestDeleteFiles()
+                                    }
+                                )
+                                DropdownMenuItem(
+                                    text = {
+                                        Text(
+                                            text = stringResource(Res.string.delete_all_documents),
+                                            color = MaterialTheme.colorScheme.error
+                                        )
+                                    },
+                                    onClick = {
+                                        isSettingsMenuExpanded = false
+                                        viewModel.requestDeleteAll()
+                                    }
+                                )
+                            }
+                        }
+                    }
+                )
+
+                if (!isSearchActive) {
+                    Text(
+                        text = stringResource(Res.string.nav_documents),
+                        style = MaterialTheme.typography.headlineMedium,
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
+                    )
+
+                    if (uiState.allCount > 0) {
+                    val tabs = DocumentStatusFilter.entries
+                    val selectedIndex = tabs.indexOf(uiState.selectedFilter)
+
+                    val tabAccentColor = Color(0xFFD32F2F)
+
+                    TabRow(
+                        selectedTabIndex = selectedIndex,
+                        containerColor = Color.Transparent,
+                        indicator = { tabPositions ->
+                            if (selectedIndex < tabPositions.size) {
+                                TabRowDefaults.SecondaryIndicator(
+                                    modifier = Modifier.tabIndicatorOffset(tabPositions[selectedIndex]),
+                                    color = tabAccentColor
+                                )
+                            }
+                        }
+                    ) {
+                        tabs.forEachIndexed { index, filter ->
+                            val count = when (filter) {
+                                DocumentStatusFilter.ALL -> uiState.allCount
+                                DocumentStatusFilter.ACTIVE -> uiState.activeCount
+                                DocumentStatusFilter.URGENT -> uiState.urgentCount
+                                DocumentStatusFilter.EXPIRED -> uiState.expiredCount
+                            }
+                            val isSelected = selectedIndex == index
+                            Tab(
+                                selected = isSelected,
+                                onClick = { viewModel.selectFilter(filter) },
+                                selectedContentColor = tabAccentColor,
+                                unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                text = {
+                                    Text(
+                                        text = "${stringResource(filter.labelRes)} ($count)",
+                                        style = MaterialTheme.typography.labelSmall,
+                                        maxLines = 1
+                                    )
+                                }
+                            )
+                        }
+                    }
+                    } // end if allCount > 0
+                }
+            }
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = onScanClick) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = stringResource(Res.string.scan_document)
-                )
+            if (!isIos && !isSearchActive) {
+                FloatingActionButton(
+                    onClick = onScanClick,
+                    containerColor = MaterialTheme.colorScheme.error,
+                    contentColor = MaterialTheme.colorScheme.onError
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = stringResource(Res.string.scan_document)
+                    )
+                }
             }
         }
     ) { paddingValues ->
-        if (uiState.documents.isEmpty() && !uiState.isLoading) {
-            EmptyState(
+        if (uiState.documents.isEmpty() && !uiState.isLoading && !isSearchActive) {
+            FilterEmptyState(
+                filter = uiState.selectedFilter,
+                hasAnyDocuments = uiState.allCount > 0,
+                onAddClick = onScanClick,
                 modifier = Modifier
                     .fillMaxSize()
+                    .background(Color(0xFFF5F5F5))
                     .padding(paddingValues)
             )
         } else {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
+                    .background(Color(0xFFF5F5F5))
                     .padding(paddingValues),
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(
-                    items = uiState.documents,
-                    key = { it.id }
-                ) { document ->
-                    val dismissState = rememberSwipeToDismissBoxState()
-
-                    LaunchedEffect(dismissState.currentValue) {
-                        if (dismissState.currentValue == SwipeToDismissBoxValue.EndToStart) {
-                            viewModel.requestDelete(document)
-                            dismissState.snapTo(SwipeToDismissBoxValue.Settled)
-                        }
-                    }
-
-                    SwipeToDismissBox(
-                        state = dismissState,
-                        modifier = Modifier.animateItem(),
-                        enableDismissFromStartToEnd = false,
-                        enableDismissFromEndToStart = true,
-                        backgroundContent = {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .clip(RoundedCornerShape(12.dp))
-                                    .background(MaterialTheme.colorScheme.error),
-                                contentAlignment = Alignment.CenterEnd
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Delete,
-                                    contentDescription = stringResource(Res.string.delete),
-                                    tint = MaterialTheme.colorScheme.onError,
-                                    modifier = Modifier.padding(end = 24.dp)
-                                )
-                            }
-                        }
+                items(items = uiState.documents, key = { it.id }) { document ->
+                    SwipeToRevealDeleteItem(
+                        onDeleteClick = { viewModel.requestDelete(document) },
+                        modifier = Modifier.animateItem()
                     ) {
                         DocumentListItem(
                             document = document,
@@ -166,6 +329,230 @@ fun DocumentListScreen(
                     }
                 }
             }
+        }
+    }
+
+    // Search overlay on top of everything
+    if (isSearchActive) {
+        SearchOverlay(
+            query = searchQuery,
+            results = searchResults,
+            onQueryChange = { viewModel.onSearchQueryChange(it) },
+            onClose = {
+                isSearchActive = false
+                viewModel.onSearchQueryChange("")
+            },
+            onDocumentClick = { id ->
+                isSearchActive = false
+                viewModel.onSearchQueryChange("")
+                onDocumentClick(id)
+            }
+        )
+    }
+    } // close outer Box
+}
+
+@Composable
+private fun SearchOverlay(
+    query: String,
+    results: List<com.stc.terminowo.domain.model.Document>,
+    onQueryChange: (String) -> Unit,
+    onClose: () -> Unit,
+    onDocumentClick: (String) -> Unit
+) {
+    val focusRequester = remember { FocusRequester() }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black.copy(alpha = 0.15f))
+            .clickable(
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }
+            ) { onClose() }
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() }
+                ) { /* consume clicks so they don't dismiss */ }
+                .padding(horizontal = 12.dp, vertical = 8.dp)
+        ) {
+        // Search bar
+        Card(
+            shape = RoundedCornerShape(28.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+            colors = CardDefaults.cardColors(containerColor = Color.White)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconButton(onClick = onClose) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = stringResource(Res.string.back)
+                    )
+                }
+                TextField(
+                    value = query,
+                    onValueChange = onQueryChange,
+                    placeholder = { Text(stringResource(Res.string.search_documents)) },
+                    singleLine = true,
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent
+                    ),
+                    modifier = Modifier
+                        .weight(1f)
+                        .focusRequester(focusRequester)
+                )
+                if (query.isNotEmpty()) {
+                    IconButton(onClick = { onQueryChange("") }) {
+                        Icon(imageVector = Icons.Default.Close, contentDescription = null)
+                    }
+                }
+            }
+        }
+
+        // Results dropdown
+        if (query.isNotBlank() && results.isNotEmpty()) {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(max = 400.dp),
+                shape = RoundedCornerShape(16.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White)
+            ) {
+                LazyColumn(
+                    contentPadding = PaddingValues(vertical = 8.dp)
+                ) {
+                    items(items = results, key = { it.id }) { document ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable { onDocumentClick(document.id) }
+                                .padding(horizontal = 16.dp, vertical = 10.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            CategoryIconCircle(
+                                category = document.category,
+                                size = 36.dp
+                            )
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Column {
+                                Text(
+                                    text = document.name,
+                                    style = MaterialTheme.typography.titleSmall
+                                )
+                                Text(
+                                    text = stringResource(document.category.labelRes),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        } else if (query.isNotBlank() && results.isEmpty()) {
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(16.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(24.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = stringResource(Res.string.no_results),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+        }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
+}
+
+@Composable
+private fun SwipeToRevealDeleteItem(
+    onDeleteClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    val revealWidthDp = 72.dp
+    val density = LocalDensity.current
+    val revealWidthPx = with(density) { revealWidthDp.toPx() }
+    val offsetX = remember { Animatable(0f) }
+    val scope = rememberCoroutineScope()
+
+    Box(
+        modifier = modifier.clip(RoundedCornerShape(12.dp))
+    ) {
+        // Delete button behind
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .background(Color(0xFFD32F2F)),
+            contentAlignment = Alignment.CenterEnd
+        ) {
+            IconButton(
+                onClick = {
+                    scope.launch { offsetX.animateTo(0f) }
+                    onDeleteClick()
+                },
+                modifier = Modifier.width(revealWidthDp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = null,
+                    tint = Color.White
+                )
+            }
+        }
+
+        // Foreground content
+        Box(
+            modifier = Modifier
+                .offset { IntOffset(offsetX.value.roundToInt(), 0) }
+                .pointerInput(Unit) {
+                    detectHorizontalDragGestures(
+                        onDragEnd = {
+                            scope.launch {
+                                if (offsetX.value < -revealWidthPx / 2) {
+                                    offsetX.animateTo(-revealWidthPx)
+                                } else {
+                                    offsetX.animateTo(0f)
+                                }
+                            }
+                        },
+                        onHorizontalDrag = { change, dragAmount ->
+                            change.consume()
+                            scope.launch {
+                                val newOffset = (offsetX.value + dragAmount)
+                                    .coerceIn(-revealWidthPx, 0f)
+                                offsetX.snapTo(newOffset)
+                            }
+                        }
+                    )
+                }
+        ) {
+            content()
         }
     }
 }
@@ -179,15 +566,10 @@ private fun DeleteConfirmationDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(Res.string.delete_document_confirm_title)) },
-        text = {
-            Text(stringResource(Res.string.delete_document_confirm_message, documentName))
-        },
+        text = { Text(stringResource(Res.string.delete_document_confirm_message, documentName)) },
         confirmButton = {
             TextButton(onClick = onConfirm) {
-                Text(
-                    text = stringResource(Res.string.delete),
-                    color = MaterialTheme.colorScheme.error
-                )
+                Text(stringResource(Res.string.delete), color = MaterialTheme.colorScheme.error)
             }
         },
         dismissButton = {
@@ -199,24 +581,70 @@ private fun DeleteConfirmationDialog(
 }
 
 @Composable
-private fun EmptyState(modifier: Modifier = Modifier) {
+private fun FilterEmptyState(
+    filter: DocumentStatusFilter,
+    hasAnyDocuments: Boolean,
+    onAddClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val (title, subtitle) = when {
+        !hasAnyDocuments -> Pair(
+            stringResource(Res.string.empty_list_title),
+            stringResource(Res.string.empty_list_subtitle)
+        )
+        filter == DocumentStatusFilter.ACTIVE -> Pair(
+            stringResource(Res.string.empty_active_title),
+            stringResource(Res.string.empty_active_subtitle)
+        )
+        filter == DocumentStatusFilter.URGENT -> Pair(
+            stringResource(Res.string.empty_urgent_title),
+            stringResource(Res.string.empty_urgent_subtitle)
+        )
+        filter == DocumentStatusFilter.EXPIRED -> Pair(
+            stringResource(Res.string.empty_expired_title),
+            stringResource(Res.string.empty_expired_subtitle)
+        )
+        else -> Pair(
+            stringResource(Res.string.empty_list_title),
+            stringResource(Res.string.empty_list_subtitle)
+        )
+    }
+
     Box(
         modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.padding(horizontal = 32.dp)
+        ) {
             Text(
-                text = stringResource(Res.string.no_documents_yet),
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                text = title,
+                style = MaterialTheme.typography.titleLarge,
+                textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = stringResource(Res.string.empty_state_hint),
+                text = subtitle,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center
             )
+            if (!hasAnyDocuments) {
+                Spacer(modifier = Modifier.height(24.dp))
+                androidx.compose.material3.Button(
+                    onClick = onAddClick,
+                    colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFD32F2F)
+                    ),
+                    shape = RoundedCornerShape(24.dp)
+                ) {
+                    Text(
+                        text = "+ ${stringResource(Res.string.add_document)}",
+                        color = Color.White
+                    )
+                }
+            }
         }
     }
 }

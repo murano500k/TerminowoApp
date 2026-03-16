@@ -8,11 +8,19 @@ class DocumentCategoryTest {
     @Test
     fun `fromKey returns correct category for all known keys`() {
         assertEquals(DocumentCategory.INSURANCE, DocumentCategory.fromKey("insurance"))
-        assertEquals(DocumentCategory.PAYMENT, DocumentCategory.fromKey("payment"))
+        assertEquals(DocumentCategory.PAYMENTS, DocumentCategory.fromKey("payments"))
         assertEquals(DocumentCategory.AGREEMENT, DocumentCategory.fromKey("agreement"))
-        assertEquals(DocumentCategory.DRIVER_LICENSE, DocumentCategory.fromKey("driver_license"))
+        assertEquals(DocumentCategory.DOCUMENTS, DocumentCategory.fromKey("documents"))
         assertEquals(DocumentCategory.TECHNICAL_INSPECTION, DocumentCategory.fromKey("technical_inspection"))
+        assertEquals(DocumentCategory.SUBSCRIPTIONS, DocumentCategory.fromKey("subscriptions"))
+        assertEquals(DocumentCategory.HEALTH, DocumentCategory.fromKey("health"))
         assertEquals(DocumentCategory.OTHER, DocumentCategory.fromKey("other"))
+    }
+
+    @Test
+    fun `fromKey returns correct category for legacy keys`() {
+        assertEquals(DocumentCategory.PAYMENTS, DocumentCategory.fromKey("payment"))
+        assertEquals(DocumentCategory.DOCUMENTS, DocumentCategory.fromKey("driver_license"))
     }
 
     @Test

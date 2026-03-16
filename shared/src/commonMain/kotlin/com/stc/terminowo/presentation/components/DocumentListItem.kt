@@ -1,46 +1,27 @@
 package com.stc.terminowo.presentation.components
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Description
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.stc.terminowo.domain.model.Document
-import com.stc.terminowo.domain.model.DocumentCategory
-import com.stc.terminowo.platform.ImageStorage
-import com.stc.terminowo.platform.decodeImageBitmap
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.daysUntil
@@ -48,13 +29,10 @@ import kotlinx.datetime.todayIn
 import kotlinx.datetime.Clock as DateTimeClock
 import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.koinInject
 import terminowo.shared.generated.resources.Res
-import terminowo.shared.generated.resources.expired_with_date
-import terminowo.shared.generated.resources.expires_in_days
-import terminowo.shared.generated.resources.expires_on_date
+import terminowo.shared.generated.resources.expired_days_ago_short
+import terminowo.shared.generated.resources.expires_in_days_short
 import terminowo.shared.generated.resources.expires_today
-import terminowo.shared.generated.resources.expires_tomorrow
 import terminowo.shared.generated.resources.no_expiry_date
 
 @Composable
@@ -63,124 +41,78 @@ fun DocumentListItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val imageStorage: ImageStorage = koinInject()
-    var thumbnailBitmap by remember { mutableStateOf<ImageBitmap?>(null) }
-
-    LaunchedEffect(document.thumbnailPath) {
-        thumbnailBitmap = document.thumbnailPath?.let { path ->
-            imageStorage.readImage(path)?.let { decodeImageBitmap(it) }
-        }
-    }
-
     val today = DateTimeClock.System.todayIn(TimeZone.currentSystemDefault())
     val daysUntilExpiry = document.expiryDate?.let { today.daysUntil(it) }
-    val isExpired = daysUntilExpiry != null && daysUntilExpiry < 0
     val expiryColor = when {
         daysUntilExpiry == null -> MaterialTheme.colorScheme.onSurfaceVariant
         daysUntilExpiry < 0 -> MaterialTheme.colorScheme.error
-        daysUntilExpiry <= 7 -> MaterialTheme.colorScheme.error
-        daysUntilExpiry <= 30 -> MaterialTheme.colorScheme.tertiary
-        else -> MaterialTheme.colorScheme.primary
+        daysUntilExpiry <= 30 -> MaterialTheme.colorScheme.error
+        else -> Color(0xFF4CAF50)
     }
-
-    val accentColor = if (isExpired) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
 
     Card(
         modifier = modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        colors = if (isExpired) {
-            CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.errorContainer
-            )
-        } else {
-            CardDefaults.cardColors()
-        }
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        border = BorderStroke(1.dp, Color(0xFFE0E0E0))
     ) {
-        Row(modifier = Modifier.height(IntrinsicSize.Min)) {
-            Box(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .width(4.dp)
-                    .background(accentColor)
-            )
-            Row(
-                modifier = Modifier.padding(16.dp).weight(1f),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                // Thumbnail
-                Card(
-                    modifier = Modifier
-                        .size(56.dp)
-                        .clip(RoundedCornerShape(8.dp)),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant
-                    )
-                ) {
-                    thumbnailBitmap?.let { bitmap ->
-                        Image(
-                            bitmap = bitmap,
-                            contentDescription = document.name,
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    } ?: run {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Description,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier.size(28.dp)
-                            )
-                        }
-                    }
-                }
+        Row(
+            modifier = Modifier.padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            CategoryIconCircle(category = document.category)
 
-                Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(12.dp))
 
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = document.name,
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.SemiBold,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = document.name,
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Text(
+                    text = stringResource(document.category.labelRes),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
 
-                    if (document.category != DocumentCategory.OTHER) {
-                        Text(
-                            text = stringResource(document.category.labelRes),
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                    }
+            Spacer(modifier = Modifier.width(8.dp))
 
-                    Text(
-                        text = document.expiryDate?.let { formatExpiryDate(it, daysUntilExpiry) }
-                            ?: stringResource(Res.string.no_expiry_date),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = expiryColor
-                    )
-                }
+            Column(horizontalAlignment = Alignment.End) {
+                Text(
+                    text = formatDaysText(daysUntilExpiry),
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.SemiBold,
+                    color = expiryColor,
+                    textAlign = TextAlign.End
+                )
+                Text(
+                    text = document.expiryDate?.let { formatDateShort(it) } ?: "",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.End
+                )
             }
         }
     }
 }
 
 @Composable
-private fun formatExpiryDate(date: LocalDate, daysUntil: Int?): String {
-    val dateStr = "${date.dayOfMonth}/${date.monthNumber}/${date.year}"
+private fun formatDaysText(daysUntil: Int?): String {
     return when {
-        daysUntil == null -> dateStr
-        daysUntil < 0 -> stringResource(Res.string.expired_with_date, dateStr)
+        daysUntil == null -> stringResource(Res.string.no_expiry_date)
+        daysUntil < 0 -> pluralStringResource(Res.plurals.expired_days_ago_short, -daysUntil, -daysUntil)
         daysUntil == 0 -> stringResource(Res.string.expires_today)
-        daysUntil == 1 -> stringResource(Res.string.expires_tomorrow)
-        daysUntil <= 30 -> pluralStringResource(Res.plurals.expires_in_days, daysUntil, daysUntil)
-        else -> stringResource(Res.string.expires_on_date, dateStr)
+        else -> pluralStringResource(Res.plurals.expires_in_days_short, daysUntil, daysUntil)
     }
+}
+
+private fun formatDateShort(date: LocalDate): String {
+    return "${date.year}-${date.monthNumber.toString().padStart(2, '0')}-${date.dayOfMonth.toString().padStart(2, '0')}"
 }

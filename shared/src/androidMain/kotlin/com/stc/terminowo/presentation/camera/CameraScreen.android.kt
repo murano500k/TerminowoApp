@@ -40,6 +40,7 @@ import com.kashif.cameraK.permissions.providePermissions
 import com.kashif.cameraK.result.ImageCaptureResult
 import com.kashif.cameraK.state.CameraConfiguration
 import com.stc.terminowo.platform.ImageStorage
+import com.stc.terminowo.presentation.theme.LocalExtendedColors
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock as DateTimeClock
 import org.jetbrains.compose.resources.getString
@@ -154,7 +155,7 @@ actual fun CameraScreen(
                     .size(72.dp),
                 shape = CircleShape,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary
+                    containerColor = LocalExtendedColors.current.accentRed
                 ),
                 enabled = !isCapturing,
                 contentPadding = PaddingValues(0.dp)

@@ -112,7 +112,7 @@ class OrangePolskaBillScanTest {
     fun `detects PAYMENT category from Polish bill text`() {
         val result = mapper.mapToScanResult(buildOrangeResponse(), null)
 
-        assertEquals(DocumentCategory.PAYMENT, result.detectedCategory)
+        assertEquals(DocumentCategory.PAYMENTS, result.detectedCategory)
     }
 
     // ── Test 3: Extract document name ───────────────────────────────────
@@ -150,7 +150,7 @@ class OrangePolskaBillScanTest {
     // ── Test 6: No false category match ─────────────────────────────────
 
     @Test
-    fun `bill is not classified as insurance or driver_license or technical_inspection`() {
+    fun `bill is not classified as insurance or documents or technical_inspection`() {
         val category = mapper.extractCategory(fullText)
 
         assertTrue(
@@ -158,8 +158,8 @@ class OrangePolskaBillScanTest {
             "should not be classified as INSURANCE"
         )
         assertTrue(
-            category != DocumentCategory.DRIVER_LICENSE,
-            "should not be classified as DRIVER_LICENSE"
+            category != DocumentCategory.DOCUMENTS,
+            "should not be classified as DOCUMENTS"
         )
         assertTrue(
             category != DocumentCategory.TECHNICAL_INSPECTION,

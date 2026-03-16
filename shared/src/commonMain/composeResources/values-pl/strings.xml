@@ -7,7 +7,7 @@
     <string name="no_documents_yet">Brak dokument\u00F3w</string>
     <string name="empty_state_hint">Naci\u015Bnij +, aby zeskanowa\u0107\npierwszy dokument</string>
     <string name="delete_document_confirm_title">Usun\u0105\u0107 dokument?</string>
-    <string name="delete_document_confirm_message">Czy na pewno chcesz usun\u0105\u0107 \"%1$s\"? Tej operacji nie mo\u017Cna cofn\u0105\u0107.</string>
+    <string name="delete_document_confirm_message">Czy na pewno chcesz usun\u0105\u0107 %1$s? Tej operacji nie mo\u017Cna cofn\u0105\u0107.</string>
     <string name="delete">Usu\u0144</string>
     <string name="cancel">Anuluj</string>
 
@@ -98,11 +98,13 @@
     <string name="documents_count">%1$d</string>
 
     <!-- Categories -->
-    <string name="category_insurance">Ubezpieczenie</string>
-    <string name="category_payment">P\u0142atno\u015B\u0107</string>
-    <string name="category_agreement">Umowa</string>
-    <string name="category_driver_license">Prawo jazdy</string>
-    <string name="category_technical_inspection">Przegl\u0105d techniczny</string>
+    <string name="category_insurance">Ubezpieczenia</string>
+    <string name="category_payments">P\u0142atno\u015Bci</string>
+    <string name="category_agreement">Umowy</string>
+    <string name="category_documents">Dokumenty</string>
+    <string name="category_technical_inspection">Przegl\u0105dy</string>
+    <string name="category_subscriptions">Subskrypcje</string>
+    <string name="category_health">Zdrowie</string>
     <string name="category_other">Inne</string>
 
     <!-- Reminder intervals -->
@@ -120,6 +122,39 @@
     <string name="notification_time">Czas powiadomienia</string>
     <string name="confirm">Zatwierd\u017A</string>
 
+    <!-- Empty states per filter -->
+    <string name="empty_list_title">Twoja lista jest pusta</string>
+    <string name="empty_list_subtitle">Ka\u017Cdy dodany dokument pojawi si\u0119 tutaj \u2014 paszport, ubezpieczenie, przegl\u0105d auta i wszystko inne.</string>
+    <string name="empty_active_title">\u017Badnych aktywnych dokument\u00F3w</string>
+    <string name="empty_active_subtitle">Dokumenty z wa\u017Cno\u015Bci\u0105 powy\u017Cej 30 dni pojawi\u0105 si\u0119 w tej zak\u0142adce.</string>
+    <string name="empty_urgent_title">Nic pilnego \u2014 \u015Bwietnie!</string>
+    <string name="empty_urgent_subtitle">Dokumenty wygasaj\u0105ce w ci\u0105gu 30 dni pojawi\u0105 si\u0119 tutaj.</string>
+    <string name="empty_expired_title">Brak wygas\u0142ych dokument\u00F3w</string>
+    <string name="empty_expired_subtitle">Masz wszystko pod kontrol\u0105.</string>
+
+    <!-- Filter tabs -->
+    <string name="filter_all">Wszystkie</string>
+    <string name="filter_active">Aktywne</string>
+    <string name="filter_urgent">Pilne</string>
+    <string name="filter_expired">Wygas\u0142e</string>
+
+    <!-- Pulpit (Dashboard) screen -->
+    <string name="pulpit_title">Tw\u00F3j pulpit</string>
+    <string name="document_score">Wynik dokument\u00F3w</string>
+    <string name="status_expired">Wygas\u0142e</string>
+    <string name="status_within_30_days">\u2264 30 dni</string>
+    <string name="status_over_30_days">> 30 dni</string>
+    <string name="upcoming_deadlines">Zbli\u017Caj\u0105ce si\u0119 terminy</string>
+    <string name="all_documents_ok">Wszystkie dokumenty s\u0105 aktualne</string>
+    <string name="all_documents_ok_subtitle">Daj zna\u0107, kiedy co\u015B b\u0119dzie wymaga\u0142o uwagi.</string>
+    <string name="no_documents_pulpit_title">Nie masz jeszcze \u017Cadnych dokument\u00F3w</string>
+    <string name="no_documents_pulpit_subtitle">Dodaj pierwszy, \u017Ceby \u015Bledzi\u0107 terminy i dostawa\u0107 przypomnienia na czas.</string>
+    <string name="add_document_button">+ Dodaj dokument</string>
+
+    <!-- Bottom navigation -->
+    <string name="nav_pulpit">Pulpit</string>
+    <string name="nav_documents">Dokumenty</string>
+
     <!-- Plurals -->
     <plurals name="expired_days_ago">
         <item quantity="one">Ten dokument wygas\u0142 %1$d dzie\u0144 temu</item>
@@ -132,5 +167,23 @@
         <item quantity="few">Wygasa za %1$d dni</item>
         <item quantity="many">Wygasa za %1$d dni</item>
         <item quantity="other">Wygasa za %1$d dni</item>
+    </plurals>
+    <plurals name="expired_days_ago_short">
+        <item quantity="one">Wygas\u0142 %1$d dzie\u0144 temu</item>
+        <item quantity="few">Wygas\u0142 %1$d dni temu</item>
+        <item quantity="many">Wygas\u0142 %1$d dni temu</item>
+        <item quantity="other">Wygas\u0142 %1$d dni temu</item>
+    </plurals>
+    <plurals name="expires_in_days_short">
+        <item quantity="one">%1$d dzie\u0144</item>
+        <item quantity="few">%1$d dni</item>
+        <item quantity="many">%1$d dni</item>
+        <item quantity="other">%1$d dni</item>
+    </plurals>
+    <plurals name="documents_count_label">
+        <item quantity="one">%1$d dokument</item>
+        <item quantity="few">%1$d dokumenty</item>
+        <item quantity="many">%1$d dokument\u00F3w</item>
+        <item quantity="other">%1$d dokument\u00F3w</item>
     </plurals>
 </resources>

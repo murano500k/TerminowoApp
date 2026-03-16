@@ -4,7 +4,19 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.graphics.Color
+
+/** Accent red used for primary action buttons (scan, save, toggles). */
+val AccentRed = Color(0xFFE8274C)
+val AccentRedDark = Color(0xFFFF6B81)
+
+/** Extra colors not covered by Material3 color scheme. */
+data class ExtendedColors(
+    val accentRed: Color = AccentRed
+)
+
+val LocalExtendedColors = compositionLocalOf { ExtendedColors() }
 
 private val LightColorScheme = lightColorScheme(
     primary = Color(0xFFF4842A),
@@ -54,9 +66,14 @@ fun TerminowoTheme(
     content: @Composable () -> Unit
 ) {
     val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
+    val extendedColors = if (darkTheme) ExtendedColors(AccentRedDark) else ExtendedColors(AccentRed)
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        content = content
-    )
+    androidx.compose.runtime.CompositionLocalProvider(
+        LocalExtendedColors provides extendedColors
+    ) {
+        MaterialTheme(
+            colorScheme = colorScheme,
+            content = content
+        )
+    }
 }

@@ -129,9 +129,15 @@ class DocumentAiMapperTest {
     }
 
     @Test
-    fun `detects driver_license category`() {
-        val result = mapper.extractCategory("Prawo jazdy kategorii B wydane dnia 01.05.2020")
-        assertEquals(DocumentCategory.DRIVER_LICENSE, result)
+    fun `detects health category`() {
+        val result = mapper.extractCategory("Zaświadczenie lekarskie o zdolności do pracy")
+        assertEquals(DocumentCategory.HEALTH, result)
+    }
+
+    @Test
+    fun `detects subscriptions category`() {
+        val result = mapper.extractCategory("Potwierdzenie subskrypcja Netflix na okres 12 miesięcy")
+        assertEquals(DocumentCategory.SUBSCRIPTIONS, result)
     }
 
     @Test

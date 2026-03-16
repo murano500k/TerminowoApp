@@ -7,7 +7,7 @@
     <string name="no_documents_yet">No documents yet</string>
     <string name="empty_state_hint">Tap the + button to scan\nyour first document</string>
     <string name="delete_document_confirm_title">Delete document?</string>
-    <string name="delete_document_confirm_message">Are you sure you want to delete \"%1$s\"? This action cannot be undone.</string>
+    <string name="delete_document_confirm_message">Are you sure you want to delete %1$s? This action cannot be undone.</string>
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
 
@@ -23,6 +23,7 @@
     <string name="ocr_confidence">OCR confidence: %1$d%</string>
     <string name="reminders">Reminders</string>
     <string name="save_document">Save Document</string>
+    <string name="document_added">Document added</string>
     <string name="update_document">Update Document</string>
     <string name="delete_document">Delete Document</string>
     <string name="document_image">Document image</string>
@@ -99,10 +100,12 @@
 
     <!-- Categories -->
     <string name="category_insurance">Insurance</string>
-    <string name="category_payment">Payment</string>
+    <string name="category_payments">Payments</string>
     <string name="category_agreement">Agreement</string>
-    <string name="category_driver_license">Driver License</string>
+    <string name="category_documents">Documents</string>
     <string name="category_technical_inspection">Technical Inspection</string>
+    <string name="category_subscriptions">Subscriptions</string>
+    <string name="category_health">Health</string>
     <string name="category_other">Other</string>
 
     <!-- Reminder intervals -->
@@ -120,6 +123,39 @@
     <string name="notification_time">Notification time</string>
     <string name="confirm">Confirm</string>
 
+    <!-- Empty states per filter -->
+    <string name="empty_list_title">Your list is empty</string>
+    <string name="empty_list_subtitle">Every document you add will appear here \u2014 passport, insurance, car inspection, and more.</string>
+    <string name="empty_active_title">No active documents</string>
+    <string name="empty_active_subtitle">Documents valid for more than 30 days will appear in this tab.</string>
+    <string name="empty_urgent_title">Nothing urgent \u2014 great!</string>
+    <string name="empty_urgent_subtitle">Documents expiring within 30 days will appear here.</string>
+    <string name="empty_expired_title">No expired documents</string>
+    <string name="empty_expired_subtitle">You have everything under control.</string>
+
+    <!-- Filter tabs -->
+    <string name="filter_all">All</string>
+    <string name="filter_active">Active</string>
+    <string name="filter_urgent">Urgent</string>
+    <string name="filter_expired">Expired</string>
+
+    <!-- Pulpit (Dashboard) screen -->
+    <string name="pulpit_title">Your dashboard</string>
+    <string name="document_score">Document score</string>
+    <string name="status_expired">Expired</string>
+    <string name="status_within_30_days">\u2264 30 days</string>
+    <string name="status_over_30_days">> 30 days</string>
+    <string name="upcoming_deadlines">Upcoming deadlines</string>
+    <string name="all_documents_ok">All documents are up to date</string>
+    <string name="all_documents_ok_subtitle">We\'ll let you know when something needs attention.</string>
+    <string name="no_documents_pulpit_title">You don\'t have any documents yet</string>
+    <string name="no_documents_pulpit_subtitle">Add your first to track deadlines and get reminders on time.</string>
+    <string name="add_document_button">+ Add document</string>
+
+    <!-- Bottom navigation -->
+    <string name="nav_pulpit">Dashboard</string>
+    <string name="nav_documents">Documents</string>
+
     <!-- Plurals -->
     <plurals name="expired_days_ago">
         <item quantity="one">This document expired %1$d day ago</item>
@@ -128,5 +164,17 @@
     <plurals name="expires_in_days">
         <item quantity="one">Expires in %1$d day</item>
         <item quantity="other">Expires in %1$d days</item>
+    </plurals>
+    <plurals name="expired_days_ago_short">
+        <item quantity="one">Expired %1$d day ago</item>
+        <item quantity="other">Expired %1$d days ago</item>
+    </plurals>
+    <plurals name="expires_in_days_short">
+        <item quantity="one">%1$d day</item>
+        <item quantity="other">%1$d days</item>
+    </plurals>
+    <plurals name="documents_count_label">
+        <item quantity="one">%1$d document</item>
+        <item quantity="other">%1$d documents</item>
     </plurals>
 </resources>

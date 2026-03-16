@@ -77,6 +77,7 @@ import com.stc.terminowo.platform.decodeImageBitmap
 import com.stc.terminowo.platform.getPdfPageCount
 import com.stc.terminowo.platform.renderPdfPage
 import com.stc.terminowo.presentation.components.ReminderChips
+import com.stc.terminowo.presentation.theme.LocalExtendedColors
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
@@ -91,6 +92,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import terminowo.shared.generated.resources.Res
+import terminowo.shared.generated.resources.add_document
 import terminowo.shared.generated.resources.back
 import terminowo.shared.generated.resources.category
 import terminowo.shared.generated.resources.close
@@ -134,6 +136,7 @@ fun DetailScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val defaultDocName = stringResource(Res.string.default_document_name)
     val imageStorage: ImageStorage = koinInject()
+    val accentRed = LocalExtendedColors.current.accentRed
 
     var thumbnailBitmap by remember { mutableStateOf<ImageBitmap?>(null) }
     var showFullImage by remember { mutableStateOf(false) }
@@ -187,17 +190,26 @@ fun DetailScreen(
     var showDatePicker by remember { mutableStateOf(false) }
     var showTimePicker by remember { mutableStateOf(false) }
 
+    val accentColorScheme = MaterialTheme.colorScheme.copy(
+        primary = accentRed,
+        onPrimary = Color.White
+    )
+
+    MaterialTheme(colorScheme = accentColorScheme) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(if (isNew) stringResource(Res.string.new_document) else stringResource(Res.string.document_details))
+                    Text(
+                        if (isNew) stringResource(Res.string.add_document)
+                        else stringResource(Res.string.document_details)
+                    )
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = stringResource(Res.string.back)
+                            imageVector = if (isNew) Icons.Default.Close else Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = if (isNew) stringResource(Res.string.close) else stringResource(Res.string.back)
                         )
                     }
                 },
@@ -212,8 +224,8 @@ fun DetailScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp)
         ) {
-            // Document thumbnail
-            if (thumbnailBitmap != null) {
+            // Show thumbnail only for existing documents (edit mode)
+            if (!isNew && thumbnailBitmap != null) {
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -233,7 +245,7 @@ fun DetailScreen(
                     )
                 }
                 Spacer(modifier = Modifier.height(16.dp))
-            } else if (uiState.imagePath.isEmpty()) {
+            } else if (!isNew && uiState.imagePath.isEmpty()) {
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -305,14 +317,21 @@ fun DetailScreen(
             // Expiry date picker
             Box {
                 OutlinedTextField(
-                    value = uiState.expiryDate?.toString() ?: "",
+                    value = uiState.expiryDate?.let {
+                        "${it.dayOfMonth.toString().padStart(2, '0')}/${it.monthNumber.toString().padStart(2, '0')}/${it.year}"
+                    } ?: "",
                     onValueChange = {},
                     readOnly = true,
                     label = { Text(stringResource(Res.string.expiry_date_format)) },
+                    placeholder = { Text("dd/mm/yyyy") },
                     modifier = Modifier.fillMaxWidth(),
+                    isError = uiState.expiryDate == null,
                     supportingText = {
                         if (uiState.expiryDate == null) {
-                            Text(stringResource(Res.string.expiry_date_required))
+                            Text(
+                                stringResource(Res.string.expiry_date_required),
+                                color = MaterialTheme.colorScheme.error
+                            )
                         } else {
                             uiState.confidence?.let {
                                 Text(stringResource(Res.string.ocr_confidence, (it * 100).toInt()))
@@ -463,7 +482,8 @@ fun DetailScreen(
             Button(
                 onClick = { viewModel.save() },
                 modifier = Modifier.fillMaxWidth(),
-                enabled = !uiState.isSaving && uiState.name.isNotBlank() && uiState.expiryDate != null
+                enabled = !uiState.isSaving && uiState.name.isNotBlank() && uiState.expiryDate != null,
+                shape = RoundedCornerShape(24.dp)
             ) {
                 Text(if (isNew) stringResource(Res.string.save_document) else stringResource(Res.string.update_document))
             }
@@ -474,6 +494,7 @@ fun DetailScreen(
                     onClick = { viewModel.delete() },
                     modifier = Modifier.fillMaxWidth(),
                     enabled = !uiState.isDeleting,
+                    shape = RoundedCornerShape(24.dp),
                     colors = ButtonDefaults.outlinedButtonColors(
                         contentColor = MaterialTheme.colorScheme.error
                     )
@@ -491,6 +512,7 @@ fun DetailScreen(
             imageStorage = imageStorage,
             onDismiss = { showFullImage = false }
         )
+    }
     }
 }
 
