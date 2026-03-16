@@ -80,7 +80,6 @@ import org.koin.compose.viewmodel.koinViewModel
 import terminowo.shared.generated.resources.Res
 import terminowo.shared.generated.resources.cancel
 import terminowo.shared.generated.resources.delete
-import terminowo.shared.generated.resources.document_added
 import terminowo.shared.generated.resources.delete_all_confirm_message
 import terminowo.shared.generated.resources.delete_all_confirm_title
 import terminowo.shared.generated.resources.delete_all_documents
@@ -110,18 +109,8 @@ fun DocumentsScreen(
     onScanClick: () -> Unit,
     onDocumentClick: (String) -> Unit,
     initialFilter: DocumentStatusFilter? = null,
-    showDocumentAdded: Boolean = false,
     viewModel: DocumentsViewModel = koinViewModel()
 ) {
-    val snackbarHostState = remember { androidx.compose.material3.SnackbarHostState() }
-    val documentAddedMsg = stringResource(Res.string.document_added)
-
-    LaunchedEffect(showDocumentAdded) {
-        if (showDocumentAdded) {
-            snackbarHostState.showSnackbar(documentAddedMsg)
-        }
-    }
-
     androidx.compose.runtime.LaunchedEffect(initialFilter) {
         if (initialFilter != null) {
             viewModel.selectFilter(initialFilter)
@@ -181,7 +170,6 @@ fun DocumentsScreen(
     Box(modifier = Modifier.fillMaxSize()) {
     Scaffold(
         modifier = if (isSearchActive) Modifier.blur(12.dp) else Modifier,
-        snackbarHost = { androidx.compose.material3.SnackbarHost(snackbarHostState) },
         topBar = {
             Column {
                 AppTopBar(

@@ -34,6 +34,8 @@ import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -62,6 +64,7 @@ import com.stc.terminowo.presentation.preview.ImagePreviewScreen
 import com.stc.terminowo.presentation.pulpit.DashboardScreen
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock as DateTimeClock
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import terminowo.shared.generated.resources.Res
@@ -69,6 +72,7 @@ import terminowo.shared.generated.resources.add_document
 import terminowo.shared.generated.resources.choose_file
 import terminowo.shared.generated.resources.enter_manually
 import terminowo.shared.generated.resources.nav_documents
+import terminowo.shared.generated.resources.document_added
 import terminowo.shared.generated.resources.nav_pulpit
 import terminowo.shared.generated.resources.take_photo
 import kotlin.uuid.Uuid
@@ -257,6 +261,7 @@ fun NavGraph() {
     }
 
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         bottomBar = {
             if (showBottomBar) {
                 val navBarColors = NavigationBarItemDefaults.colors(
@@ -381,8 +386,7 @@ fun NavGraph() {
                     onDocumentClick = { documentId ->
                         navController.navigate(Screen.DetailEdit(documentId))
                     },
-                    initialFilter = initialFilter,
-                    showDocumentAdded = route.showDocumentAdded
+                    initialFilter = initialFilter
                 )
             }
 
@@ -440,9 +444,12 @@ fun NavGraph() {
                     newDocRawResponse = route.rawOcrResponse,
                     newDocId = route.documentId,
                     newDocCategory = route.category,
-                    onSaved = {
-                        navController.navigate(Screen.Documents(showDocumentAdded = true)) {
+                    onSaved = { docName ->
+                        navController.navigate(Screen.Documents()) {
                             popUpTo<Screen.Documents> { inclusive = true }
+                        }
+                        scope.launch {
+                            snackbarHostState.showSnackbar(getString(Res.string.document_added, docName))
                         }
                     },
                     onDeleted = {
@@ -467,7 +474,7 @@ fun NavGraph() {
                     newDocRawResponse = null,
                     newDocId = null,
                     newDocCategory = null,
-                    onSaved = { navController.popBackStack() },
+                    onSaved = { _ -> navController.popBackStack() },
                     onDeleted = {
                         navController.navigate(Screen.Documents()) {
                             popUpTo<Screen.Documents> { inclusive = true }

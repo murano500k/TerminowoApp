@@ -23,6 +23,7 @@
     <string name="ocr_confidence">Pewno\u015B\u0107 OCR: %1$d%</string>
     <string name="reminders">Przypomnienia</string>
     <string name="save_document">Zapisz dokument</string>
+    <string name="document_added">%1$s dodano</string>
     <string name="update_document">Aktualizuj dokument</string>
     <string name="delete_document">Usu\u0144 dokument</string>
     <string name="document_image">Zdj\u0119cie dokumentu</string>

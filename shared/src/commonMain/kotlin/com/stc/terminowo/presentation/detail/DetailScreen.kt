@@ -127,7 +127,7 @@ fun DetailScreen(
     newDocRawResponse: String?,
     newDocId: String?,
     newDocCategory: String? = null,
-    onSaved: () -> Unit,
+    onSaved: (documentName: String) -> Unit,
     onDeleted: () -> Unit,
     onBack: () -> Unit,
     viewModel: DetailViewModel = koinViewModel()
@@ -173,7 +173,7 @@ fun DetailScreen(
     }
 
     LaunchedEffect(uiState.savedSuccessfully) {
-        if (uiState.savedSuccessfully) onSaved()
+        if (uiState.savedSuccessfully) onSaved(uiState.name)
     }
 
     LaunchedEffect(uiState.deletedSuccessfully) {

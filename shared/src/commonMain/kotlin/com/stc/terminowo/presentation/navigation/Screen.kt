@@ -7,7 +7,7 @@ sealed interface Screen {
     data object Pulpit : Screen
 
     @Serializable
-    data class Documents(val initialFilter: String? = null, val showDocumentAdded: Boolean = false) : Screen
+    data class Documents(val initialFilter: String? = null) : Screen
 
     @Serializable
     data object Camera : Screen
