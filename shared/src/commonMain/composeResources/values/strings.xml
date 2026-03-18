@@ -156,6 +156,16 @@
     <string name="nav_pulpit">Dashboard</string>
     <string name="nav_documents">Documents</string>
 
+    <!-- Notifications -->
+    <string name="notifications_title">Notifications</string>
+    <string name="notifications_empty">No notifications yet</string>
+    <string name="notifications_expires_label">Expires</string>
+    <string name="time_ago_just_now">just now</string>
+    <string name="time_ago_minutes">%1$d min ago</string>
+    <string name="time_ago_hours">%1$d h ago</string>
+    <string name="time_ago_days">%1$d days ago</string>
+    <string name="time_ago_weeks">%1$d weeks ago</string>
+
     <!-- Plurals -->
     <plurals name="expired_days_ago">
         <item quantity="one">This document expired %1$d day ago</item>

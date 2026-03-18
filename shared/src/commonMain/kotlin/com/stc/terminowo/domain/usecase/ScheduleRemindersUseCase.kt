@@ -1,7 +1,10 @@
 package com.stc.terminowo.domain.usecase
 
+import com.stc.terminowo.domain.model.AppNotification
 import com.stc.terminowo.domain.model.Document
+import com.stc.terminowo.domain.repository.NotificationRepository
 import com.stc.terminowo.platform.NotificationScheduler
+import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atTime
@@ -12,11 +15,13 @@ import kotlinx.datetime.toLocalDateTime
 import kotlinx.datetime.todayIn
 
 class ScheduleRemindersUseCase(
-    private val notificationScheduler: NotificationScheduler
+    private val notificationScheduler: NotificationScheduler,
+    private val notificationRepository: NotificationRepository
 ) {
     operator fun invoke(document: Document) {
-        // Cancel existing reminders for this document
+        // Cancel existing reminders and clear old notification records
         notificationScheduler.cancelReminders(document.id)
+        runBlocking { notificationRepository.deleteByDocumentId(document.id) }
 
         val expiryDate = document.expiryDate ?: return
         val tz = TimeZone.currentSystemDefault()
@@ -45,6 +50,22 @@ class ScheduleRemindersUseCase(
                 reminderDate = scheduledDateTime,
                 daysBefore = daysBefore
             )
+
+            // Record notification for in-app display
+            runBlocking {
+                notificationRepository.insertNotification(
+                    AppNotification(
+                        id = "${document.id}_$daysBefore",
+                        documentId = document.id,
+                        documentName = document.name,
+                        category = document.category,
+                        expiryDate = document.expiryDate,
+                        daysBefore = daysBefore,
+                        scheduledAt = scheduledDateTime,
+                        isRead = false
+                    )
+                )
+            }
         }
     }
 }

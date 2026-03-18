@@ -53,10 +53,13 @@ import androidx.navigation.toRoute
 import com.stc.terminowo.platform.FilePicker
 import com.stc.terminowo.platform.ImageStorage
 import com.stc.terminowo.platform.isIos
+import androidx.compose.runtime.collectAsState
+import com.stc.terminowo.domain.repository.NotificationRepository
 import com.stc.terminowo.presentation.camera.CameraScreen
 import com.stc.terminowo.presentation.detail.DetailScreen
 import com.stc.terminowo.presentation.main.DocumentStatusFilter
 import com.stc.terminowo.presentation.main.DocumentsScreen
+import com.stc.terminowo.presentation.notifications.NotificationsScreen
 import com.stc.terminowo.presentation.preview.ImagePreviewScreen
 import com.stc.terminowo.presentation.pulpit.DashboardScreen
 import com.stc.terminowo.presentation.theme.LocalExtendedColors
@@ -109,6 +112,10 @@ fun NavGraph() {
     val filePicker: FilePicker = koinInject()
     val imageStorage: ImageStorage = koinInject()
     val scope = rememberCoroutineScope()
+
+    val notificationRepository: NotificationRepository = koinInject()
+    val unreadNotificationCount by notificationRepository.getUnreadCount()
+        .collectAsState(initial = 0L)
 
     var showAddSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState()
@@ -311,7 +318,9 @@ fun NavGraph() {
                             popUpTo<Screen.Documents> { inclusive = true }
                         }
                     },
-                    onAddDocumentClick = { showAddSheet = true }
+                    onAddDocumentClick = { showAddSheet = true },
+                    onNotificationsClick = { navController.navigate(Screen.Notifications) },
+                    unreadNotificationCount = unreadNotificationCount.toInt()
                 )
             }
 
@@ -325,7 +334,9 @@ fun NavGraph() {
                     onDocumentClick = { documentId ->
                         navController.navigate(Screen.DetailEdit(documentId))
                     },
-                    initialFilter = initialFilter
+                    initialFilter = initialFilter,
+                    onNotificationsClick = { navController.navigate(Screen.Notifications) },
+                    unreadNotificationCount = unreadNotificationCount.toInt()
                 )
             }
 
@@ -396,6 +407,12 @@ fun NavGraph() {
                             popUpTo<Screen.Documents> { inclusive = true }
                         }
                     },
+                    onBack = { navController.popBackStack() }
+                )
+            }
+
+            composable<Screen.Notifications> {
+                NotificationsScreen(
                     onBack = { navController.popBackStack() }
                 )
             }

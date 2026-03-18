@@ -6,5 +6,5 @@ import org.koin.dsl.module
 
 val domainModule = module {
     factory { ScanDocumentUseCase(get()) }
-    factory { ScheduleRemindersUseCase(get()) }
+    factory { ScheduleRemindersUseCase(get(), get()) }
 }

@@ -29,4 +29,7 @@ sealed interface Screen {
 
     @Serializable
     data class DetailEdit(val documentId: String) : Screen
+
+    @Serializable
+    data object Notifications : Screen
 }

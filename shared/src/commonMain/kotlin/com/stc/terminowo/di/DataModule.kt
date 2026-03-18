@@ -7,8 +7,10 @@ import com.stc.terminowo.data.remote.DocumentAiService
 import com.stc.terminowo.data.remote.ProxyConfig
 import com.stc.terminowo.data.remote.UserProfileService
 import com.stc.terminowo.data.repository.DocumentRepositoryImpl
+import com.stc.terminowo.data.repository.NotificationRepositoryImpl
 import com.stc.terminowo.data.repository.OcrRepositoryImpl
 import com.stc.terminowo.domain.repository.DocumentRepository
+import com.stc.terminowo.domain.repository.NotificationRepository
 import com.stc.terminowo.domain.repository.OcrRepository
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -55,6 +57,8 @@ val dataModule = module {
     single { DocumentAiService(get(), get<ProxyConfig>()) }
 
     single<DocumentRepository> { DocumentRepositoryImpl(get()) }
+
+    single<NotificationRepository> { NotificationRepositoryImpl(get()) }
 
     single<OcrRepository> { OcrRepositoryImpl(get(), get(), get()) }
 

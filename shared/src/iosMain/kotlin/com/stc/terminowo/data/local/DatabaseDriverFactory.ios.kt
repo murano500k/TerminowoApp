@@ -9,6 +9,8 @@ actual class DatabaseDriverFactory {
         return NativeSqliteDriver(
             schema = DocumentDatabase.Schema,
             name = "document_scanner.db"
-        )
+        ).also {
+            it.execute(null, "PRAGMA foreign_keys = ON", 0)
+        }
     }
 }

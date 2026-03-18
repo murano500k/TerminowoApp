@@ -42,3 +42,40 @@ DELETE FROM DocumentEntity;
 
 clearAllFilePaths:
 UPDATE DocumentEntity SET imagePath = '', thumbnailPath = '' WHERE imagePath != '' OR thumbnailPath != '';
+
+-- Notification table
+CREATE TABLE NotificationEntity (
+    id TEXT NOT NULL PRIMARY KEY,
+    documentId TEXT NOT NULL,
+    documentName TEXT NOT NULL,
+    category TEXT NOT NULL DEFAULT 'other',
+    expiryDate TEXT,
+    daysBefore INTEGER NOT NULL,
+    scheduledAt TEXT NOT NULL,
+    isRead INTEGER NOT NULL DEFAULT 0,
+    FOREIGN KEY (documentId) REFERENCES DocumentEntity(id) ON DELETE CASCADE
+);
+
+getDeliveredNotifications:
+SELECT *
+FROM NotificationEntity
+WHERE scheduledAt <= ?
+ORDER BY scheduledAt DESC;
+
+getUnreadCount:
+SELECT COUNT(*)
+FROM NotificationEntity
+WHERE isRead = 0 AND scheduledAt <= ?;
+
+insertNotification:
+INSERT OR REPLACE INTO NotificationEntity(id, documentId, documentName, category, expiryDate, daysBefore, scheduledAt, isRead)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+
+markAllAsRead:
+UPDATE NotificationEntity
+SET isRead = 1
+WHERE isRead = 0 AND scheduledAt <= ?;
+
+deleteNotificationsByDocumentId:
+DELETE FROM NotificationEntity
+WHERE documentId = ?;

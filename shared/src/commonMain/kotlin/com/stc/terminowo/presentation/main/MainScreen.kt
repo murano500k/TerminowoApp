@@ -65,6 +65,8 @@ fun DocumentsScreen(
     onScanClick: () -> Unit,
     onDocumentClick: (String) -> Unit,
     initialFilter: DocumentStatusFilter? = null,
+    onNotificationsClick: () -> Unit = {},
+    unreadNotificationCount: Int = 0,
     viewModel: DocumentsViewModel = koinViewModel()
 ) {
     LaunchedEffect(initialFilter) {
@@ -118,6 +120,8 @@ fun DocumentsScreen(
                     searchQuery = searchQuery,
                     onSearchQueryChange = { viewModel.onSearchQueryChange(it) },
                     onSearchActiveChange = { isSearchActive = it },
+                    onNotificationsClick = onNotificationsClick,
+                    unreadNotificationCount = unreadNotificationCount,
                     showSearchIcon = uiState.allCount > 1,
                     trailingActions = {
                         Box {

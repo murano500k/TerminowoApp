@@ -156,6 +156,16 @@
     <string name="nav_pulpit">\u041F\u0443\u043B\u044C\u0442</string>
     <string name="nav_documents">\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u0438</string>
 
+    <!-- Notifications -->
+    <string name="notifications_title">\u0421\u043F\u043E\u0432\u0456\u0449\u0435\u043D\u043D\u044F</string>
+    <string name="notifications_empty">\u0421\u043F\u043E\u0432\u0456\u0449\u0435\u043D\u044C \u043D\u0435\u043C\u0430\u0454</string>
+    <string name="notifications_expires_label">\u0421\u043F\u043B\u0438\u0432\u0430\u0454</string>
+    <string name="time_ago_just_now">\u0449\u043E\u0439\u043D\u043E</string>
+    <string name="time_ago_minutes">%1$d \u0445\u0432 \u0442\u043E\u043C\u0443</string>
+    <string name="time_ago_hours">%1$d \u0433\u043E\u0434 \u0442\u043E\u043C\u0443</string>
+    <string name="time_ago_days">%1$d \u0434\u043D. \u0442\u043E\u043C\u0443</string>
+    <string name="time_ago_weeks">%1$d \u0442\u0438\u0436. \u0442\u043E\u043C\u0443</string>
+
     <!-- Plurals -->
     <plurals name="expired_days_ago">
         <item quantity="one">\u0421\u0442\u0440\u043E\u043A \u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u0430 \u0441\u043F\u043B\u0438\u0432 %1$d \u0434\u0435\u043D\u044C \u0442\u043E\u043C\u0443</item>

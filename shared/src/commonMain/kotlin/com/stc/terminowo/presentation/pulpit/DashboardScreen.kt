@@ -80,7 +80,9 @@ fun DashboardScreen(
     onDocumentClick: (String) -> Unit,
     onNavigateToDocuments: () -> Unit,
     onNavigateToDocumentsWithFilter: (DocumentStatusFilter) -> Unit,
-    onAddDocumentClick: () -> Unit
+    onAddDocumentClick: () -> Unit,
+    onNotificationsClick: () -> Unit = {},
+    unreadNotificationCount: Int = 0
 ) {
     val viewModel: DashboardViewModel = koinViewModel()
     val uiState by viewModel.uiState.collectAsState()
@@ -97,6 +99,8 @@ fun DashboardScreen(
                     searchQuery = searchQuery,
                     onSearchQueryChange = { viewModel.onSearchQueryChange(it) },
                     onSearchActiveChange = { isSearchActive = it },
+                    onNotificationsClick = onNotificationsClick,
+                    unreadNotificationCount = unreadNotificationCount,
                     showSearchIcon = uiState.totalCount > 1
                 )
 
