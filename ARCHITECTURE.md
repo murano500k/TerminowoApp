@@ -33,7 +33,7 @@ TerminowoApp/
 └── iosApp/               Xcode project shell (not yet wired)
 ```
 
-Package: `com.stc.terminowo` (shared), `com.stc.terminowo.android` (androidApp).
+Package: `com.stc.terminowo` (shared and androidApp).
 
 ## Architecture Layers
 

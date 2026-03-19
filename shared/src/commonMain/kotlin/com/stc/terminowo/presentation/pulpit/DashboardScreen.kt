@@ -171,64 +171,70 @@ private fun DashboardContent(
     onAddDocumentClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    LazyColumn(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        when {
-            uiState.isLoading -> { /* show nothing while loading */ }
+    if (!uiState.isLoading && uiState.totalCount == 0) {
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.surfaceContainerLow),
+            contentAlignment = Alignment.Center
+        ) {
+            EmptyState(onAddClick = onAddDocumentClick)
+        }
+    } else {
+        LazyColumn(
+            modifier = modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.surfaceContainerLow)
+                .padding(horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            when {
+                uiState.isLoading -> { /* show nothing while loading */ }
 
-            uiState.totalCount == 0 -> {
-                item {
-                    EmptyState(onAddClick = onAddDocumentClick)
-                }
-            }
-
-            else -> {
-                item {
-                    ScoreCard(
-                        scorePercent = uiState.scorePercent,
-                        totalCount = uiState.totalCount
-                    )
-                }
-
-                item {
-                    StatusBoxesRow(
-                        expiredCount = uiState.expiredCount,
-                        urgentCount = uiState.urgentCount,
-                        activeCount = uiState.activeCount,
-                        onExpiredClick = { onNavigateToDocumentsWithFilter(DocumentStatusFilter.EXPIRED) },
-                        onUrgentClick = { onNavigateToDocumentsWithFilter(DocumentStatusFilter.URGENT) },
-                        onActiveClick = { onNavigateToDocumentsWithFilter(DocumentStatusFilter.ACTIVE) }
-                    )
-                }
-
-                if (uiState.upcomingDocuments.isNotEmpty()) {
+                else -> {
                     item {
-                        UpcomingDeadlinesHeader(onClick = onNavigateToDocuments)
-                    }
-
-                    items(
-                        items = uiState.upcomingDocuments,
-                        key = { it.id }
-                    ) { document ->
-                        DocumentListItem(
-                            document = document,
-                            onClick = { onDocumentClick(document.id) }
+                        ScoreCard(
+                            scorePercent = uiState.scorePercent,
+                            totalCount = uiState.totalCount
                         )
                     }
-                } else {
+
                     item {
-                        AllDocumentsOkState()
+                        StatusBoxesRow(
+                            expiredCount = uiState.expiredCount,
+                            urgentCount = uiState.urgentCount,
+                            activeCount = uiState.activeCount,
+                            onExpiredClick = { onNavigateToDocumentsWithFilter(DocumentStatusFilter.EXPIRED) },
+                            onUrgentClick = { onNavigateToDocumentsWithFilter(DocumentStatusFilter.URGENT) },
+                            onActiveClick = { onNavigateToDocumentsWithFilter(DocumentStatusFilter.ACTIVE) }
+                        )
+                    }
+
+                    if (uiState.upcomingDocuments.isNotEmpty()) {
+                        item {
+                            UpcomingDeadlinesHeader(onClick = onNavigateToDocuments)
+                        }
+
+                        items(
+                            items = uiState.upcomingDocuments,
+                            key = { it.id }
+                        ) { document ->
+                            DocumentListItem(
+                                document = document,
+                                onClick = { onDocumentClick(document.id) }
+                            )
+                        }
+                    } else {
+                        item {
+                            AllDocumentsOkState()
+                        }
                     }
                 }
             }
-        }
 
-        item {
-            Spacer(modifier = Modifier.height(8.dp))
+            item {
+                Spacer(modifier = Modifier.height(8.dp))
+            }
         }
     }
 }
@@ -466,8 +472,7 @@ private fun UpcomingDeadlinesHeader(onClick: () -> Unit) {
 private fun EmptyState(onAddClick: () -> Unit) {
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 48.dp),
+            .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(

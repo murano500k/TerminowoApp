@@ -43,11 +43,11 @@ kotlin {
 }
 
 android {
-    namespace = "com.stc.terminowo.android"
+    namespace = "com.stc.terminowo"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.stc.terminowo.android"
+        applicationId = "com.stc.terminowo"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 2

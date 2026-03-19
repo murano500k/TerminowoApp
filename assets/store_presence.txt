@@ -1,0 +1,55 @@
+App name *
+Terminowo
+This is how your app will appear on Google Play 
+
+9 / 30
+Text is 9 characters out of 30
+Short description *
+Scan documents, track expiry dates, and get timely reminders automatically.
+A short description for your app. Users can expand to view your full description. 
+
+75 / 80
+Text is 75 characters out of 80
+Full description *
+Never miss an expiry date again. Terminowo scans your insurance policies, driver's licenses, vehicle inspections, and other important documents — then reminds you before they expire.                    
+                                                                                                                                                                                                            
+  How it works:                                                                                                                                                                                             
+                                                                                                  
+  1. Take a photo of your document                                                                                                                                                                          
+  2. The app automatically detects the expiry date using advanced OCR technology                                                                                                                            
+  3. Set up reminders and forget about it — Terminowo will notify you when it's time to renew                                                                                                               
+                                                                                                                                                                                                            
+  Key features:
+
+  — Automatic date extraction
+  Point your camera at any document and Terminowo will find the expiry date for you. No manual typing required. Powered by Google Document AI for accurate recognition of dates in multiple formats and
+  languages.
+
+  — Smart document categories
+  Your documents are automatically sorted into categories: insurance, driver's license, technical inspection, agreements, and payments. You can always change the category manually if needed.
+
+  — Flexible reminders
+  Choose when you want to be reminded — 90 days, 30 days, 7 days, or 1 day before expiry. Set multiple reminders for the same document so you never get caught off guard. Pick your preferred reminder time
+  to get notifications when it's convenient.
+
+  — Everything stays on your device
+  Your documents and personal data are stored locally on your phone. No cloud storage, no accounts required, no data shared with third parties. Your privacy is our priority.
+
+  — Simple and focused
+  Terminowo does one thing and does it well. No clutter, no unnecessary features — just a clean list of your documents sorted by expiry date with timely reminders.
+
+  — Works with multiple document types
+  Insurance policies, car insurance, health insurance, driver's licenses, vehicle technical inspections, rental agreements, payment receipts — if it has an expiry date, Terminowo can track it.
+
+  — Multilingual OCR
+  Date extraction works with documents in English, Polish, Russian, and Ukrainian.
+
+  — Optional Google Sign-In
+  Sign in with your Google account to enable automatic date extraction via cloud OCR, or skip sign-in and enter dates manually — the choice is yours.
+
+  Who is Terminowo for?
+
+  Anyone who deals with documents that expire. If you've ever been surprised by an expired insurance policy, a lapsed driver's license, or an overdue vehicle inspection — this app is for you. Terminowo
+  keeps all your deadlines in one place and makes sure you're always prepared.
+
+  Download Terminowo and stop worrying about expiry dates.

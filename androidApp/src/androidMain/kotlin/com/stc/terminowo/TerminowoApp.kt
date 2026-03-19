@@ -1,4 +1,4 @@
-package com.stc.terminowo.android
+package com.stc.terminowo
 
 import android.app.Application
 import com.stc.terminowo.data.remote.ProxyConfig

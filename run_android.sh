@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PACKAGE="com.stc.terminowo.android"
+PACKAGE="com.stc.terminowo"
 ACTIVITY="${PACKAGE}.MainActivity"
 PROJECT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
