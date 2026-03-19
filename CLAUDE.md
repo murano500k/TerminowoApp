@@ -14,10 +14,13 @@ Mobile app (Terminowo) that scans documents, extracts expiry dates via OCR, stor
 ./gradlew :shared:testDebugUnitTest --tests "*.DocumentAiMapperTest.extractDate*"  # Single test method
 ./gradlew :androidApp:assembleDebug                    # Build debug APK
 ./gradlew :androidApp:installDebug                     # Install on device/emulator
-./run.sh                                               # Build + install + launch (checks for connected device)
+./run_android.sh                                       # Build + install + launch Android (checks for connected device)
+./run_ios.sh                                           # Build + install + launch iOS (checks for connected iPhone/iPad)
 ```
 
-**Manual testing**: Always use `./run.sh` to deploy and test on a connected Android device. It builds, installs, and launches the app in one step.
+**Manual testing (Android)**: Use `./run_android.sh` to deploy and test on a connected Android device. Builds debug APK, installs, and launches.
+
+**Manual testing (iOS)**: Use `./run_ios.sh` to deploy and test on a connected iOS device. Builds shared framework (`linkDebugFrameworkIosArm64` + `iosArm64AggregateResources`), then builds the Xcode project and installs via `devicectl`.
 
 ## Tech Stack
 
@@ -51,4 +54,4 @@ Backend proxy (GCP Cloud Function) → `DocumentAiMapper` with 3-strategy date e
 
 ## What's Not Done Yet
 
-- iOS implementation (requires Mac)
+- iOS polish and feature parity with Android

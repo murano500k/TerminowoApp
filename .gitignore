@@ -15,6 +15,8 @@ documentscanner-*.json
 *.jks
 *.apk
 *.aab
+*.ipa
+AuthKey*.p8
 
 # Build directories (all modules)
 build/

@@ -4,6 +4,7 @@ package com.stc.terminowo.platform
 
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.addressOf
+import kotlinx.cinterop.reinterpret
 import kotlinx.cinterop.usePinned
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -13,7 +14,6 @@ import platform.CoreGraphics.CGPDFDocumentGetPage
 import platform.CoreGraphics.CGRectMake
 import platform.CoreGraphics.CGSizeMake
 import platform.Foundation.NSData
-import platform.Foundation.create
 import platform.UIKit.UIGraphicsBeginImageContextWithOptions
 import platform.UIKit.UIGraphicsEndImageContext
 import platform.UIKit.UIGraphicsGetImageFromCurrentImageContext
@@ -23,8 +23,6 @@ import platform.CoreGraphics.CGContextScaleCTM
 import platform.CoreGraphics.CGContextTranslateCTM
 import platform.CoreGraphics.CGPDFPageGetBoxRect
 import platform.CoreGraphics.kCGPDFMediaBox
-import platform.Foundation.CFBridgingRelease
-import platform.Foundation.CFBridgingRetain
 import platform.CoreFoundation.CFDataCreate
 import platform.CoreGraphics.CGDataProviderCreateWithCFData
 import platform.UIKit.UIGraphicsGetCurrentContext
@@ -34,13 +32,10 @@ import platform.posix.memcpy
 actual suspend fun renderPdfPage(pdfBytes: ByteArray, pageIndex: Int): ByteArray? =
     withContext(Dispatchers.Default) {
         try {
-            val nsData = pdfBytes.usePinned { pinned ->
-                NSData.create(bytes = pinned.addressOf(0), length = pdfBytes.size.toULong())
+            val cfData = pdfBytes.usePinned { pinned ->
+                CFDataCreate(null, pinned.addressOf(0).reinterpret(), pdfBytes.size.toLong())
             }
-
-            val cfData = CFBridgingRetain(nsData)
             val dataProvider = CGDataProviderCreateWithCFData(cfData)
-            CFBridgingRelease(cfData)
 
             if (dataProvider == null) return@withContext null
 
@@ -103,13 +98,10 @@ actual suspend fun renderPdfPage(pdfBytes: ByteArray, pageIndex: Int): ByteArray
 actual suspend fun getPdfPageCount(pdfBytes: ByteArray): Int =
     withContext(Dispatchers.Default) {
         try {
-            val nsData = pdfBytes.usePinned { pinned ->
-                NSData.create(bytes = pinned.addressOf(0), length = pdfBytes.size.toULong())
+            val cfData = pdfBytes.usePinned { pinned ->
+                CFDataCreate(null, pinned.addressOf(0).reinterpret(), pdfBytes.size.toLong())
             }
-
-            val cfData = CFBridgingRetain(nsData)
             val dataProvider = CGDataProviderCreateWithCFData(cfData)
-            CFBridgingRelease(cfData)
 
             if (dataProvider == null) return@withContext 0
 

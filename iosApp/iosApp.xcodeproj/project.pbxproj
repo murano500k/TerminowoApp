@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 63;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -14,7 +14,7 @@
 
 /* Begin PBXFileReference section */
 		245434685F34A9A15B1AC406 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
-		86038AE1032E284E79B32AD6 /* iosApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = iosApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		86038AE1032E284E79B32AD6 /* iosApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iosApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B6C1F485E0CF8BB70C9DDD2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9E952615EB910B75418E8063 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		C117AD187833E2513BD2F553 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -113,7 +113,6 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					78B53CC79860CBFC2F5543C6 = {
-						DevelopmentTeam = 64RYVQ9R2P;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -128,7 +127,6 @@
 			);
 			mainGroup = 38B69C3F79CD97858CF7B609;
 			minimizedProjectReferenceProxies = 1;
-			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -204,7 +202,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ \"$PLATFORM_NAME\" = \"iphonesimulator\" ]; then\n  if [ \"$CURRENT_ARCH\" = \"arm64\" ]; then\n    KOTLIN_TARGET=\"IosSimulatorArm64\"\n    KOTLIN_TARGET_LOWER=\"iosSimulatorArm64\"\n  else\n    KOTLIN_TARGET=\"IosX64\"\n    KOTLIN_TARGET_LOWER=\"iosX64\"\n  fi\nelse\n  KOTLIN_TARGET=\"IosArm64\"\n  KOTLIN_TARGET_LOWER=\"iosArm64\"\nfi\ncd \"$SRCROOT/..\"\n./gradlew \":shared:linkDebugFramework${KOTLIN_TARGET}\" \":shared:${KOTLIN_TARGET_LOWER}AggregateResources\"\n";
+			shellScript = "if [ \"$PLATFORM_NAME\" = \"iphonesimulator\" ]; then\n  if [ \"$CURRENT_ARCH\" = \"arm64\" ]; then\n    KOTLIN_TARGET=\"IosSimulatorArm64\"\n    KOTLIN_TARGET_LOWER=\"iosSimulatorArm64\"\n  else\n    KOTLIN_TARGET=\"IosX64\"\n    KOTLIN_TARGET_LOWER=\"iosX64\"\n  fi\nelse\n  KOTLIN_TARGET=\"IosArm64\"\n  KOTLIN_TARGET_LOWER=\"iosArm64\"\nfi\nif [ \"$CONFIGURATION\" = \"Release\" ]; then\n  LINK_TASK=\"linkReleaseFramework${KOTLIN_TARGET}\"\nelse\n  LINK_TASK=\"linkDebugFramework${KOTLIN_TARGET}\"\nfi\ncd \"$SRCROOT/..\"\n./gradlew \":shared:${LINK_TASK}\" \":shared:${KOTLIN_TARGET_LOWER}AggregateResources\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -348,7 +346,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 64RYVQ9R2P;
+				DEVELOPMENT_TEAM = DMPH957CKJ;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../shared/build/bin/iosArm64/debugFramework",
@@ -360,12 +358,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				OTHER_LINKER_FLAGS = (
-					"$(inherited)",
-					"-framework",
-					shared,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.stc.terminowo;
+				OTHER_LINKER_FLAGS = "$(inherited) -framework shared";
+				PRODUCT_BUNDLE_IDENTIFIER = com.stc.terminowoapp;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -377,26 +371,21 @@
 			baseConfigurationReference = 9E952615EB910B75418E8063 /* Secrets.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 64RYVQ9R2P;
+				DEVELOPMENT_TEAM = DMPH957CKJ;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../shared/build/bin/iosArm64/debugFramework",
-					"$(SRCROOT)/../shared/build/bin/iosSimulatorArm64/debugFramework",
-					"$(SRCROOT)/../shared/build/bin/iosX64/debugFramework",
+					"$(SRCROOT)/../shared/build/bin/iosArm64/releaseFramework",
+					"$(SRCROOT)/../shared/build/bin/iosSimulatorArm64/releaseFramework",
+					"$(SRCROOT)/../shared/build/bin/iosX64/releaseFramework",
 				);
 				INFOPLIST_FILE = iosApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				OTHER_LINKER_FLAGS = (
-					"$(inherited)",
-					"-framework",
-					shared,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.stc.terminowo;
+				OTHER_LINKER_FLAGS = "$(inherited) -framework shared";
+				PRODUCT_BUNDLE_IDENTIFIER = com.stc.terminowoapp;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
