@@ -253,7 +253,7 @@ fun NavGraph() {
                             shape = RoundedCornerShape(28.dp),
                             contentPadding = PaddingValues(0.dp),
                             modifier = Modifier
-                                .width(80.dp)
+                                .width(100.dp)
                                 .height(56.dp)
                         ) {
                             Icon(
