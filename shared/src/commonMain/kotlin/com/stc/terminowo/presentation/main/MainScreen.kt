@@ -214,20 +214,7 @@ fun DocumentsScreen(
                 }
             }
         },
-        floatingActionButton = {
-            if (!isIos && !isSearchActive) {
-                FloatingActionButton(
-                    onClick = onScanClick,
-                    containerColor = MaterialTheme.colorScheme.error,
-                    contentColor = MaterialTheme.colorScheme.onError
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = stringResource(Res.string.scan_document)
-                    )
-                }
-            }
-        }
+        floatingActionButton = {}
     ) { paddingValues ->
         if (uiState.documents.isEmpty() && !uiState.isLoading && !isSearchActive) {
             FilterEmptyState(
@@ -236,14 +223,14 @@ fun DocumentsScreen(
                 onAddClick = onScanClick,
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color(0xFFF5F5F5))
+                    .background(MaterialTheme.colorScheme.surfaceContainerLow)
                     .padding(paddingValues)
             )
         } else {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color(0xFFF5F5F5))
+                    .background(MaterialTheme.colorScheme.surfaceContainerLow)
                     .padding(paddingValues),
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)

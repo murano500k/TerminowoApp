@@ -114,20 +114,7 @@ fun DashboardScreen(
                 }
             }
         },
-        floatingActionButton = {
-            if (!isIos && !isSearchActive) {
-                FloatingActionButton(
-                    onClick = onAddDocumentClick,
-                    containerColor = MaterialTheme.colorScheme.error,
-                    contentColor = MaterialTheme.colorScheme.onError
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = stringResource(Res.string.scan_document)
-                    )
-                }
-            }
-        }
+        floatingActionButton = {}
     ) { paddingValues ->
         if (isSearchActive) {
             if (searchQuery.isNotBlank() && searchResults.isEmpty()) {
@@ -501,7 +488,7 @@ private fun EmptyState(onAddClick: () -> Unit) {
             onClick = onAddClick,
             colors = ButtonDefaults.buttonColors(
                 containerColor = LocalExtendedColors.current.accentRed,
-                contentColor = Color.White
+                contentColor = MaterialTheme.colorScheme.onError
             ),
             shape = RoundedCornerShape(24.dp)
         ) {

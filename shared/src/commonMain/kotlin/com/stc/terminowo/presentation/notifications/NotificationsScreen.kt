@@ -60,8 +60,6 @@ import terminowo.shared.generated.resources.time_ago_just_now
 import terminowo.shared.generated.resources.time_ago_minutes
 import terminowo.shared.generated.resources.time_ago_weeks
 
-private val UnreadBackground = Color(0xFFFCE4EC)
-
 @Composable
 fun NotificationsScreen(
     onBack: () -> Unit,
@@ -76,7 +74,7 @@ fun NotificationsScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF5F5F5))
+            .background(MaterialTheme.colorScheme.surfaceContainerLow)
     ) {
         // Top bar
         Row(
@@ -124,7 +122,9 @@ fun NotificationsScreen(
 
 @Composable
 private fun NotificationItem(notification: AppNotification) {
-    val targetColor = if (notification.isRead) Color.White else UnreadBackground
+    val surfaceColor = MaterialTheme.colorScheme.surface
+    val unreadColor = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.3f)
+    val targetColor = if (notification.isRead) surfaceColor else unreadColor
     val animatedBg by animateColorAsState(
         targetValue = targetColor,
         animationSpec = tween(durationMillis = 600)
@@ -141,7 +141,7 @@ private fun NotificationItem(notification: AppNotification) {
         modifier = Modifier
             .fillMaxWidth()
             .clip(shape)
-            .border(BorderStroke(1.dp, Color(0xFFE0E0E0)), shape)
+            .border(BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant), shape)
             .background(animatedBg)
             .padding(horizontal = 12.dp, vertical = 12.dp),
         verticalAlignment = Alignment.Top

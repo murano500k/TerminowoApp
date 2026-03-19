@@ -42,6 +42,10 @@ Backend proxy (GCP Cloud Function) → `DocumentAiMapper` with 3-strategy date e
 
 `DocumentCategory` enum: `INSURANCE`, `PAYMENT`, `AGREEMENT`, `DRIVER_LICENSE`, `TECHNICAL_INSPECTION`, `OTHER` (default, hidden on list). Auto-detected from OCR text, user-overridable. See [ARCHITECTURE.md](ARCHITECTURE.md#domain-layer).
 
+## UI / Theming
+
+- **All colors must be theme-aware.** Never use hardcoded colors like `Color.White`, `Color.Black`, `Color(0xFFF5F5F5)`, etc. for backgrounds, surfaces, borders, or text. Always use `MaterialTheme.colorScheme` tokens (e.g., `surface`, `onSurface`, `outlineVariant`, `surfaceContainerLow`). Exception: semantic status colors (red/orange/green indicators) and intentionally dark components (e.g., fullscreen image viewer) may remain hardcoded.
+
 ## Gotchas
 
 - **Clock conflict**: `kotlinx.datetime.Clock` conflicts with `kotlin.time.Clock` in Kotlin 2.1.x. Always use `import kotlinx.datetime.Clock as DateTimeClock`.

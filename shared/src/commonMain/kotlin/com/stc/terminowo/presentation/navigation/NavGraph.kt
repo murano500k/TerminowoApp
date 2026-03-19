@@ -11,8 +11,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Description
@@ -26,8 +26,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -216,82 +216,73 @@ fun NavGraph() {
                     indicatorColor = Color.Transparent
                 )
 
-                Box {
-                    NavigationBar {
-                        val currentDest = navBackStackEntry?.destination
+                NavigationBar {
+                    val currentDest = navBackStackEntry?.destination
 
-                        val pulpitSelected = currentDest?.hasRoute<Screen.Pulpit>() == true
-                        NavigationBarItem(
-                            icon = {
-                                Icon(
-                                    imageVector = PulpitIcon,
-                                    contentDescription = null
-                                )
-                            },
-                            label = { Text(stringResource(Res.string.nav_pulpit)) },
-                            selected = pulpitSelected,
-                            colors = navBarColors,
-                            onClick = {
-                                navController.navigate(Screen.Pulpit) {
-                                    popUpTo<Screen.Documents>() { saveState = true }
-                                    launchSingleTop = true
-                                    restoreState = true
-                                }
-                            }
-                        )
-
-                        if (isIos) {
-                            // Spacer item for center button
-                            NavigationBarItem(
-                                icon = {},
-                                label = {},
-                                selected = false,
-                                enabled = false,
-                                onClick = {}
+                    val pulpitSelected = currentDest?.hasRoute<Screen.Pulpit>() == true
+                    NavigationBarItem(
+                        icon = {
+                            Icon(
+                                imageVector = PulpitIcon,
+                                contentDescription = null
                             )
-                        }
-
-                        val documentsSelected = currentDest?.hasRoute<Screen.Documents>() == true
-                        NavigationBarItem(
-                            icon = {
-                                Icon(
-                                    imageVector = if (documentsSelected) Icons.Default.Folder else Icons.Outlined.Folder,
-                                    contentDescription = null
-                                )
-                            },
-                            label = { Text(stringResource(Res.string.nav_documents)) },
-                            selected = documentsSelected,
-                            colors = navBarColors,
-                            onClick = {
-                                navController.navigate(Screen.Documents()) {
-                                    popUpTo<Screen.Documents>() { saveState = true }
-                                    launchSingleTop = true
-                                    restoreState = true
-                                }
+                        },
+                        label = { Text(stringResource(Res.string.nav_pulpit)) },
+                        selected = pulpitSelected,
+                        colors = navBarColors,
+                        onClick = {
+                            navController.navigate(Screen.Pulpit) {
+                                popUpTo<Screen.Documents>() { saveState = true }
+                                launchSingleTop = true
+                                restoreState = true
                             }
-                        )
-                    }
+                        }
+                    )
 
-                    if (isIos) {
-                        FloatingActionButton(
+                    // Center pill-shaped add button
+                    Box(
+                        modifier = Modifier.weight(1f),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Button(
                             onClick = { showAddSheet = true },
-                            containerColor = accentRed,
-                            contentColor = Color.White,
-                            shape = CircleShape,
-                            elevation = FloatingActionButtonDefaults.elevation(
-                                defaultElevation = 4.dp
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = accentRed,
+                                contentColor = MaterialTheme.colorScheme.onError
                             ),
+                            shape = RoundedCornerShape(28.dp),
+                            contentPadding = PaddingValues(0.dp),
                             modifier = Modifier
-                                .align(Alignment.TopCenter)
-                                .offset(y = (-20).dp)
-                                .size(56.dp)
+                                .width(80.dp)
+                                .height(56.dp)
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Add,
-                                contentDescription = stringResource(Res.string.add_document)
+                                contentDescription = stringResource(Res.string.add_document),
+                                modifier = Modifier.size(28.dp)
                             )
                         }
                     }
+
+                    val documentsSelected = currentDest?.hasRoute<Screen.Documents>() == true
+                    NavigationBarItem(
+                        icon = {
+                            Icon(
+                                imageVector = if (documentsSelected) Icons.Default.Folder else Icons.Outlined.Folder,
+                                contentDescription = null
+                            )
+                        },
+                        label = { Text(stringResource(Res.string.nav_documents)) },
+                        selected = documentsSelected,
+                        colors = navBarColors,
+                        onClick = {
+                            navController.navigate(Screen.Documents()) {
+                                popUpTo<Screen.Documents>() { saveState = true }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        }
+                    )
                 }
             }
         }

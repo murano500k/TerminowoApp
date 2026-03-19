@@ -93,7 +93,7 @@ internal fun FilterEmptyState(
                 ) {
                     Text(
                         text = "+ ${stringResource(Res.string.add_document)}",
-                        color = Color.White
+                        color = MaterialTheme.colorScheme.onError
                     )
                 }
             }

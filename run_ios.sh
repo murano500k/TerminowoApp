@@ -23,6 +23,10 @@ echo "=== Building shared framework ==="
 "$PROJECT_DIR/gradlew" -p "$PROJECT_DIR" :shared:linkDebugFrameworkIosArm64 :shared:iosArm64AggregateResources
 
 echo ""
+echo "=== Unlocking keychain for codesigning ==="
+security unlock-keychain -p "$KEYCHAIN_PASSWORD" ~/Library/Keychains/login.keychain-db
+
+echo ""
 echo "=== Building iOS app ==="
 xcodebuild \
     -project "$IOS_PROJECT_DIR/iosApp.xcodeproj" \
