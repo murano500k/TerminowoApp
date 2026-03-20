@@ -1,55 +1,176 @@
-App name *
-Terminowo
-This is how your app will appear on Google Play 
+Short description: 75 / 80
+English:
+  Scan documents, track expiry dates, and get timely reminders automatically.
 
-9 / 30
-Text is 9 characters out of 30
-Short description *
-Scan documents, track expiry dates, and get timely reminders automatically.
-A short description for your app. Users can expand to view your full description. 
+  Polish:
+  Skanuj dokumenty, śledź daty ważności i otrzymuj przypomnienia automatycznie.
 
-75 / 80
-Text is 75 characters out of 80
-Full description *
-Never miss an expiry date again. Terminowo scans your insurance policies, driver's licenses, vehicle inspections, and other important documents — then reminds you before they expire.                    
-                                                                                                                                                                                                            
-  How it works:                                                                                                                                                                                             
-                                                                                                  
-  1. Take a photo of your document                                                                                                                                                                          
-  2. The app automatically detects the expiry date using advanced OCR technology                                                                                                                            
-  3. Set up reminders and forget about it — Terminowo will notify you when it's time to renew                                                                                                               
-                                                                                                                                                                                                            
-  Key features:
+  Russian:
+  Сканируйте документы, отслеживайте сроки действия и получайте напоминания автоматически.
 
-  — Automatic date extraction
-  Point your camera at any document and Terminowo will find the expiry date for you. No manual typing required. Powered by Google Document AI for accurate recognition of dates in multiple formats and
-  languages.
+  Ukrainian:
+  Скануйте документи, відстежуйте терміни дії та отримуйте нагадування автоматично.
 
-  — Smart document categories
-  Your documents are automatically sorted into categories: insurance, driver's license, technical inspection, agreements, and payments. You can always change the category manually if needed.
 
-  — Flexible reminders
-  Choose when you want to be reminded — 90 days, 30 days, 7 days, or 1 day before expiry. Set multiple reminders for the same document so you never get caught off guard. Pick your preferred reminder time
-  to get notifications when it's convenient.
 
-  — Everything stays on your device
-  Your documents and personal data are stored locally on your phone. No cloud storage, no accounts required, no data shared with third parties. Your privacy is our priority.
+Full description:
+Never miss an expiry date again. Terminowo scans your insurance policies, driver's licenses, vehicle inspections, and other important documents — then reminds you before they expire.
+How it works:
 
-  — Simple and focused
-  Terminowo does one thing and does it well. No clutter, no unnecessary features — just a clean list of your documents sorted by expiry date with timely reminders.
+1. Take a photo of your document
+2. The app automatically detects the expiry date using advanced OCR technology
+3. Set up reminders and forget about it — Terminowo will notify you when it's time to renew
 
-  — Works with multiple document types
-  Insurance policies, car insurance, health insurance, driver's licenses, vehicle technical inspections, rental agreements, payment receipts — if it has an expiry date, Terminowo can track it.
+Key features:
 
-  — Multilingual OCR
-  Date extraction works with documents in English, Polish, Russian, and Ukrainian.
+— Automatic date extraction
+Point your camera at any document and Terminowo will find the expiry date for you. No manual typing required. Powered by advanced OCR for accurate recognition of dates in multiple formats and languages.
 
-  — Optional Google Sign-In
-  Sign in with your Google account to enable automatic date extraction via cloud OCR, or skip sign-in and enter dates manually — the choice is yours.
+— Smart document categories
+Your documents are automatically sorted into categories: insurance, driver's license, technical inspection, agreements, and payments. You can always change the category manually if needed.
 
-  Who is Terminowo for?
+— Flexible reminders
+Choose when you want to be reminded — 90 days, 30 days, 7 days, or 1 day before expiry. Set multiple reminders for the same document so you never get caught off guard. Pick your preferred reminder time
+to get notifications when it's convenient.
 
-  Anyone who deals with documents that expire. If you've ever been surprised by an expired insurance policy, a lapsed driver's license, or an overdue vehicle inspection — this app is for you. Terminowo
-  keeps all your deadlines in one place and makes sure you're always prepared.
+— Everything stays on your device
+Your documents and personal data are stored locally on your phone. No cloud storage, no accounts required, no data shared with third parties. Your privacy is our priority.
 
-  Download Terminowo and stop worrying about expiry dates.
+— Simple and focused
+Terminowo does one thing and does it well. No clutter, no unnecessary features — just a clean list of your documents sorted by expiry date with timely reminders.
+
+— Works with multiple document types
+Insurance policies, car insurance, health insurance, driver's licenses, vehicle technical inspections, rental agreements, payment receipts — if it has an expiry date, Terminowo can track it.
+
+— Multilingual OCR
+Date extraction works with documents in English, Polish, Russian, and Ukrainian.
+
+Who is Terminowo for?
+
+Anyone who deals with documents that expire. If you've ever been surprised by an expired insurance policy, a lapsed driver's license, or an overdue vehicle inspection — this app is for you. Terminowo
+keeps all your deadlines in one place and makes sure you're always prepared.
+
+Download Terminowo and stop worrying about expiry dates.
+
+___________________________________________
+Polish:
+
+Nigdy więcej nie przegap daty ważności. Terminowo skanuje Twoje polisy ubezpieczeniowe, prawa jazdy, przeglądy techniczne i inne ważne dokumenty — a potem przypomina Ci, zanim stracą ważność.
+
+  Jak to działa:
+
+  1. Zrób zdjęcie dokumentu
+  2. Aplikacja automatycznie wykrywa datę ważności za pomocą zaawansowanej technologii OCR
+  3. Ustaw przypomnienia i zapomnij — Terminowo powiadomi Cię, kiedy przyjdzie czas na odnowienie
+
+  Najważniejsze funkcje:
+
+  — Automatyczne rozpoznawanie dat
+  Skieruj aparat na dowolny dokument, a Terminowo znajdzie datę ważności za Ciebie. Bez ręcznego wpisywania. Zaawansowane OCR precyzyjnie rozpoznaje daty w wielu formatach i językach.
+
+  — Inteligentne kategorie dokumentów
+  Twoje dokumenty są automatycznie przypisywane do kategorii: ubezpieczenia, prawo jazdy, przegląd techniczny, umowy i płatności. Kategorię zawsze możesz zmienić ręcznie.
+
+  — Elastyczne przypomnienia
+  Wybierz, kiedy chcesz otrzymać przypomnienie — 90 dni, 30 dni, 7 dni lub 1 dzień przed wygaśnięciem. Ustaw wiele przypomnień dla jednego dokumentu, żeby nic Cię nie zaskoczyło. Wybierz preferowaną
+  godzinę powiadomień.
+
+  — Wszystko zostaje na Twoim urządzeniu
+  Twoje dokumenty i dane osobowe są przechowywane lokalnie na telefonie. Bez chmury, bez kont, bez udostępniania danych stronom trzecim. Twoja prywatność jest naszym priorytetem.
+
+  — Prosta i konkretna
+  Terminowo robi jedną rzecz i robi ją dobrze. Bez bałaganu, bez zbędnych funkcji — tylko przejrzysta lista dokumentów posortowana według daty ważności z przypomnieniami we właściwym czasie.
+
+  — Obsługa wielu typów dokumentów
+  Polisy ubezpieczeniowe, OC/AC, ubezpieczenia zdrowotne, prawa jazdy, przeglądy techniczne pojazdów, umowy najmu, potwierdzenia płatności — jeśli dokument ma datę ważności, Terminowo go przypilnuje.
+
+  — Wielojęzyczne OCR
+  Rozpoznawanie dat działa z dokumentami w języku angielskim, polskim, rosyjskim i ukraińskim.
+
+  Dla kogo jest Terminowo?
+
+  Dla każdego, kto ma do czynienia z dokumentami tracącymi ważność. Jeśli kiedykolwiek zaskoczyła Cię wygasła polisa ubezpieczeniowa, nieważne prawo jazdy lub przeterminowany przegląd techniczny — ta
+  aplikacja jest dla Ciebie. Terminowo trzyma wszystkie Twoje terminy w jednym miejscu i dba o to, żebyś zawsze był przygotowany.
+
+  Pobierz Terminowo i przestań martwić się o daty ważności.
+__________________________________________________________________
+Russian:
+Больше никаких просроченных документов. Terminowo сканирует ваши страховые полисы, водительские удостоверения, техосмотры и другие важные документы — и напоминает вам до истечения их срока действия.
+
+  Как это работает:
+
+  1. Сфотографируйте документ
+  2. Приложение автоматически определяет дату истечения срока с помощью продвинутой технологии OCR
+  3. Настройте напоминания и забудьте — Terminowo уведомит вас, когда придёт время продлить документ
+
+  Основные функции:
+
+  — Автоматическое распознавание дат
+  Наведите камеру на любой документ, и Terminowo найдёт дату истечения срока за вас. Никакого ручного ввода. Продвинутое OCR точно распознаёт даты в различных форматах и на разных языках.
+
+  — Умные категории документов
+  Ваши документы автоматически распределяются по категориям: страхование, водительское удостоверение, техосмотр, договоры и платежи. Категорию всегда можно изменить вручную.
+
+  — Гибкие напоминания
+  Выберите, когда получить напоминание — за 90 дней, 30 дней, 7 дней или 1 день до истечения срока. Установите несколько напоминаний для одного документа, чтобы ничего не упустить. Выберите удобное время
+  для уведомлений.
+
+  — Всё остаётся на вашем устройстве
+  Ваши документы и личные данные хранятся локально на телефоне. Без облака, без аккаунтов, без передачи данных третьим лицам. Ваша конфиденциальность — наш приоритет.
+
+  — Просто и по делу
+  Terminowo делает одну вещь и делает её хорошо. Без лишнего, без ненужных функций — только понятный список документов, отсортированный по дате истечения срока, с напоминаниями в нужный момент.
+
+  — Поддержка множества типов документов
+  Страховые полисы, ОСАГО/КАСКО, медицинские страховки, водительские удостоверения, техосмотры, договоры аренды, квитанции об оплате — если у документа есть срок действия, Terminowo его отследит.
+
+  — Многоязычное OCR
+  Распознавание дат работает с документами на английском, польском, русском и украинском языках.
+
+  Для кого Terminowo?
+
+  Для всех, кто имеет дело с документами с ограниченным сроком действия. Если вас когда-нибудь заставала врасплох просроченная страховка, истёкшее водительское удостоверение или пропущенный техосмотр —
+  это приложение для вас. Terminowo хранит все ваши сроки в одном месте и следит за тем, чтобы вы всегда были готовы.
+
+  Скачайте Terminowo и перестаньте волноваться о сроках действия документов.
+  __________________________________________________
+  Ukraininan:
+
+  Більше жодних прострочених документів. Terminowo сканує ваші страхові поліси, водійські посвідчення, техогляди та інші важливі документи — і нагадує вам до закінчення їхнього терміну дії.
+
+  Як це працює:
+
+  1. Сфотографуйте документ
+  2. Застосунок автоматично визначає дату закінчення терміну за допомогою передової технології OCR
+  3. Налаштуйте нагадування і забудьте — Terminowo повідомить вас, коли прийде час подовжити документ
+
+  Основні функції:
+
+  — Автоматичне розпізнавання дат
+  Наведіть камеру на будь-який документ, і Terminowo знайде дату закінчення терміну за вас. Жодного ручного введення. Передове OCR точно розпізнає дати в різних форматах та різними мовами.
+
+  — Розумні категорії документів
+  Ваші документи автоматично розподіляються за категоріями: страхування, водійське посвідчення, техогляд, договори та платежі. Категорію завжди можна змінити вручну.
+
+  — Гнучкі нагадування
+  Оберіть, коли отримати нагадування — за 90 днів, 30 днів, 7 днів або 1 день до закінчення терміну. Встановіть кілька нагадувань для одного документа, щоб нічого не пропустити. Оберіть зручний час для
+  сповіщень.
+
+  — Все залишається на вашому пристрої
+  Ваші документи та особисті дані зберігаються локально на телефоні. Без хмари, без акаунтів, без передачі даних третім сторонам. Ваша конфіденційність — наш пріоритет.
+
+  — Просто і по суті
+  Terminowo робить одну річ і робить її добре. Без зайвого, без непотрібних функцій — лише зрозумілий список документів, відсортований за датою закінчення терміну, з нагадуваннями в потрібний момент.
+
+  — Підтримка багатьох типів документів
+  Страхові поліси, автоцивілка/КАСКО, медичні страховки, водійські посвідчення, техогляди, договори оренди, квитанції про оплату — якщо в документа є термін дії, Terminowo його відстежить.
+
+  — Багатомовне OCR
+  Розпізнавання дат працює з документами англійською, польською, російською та українською мовами.
+
+  Для кого Terminowo?
+
+  Для всіх, хто має справу з документами з обмеженим терміном дії. Якщо вас коли-небудь заставала зненацька прострочена страховка, недійсне водійське посвідчення або пропущений техогляд — цей застосунок
+  для вас. Terminowo зберігає всі ваші терміни в одному місці та дбає про те, щоб ви завжди були готові.
+
+  Завантажте Terminowo і перестаньте хвилюватися про терміни дії документів.
