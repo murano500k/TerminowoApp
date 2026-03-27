@@ -24,6 +24,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -31,6 +32,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -101,7 +103,15 @@ fun DashboardScreen(
                     onSearchActiveChange = { isSearchActive = it },
                     onNotificationsClick = onNotificationsClick,
                     unreadNotificationCount = unreadNotificationCount,
-                    showSearchIcon = uiState.totalCount > 1
+                    showSearchIcon = uiState.totalCount > 1,
+                    trailingActions = {
+                        IconButton(onClick = { /* TODO: settings */ }) {
+                            Icon(
+                                imageVector = Icons.Default.MoreVert,
+                                contentDescription = null
+                            )
+                        }
+                    }
                 )
 
                 if (!isSearchActive) {
@@ -174,8 +184,7 @@ private fun DashboardContent(
     if (!uiState.isLoading && uiState.totalCount == 0) {
         Box(
             modifier = modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.surfaceContainerLow),
+                .fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
             EmptyState(onAddClick = onAddDocumentClick)
@@ -184,7 +193,6 @@ private fun DashboardContent(
         LazyColumn(
             modifier = modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.surfaceContainerLow)
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
@@ -248,33 +256,34 @@ private fun ScoreCard(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
-        )
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(24.dp),
+                .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             CircularScoreIndicator(
                 scorePercent = scorePercent,
-                modifier = Modifier.size(100.dp)
+                modifier = Modifier.size(72.dp)
             )
 
-            Spacer(modifier = Modifier.width(24.dp))
+            Spacer(modifier = Modifier.width(16.dp))
 
             Column {
                 Text(
                     text = stringResource(Res.string.document_score),
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = pluralStringResource(Res.plurals.documents_count_label, totalCount, totalCount),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold
                 )
             }
         }
@@ -331,7 +340,7 @@ private fun CircularScoreIndicator(
 
         Text(
             text = "$scorePercent%",
-            style = MaterialTheme.typography.headlineSmall,
+            style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
             color = scoreColor
         )
@@ -398,14 +407,14 @@ private fun StatusBox(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val containerColor = if (highlighted) iconColor.copy(alpha = 0.12f) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
-    val borderColor = if (highlighted) iconColor.copy(alpha = 0.4f) else Color.Transparent
+    val containerColor = if (highlighted) iconColor.copy(alpha = 0.12f) else MaterialTheme.colorScheme.surface
+    val borderColor = if (highlighted) iconColor.copy(alpha = 0.4f) else MaterialTheme.colorScheme.outlineVariant
 
     Card(
         modifier = modifier.clickable(onClick = onClick),
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(containerColor = containerColor),
-        border = if (highlighted) BorderStroke(1.dp, borderColor) else null
+        border = BorderStroke(1.dp, borderColor)
     ) {
         Column(
             modifier = Modifier
@@ -415,16 +424,15 @@ private fun StatusBox(
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                if (highlighted) {
-                    Box(
-                        modifier = Modifier
-                            .size(22.dp)
-                            .background(iconColor, RoundedCornerShape(4.dp)),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        icon()
-                    }
-                } else {
+                Box(
+                    modifier = Modifier
+                        .size(22.dp)
+                        .then(
+                            if (highlighted) Modifier.background(iconColor, RoundedCornerShape(4.dp))
+                            else Modifier
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
                     icon()
                 }
                 Spacer(modifier = Modifier.width(6.dp))
@@ -439,7 +447,8 @@ private fun StatusBox(
                 text = label,
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 1
+                maxLines = 1,
+                modifier = Modifier.padding(start = 28.dp)
             )
         }
     }

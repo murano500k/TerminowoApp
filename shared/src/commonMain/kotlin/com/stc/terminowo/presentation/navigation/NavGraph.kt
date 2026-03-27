@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.CameraAlt
@@ -207,7 +207,23 @@ fun NavGraph() {
     }
 
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
         snackbarHost = { SnackbarHost(snackbarHostState) },
+        floatingActionButton = {
+            if (showBottomBar && !isIos) {
+                androidx.compose.material3.FloatingActionButton(
+                    onClick = { showAddSheet = true },
+                    containerColor = accentRed,
+                    contentColor = Color.White,
+                    shape = CircleShape
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = stringResource(Res.string.add_document)
+                    )
+                }
+            }
+        },
         bottomBar = {
             if (showBottomBar) {
                 val navBarColors = NavigationBarItemDefaults.colors(
@@ -216,7 +232,9 @@ fun NavGraph() {
                     indicatorColor = Color.Transparent
                 )
 
-                NavigationBar {
+                NavigationBar(
+                    containerColor = MaterialTheme.colorScheme.surface
+                ) {
                     val currentDest = navBackStackEntry?.destination
 
                     val pulpitSelected = currentDest?.hasRoute<Screen.Pulpit>() == true
@@ -238,31 +256,6 @@ fun NavGraph() {
                             }
                         }
                     )
-
-                    // Center pill-shaped add button
-                    Box(
-                        modifier = Modifier.weight(1f),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Button(
-                            onClick = { showAddSheet = true },
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = accentRed,
-                                contentColor = MaterialTheme.colorScheme.onError
-                            ),
-                            shape = RoundedCornerShape(28.dp),
-                            contentPadding = PaddingValues(0.dp),
-                            modifier = Modifier
-                                .width(100.dp)
-                                .height(56.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Add,
-                                contentDescription = stringResource(Res.string.add_document),
-                                modifier = Modifier.size(28.dp)
-                            )
-                        }
-                    }
 
                     val documentsSelected = currentDest?.hasRoute<Screen.Documents>() == true
                     NavigationBarItem(
