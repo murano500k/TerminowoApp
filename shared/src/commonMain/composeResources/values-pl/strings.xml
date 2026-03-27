@@ -166,6 +166,19 @@
     <string name="time_ago_days">%1$d dni temu</string>
     <string name="time_ago_weeks">%1$d tyg. temu</string>
 
+    <!-- Consent / Legal -->
+    <string name="consent_title">Regulaminy</string>
+    <string name="consent_tos_heading">Regulamin</string>
+    <string name="consent_tos_summary">Korzystaj\u0105c z Terminowo, zgadzasz si\u0119, \u017Ce:\n\n\u2022 Jeste\u015B odpowiedzialny za skanowane dokumenty i dane na swoim urz\u0105dzeniu.\n\u2022 Wyniki OCR s\u0105 dostarczane w stanie \u201Ejak jest\u201D i mog\u0105 zawiera\u0107 b\u0142\u0119dy \u2014 zawsze weryfikuj z orygina\u0142em.\n\u2022 Dostarczanie powiadomie\u0144 zale\u017Cy od ustawie\u0144 urz\u0105dzenia i nie jest gwarantowane.\n\u2022 Aplikacja jest udost\u0119pniana bez jakichkolwiek gwarancji.\n\u2022 Tw\u00F3rca nie ponosi odpowiedzialno\u015Bci za przekroczone terminy lub niedok\u0142adne wyniki OCR.</string>
+    <string name="consent_privacy_heading">Polityka prywatno\u015Bci</string>
+    <string name="consent_privacy_summary">Jak przetwarzamy Twoje dane:\n\n\u2022 Wszystkie dane s\u0105 przechowywane lokalnie na urz\u0105dzeniu i nigdy nie s\u0105 wysy\u0142ane na nasze serwery.\n\u2022 Zdj\u0119cia dokument\u00F3w s\u0105 przesy\u0142ane do Google Document AI wy\u0142\u0105cznie w celu rozpoznania tekstu \u2014 nie s\u0105 przechowywane.\n\u2022 Nie zbieramy analityki, telemetrii ani danych lokalizacyjnych.\n\u2022 Darmowa wersja mo\u017Ce wy\u015Bwietla\u0107 reklamy; sieci reklamowe mog\u0105 zbiera\u0107 identyfikatory urz\u0105dze\u0144.\n\u2022 Odinstalowanie aplikacji usuwa wszystkie dane.</string>
+    <string name="consent_accept_tos">Akceptuj\u0119 Regulamin</string>
+    <string name="consent_accept_privacy">Akceptuj\u0119 Polityk\u0119 prywatno\u015Bci</string>
+    <string name="consent_continue">Dalej</string>
+    <string name="consent_read_full">Pe\u0142na wersja</string>
+    <string name="menu_terms_of_service">Regulamin</string>
+    <string name="menu_privacy_policy">Polityka prywatno\u015Bci</string>
+
     <!-- Plurals -->
     <plurals name="expired_days_ago">
         <item quantity="one">Ten dokument wygas\u0142 %1$d dzie\u0144 temu</item>

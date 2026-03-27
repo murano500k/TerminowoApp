@@ -47,6 +47,7 @@ import com.stc.terminowo.presentation.theme.LocalExtendedColors
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import terminowo.shared.generated.resources.Res
+import androidx.compose.ui.platform.LocalUriHandler
 import terminowo.shared.generated.resources.delete_all_confirm_message
 import terminowo.shared.generated.resources.delete_all_confirm_title
 import terminowo.shared.generated.resources.delete_all_documents
@@ -55,6 +56,8 @@ import terminowo.shared.generated.resources.delete_document_confirm_title
 import terminowo.shared.generated.resources.delete_files_confirm_message
 import terminowo.shared.generated.resources.delete_files_confirm_title
 import terminowo.shared.generated.resources.delete_files_only
+import terminowo.shared.generated.resources.menu_privacy_policy
+import terminowo.shared.generated.resources.menu_terms_of_service
 import terminowo.shared.generated.resources.nav_documents
 import terminowo.shared.generated.resources.scan_document
 import terminowo.shared.generated.resources.settings
@@ -78,6 +81,7 @@ fun DocumentsScreen(
     val searchQuery by viewModel.searchQuery.collectAsState()
     val searchResults by viewModel.searchResults.collectAsState()
 
+    val uriHandler = LocalUriHandler.current
     var isSearchActive by remember { mutableStateOf(false) }
     var isSettingsMenuExpanded by remember { mutableStateOf(false) }
 
@@ -157,6 +161,20 @@ fun DocumentsScreen(
                                     onClick = {
                                         isSettingsMenuExpanded = false
                                         viewModel.requestDeleteAll()
+                                    }
+                                )
+                                DropdownMenuItem(
+                                    text = { Text(text = stringResource(Res.string.menu_terms_of_service)) },
+                                    onClick = {
+                                        isSettingsMenuExpanded = false
+                                        uriHandler.openUri("https://terminowo.app/docs/terms-of-service.html")
+                                    }
+                                )
+                                DropdownMenuItem(
+                                    text = { Text(text = stringResource(Res.string.menu_privacy_policy)) },
+                                    onClick = {
+                                        isSettingsMenuExpanded = false
+                                        uriHandler.openUri("https://terminowo.app/docs/privacy-policy.html")
                                     }
                                 )
                             }

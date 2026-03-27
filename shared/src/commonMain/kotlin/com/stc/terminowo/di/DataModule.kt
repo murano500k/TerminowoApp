@@ -6,9 +6,11 @@ import com.stc.terminowo.data.remote.DocumentAiMapper
 import com.stc.terminowo.data.remote.DocumentAiService
 import com.stc.terminowo.data.remote.ProxyConfig
 import com.stc.terminowo.data.remote.UserProfileService
+import com.stc.terminowo.data.repository.AppSettingsRepositoryImpl
 import com.stc.terminowo.data.repository.DocumentRepositoryImpl
 import com.stc.terminowo.data.repository.NotificationRepositoryImpl
 import com.stc.terminowo.data.repository.OcrRepositoryImpl
+import com.stc.terminowo.domain.repository.AppSettingsRepository
 import com.stc.terminowo.domain.repository.DocumentRepository
 import com.stc.terminowo.domain.repository.NotificationRepository
 import com.stc.terminowo.domain.repository.OcrRepository
@@ -61,6 +63,8 @@ val dataModule = module {
     single<NotificationRepository> { NotificationRepositoryImpl(get()) }
 
     single<OcrRepository> { OcrRepositoryImpl(get(), get(), get()) }
+
+    single<AppSettingsRepository> { AppSettingsRepositoryImpl(get()) }
 
     single { UserProfileService(get()) }
 }

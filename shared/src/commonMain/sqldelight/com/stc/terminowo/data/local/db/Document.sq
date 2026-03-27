@@ -79,3 +79,15 @@ WHERE isRead = 0 AND scheduledAt <= ?;
 deleteNotificationsByDocumentId:
 DELETE FROM NotificationEntity
 WHERE documentId = ?;
+
+-- App settings table (key-value store)
+CREATE TABLE AppSettingsEntity (
+    key TEXT NOT NULL PRIMARY KEY,
+    value TEXT NOT NULL
+);
+
+getSetting:
+SELECT value FROM AppSettingsEntity WHERE key = ?;
+
+upsertSetting:
+INSERT OR REPLACE INTO AppSettingsEntity(key, value) VALUES (?, ?);
