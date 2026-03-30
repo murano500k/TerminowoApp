@@ -52,7 +52,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.stc.terminowo.platform.isIos
+import androidx.compose.material3.DropdownMenuItem
 import com.stc.terminowo.presentation.components.AppTopBar
+import com.stc.terminowo.presentation.components.ConfirmationDialog
 import com.stc.terminowo.presentation.components.SettingsMenu
 import com.stc.terminowo.presentation.components.DocumentListItem
 import com.stc.terminowo.presentation.main.DocumentStatusFilter
@@ -66,6 +68,12 @@ import terminowo.shared.generated.resources.all_documents_ok
 import terminowo.shared.generated.resources.all_documents_ok_subtitle
 import terminowo.shared.generated.resources.document_score
 import terminowo.shared.generated.resources.documents_count_label
+import terminowo.shared.generated.resources.delete_all_confirm_message
+import terminowo.shared.generated.resources.delete_all_confirm_title
+import terminowo.shared.generated.resources.delete_all_documents
+import terminowo.shared.generated.resources.delete_files_confirm_message
+import terminowo.shared.generated.resources.delete_files_confirm_title
+import terminowo.shared.generated.resources.delete_files_only
 import terminowo.shared.generated.resources.no_documents_pulpit_subtitle
 import terminowo.shared.generated.resources.no_documents_pulpit_title
 import terminowo.shared.generated.resources.no_results
@@ -89,8 +97,28 @@ fun DashboardScreen(
     val uiState by viewModel.uiState.collectAsState()
     val searchQuery by viewModel.searchQuery.collectAsState()
     val searchResults by viewModel.searchResults.collectAsState()
+    val showDeleteAllConfirmation by viewModel.showDeleteAllConfirmation.collectAsState()
+    val showDeleteFilesConfirmation by viewModel.showDeleteFilesConfirmation.collectAsState()
 
     var isSearchActive by remember { mutableStateOf(false) }
+
+    if (showDeleteAllConfirmation) {
+        ConfirmationDialog(
+            title = stringResource(Res.string.delete_all_confirm_title),
+            text = stringResource(Res.string.delete_all_confirm_message),
+            onConfirm = { viewModel.confirmDeleteAll() },
+            onDismiss = { viewModel.cancelDeleteAll() }
+        )
+    }
+
+    if (showDeleteFilesConfirmation) {
+        ConfirmationDialog(
+            title = stringResource(Res.string.delete_files_confirm_title),
+            text = stringResource(Res.string.delete_files_confirm_message),
+            onConfirm = { viewModel.confirmDeleteFiles() },
+            onDismiss = { viewModel.cancelDeleteFiles() }
+        )
+    }
 
     Scaffold(
         topBar = {
@@ -102,8 +130,37 @@ fun DashboardScreen(
                     onSearchActiveChange = { isSearchActive = it },
                     onNotificationsClick = onNotificationsClick,
                     unreadNotificationCount = unreadNotificationCount,
-                    showSearchIcon = uiState.totalCount > 1,
-                    trailingActions = { SettingsMenu() }
+                    showSearchIcon = true,
+                    trailingActions = {
+                        SettingsMenu(
+                            extraItems = { onDismiss ->
+                                DropdownMenuItem(
+                                    text = {
+                                        Text(
+                                            text = stringResource(Res.string.delete_files_only),
+                                            color = MaterialTheme.colorScheme.error
+                                        )
+                                    },
+                                    onClick = {
+                                        onDismiss()
+                                        viewModel.requestDeleteFiles()
+                                    }
+                                )
+                                DropdownMenuItem(
+                                    text = {
+                                        Text(
+                                            text = stringResource(Res.string.delete_all_documents),
+                                            color = MaterialTheme.colorScheme.error
+                                        )
+                                    },
+                                    onClick = {
+                                        onDismiss()
+                                        viewModel.requestDeleteAll()
+                                    }
+                                )
+                            }
+                        )
+                    }
                 )
 
                 if (!isSearchActive) {

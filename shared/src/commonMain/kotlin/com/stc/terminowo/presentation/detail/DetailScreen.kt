@@ -3,6 +3,7 @@ package com.stc.terminowo.presentation.detail
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -42,6 +43,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TimePicker
@@ -61,6 +64,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import com.stc.terminowo.domain.model.DocumentCategory
 import com.stc.terminowo.platform.ImageStorage
@@ -97,10 +101,12 @@ import terminowo.shared.generated.resources.document_name
 import terminowo.shared.generated.resources.expired_days_ago
 import terminowo.shared.generated.resources.expiry_date_format
 import terminowo.shared.generated.resources.expiry_date_required
+import terminowo.shared.generated.resources.my_comments
 import terminowo.shared.generated.resources.new_document
 import terminowo.shared.generated.resources.select_expiry_date
 import terminowo.shared.generated.resources.notification_time
 import terminowo.shared.generated.resources.ocr_confidence
+import terminowo.shared.generated.resources.reminder_custom_date
 import terminowo.shared.generated.resources.reminders
 import terminowo.shared.generated.resources.save_document
 import terminowo.shared.generated.resources.update_document
@@ -128,6 +134,7 @@ fun DetailScreen(
     val defaultDocName = stringResource(Res.string.default_document_name)
     val imageStorage: ImageStorage = koinInject()
     val accentRed = LocalExtendedColors.current.accentRed
+    val focusManager = LocalFocusManager.current
 
     var thumbnailBitmap by remember { mutableStateOf<ImageBitmap?>(null) }
     var showFullImage by remember { mutableStateOf(false) }
@@ -180,6 +187,7 @@ fun DetailScreen(
 
     var showDatePicker by remember { mutableStateOf(false) }
     var showTimePicker by remember { mutableStateOf(false) }
+    var showCustomDatePicker by remember { mutableStateOf(false) }
 
     val accentColorScheme = MaterialTheme.colorScheme.copy(
         primary = accentRed,
@@ -213,6 +221,10 @@ fun DetailScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
+                .clickable(
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() }
+                ) { focusManager.clearFocus() }
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp)
         ) {
@@ -303,6 +315,19 @@ fun DetailScreen(
                     }
                 }
             }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // My comments
+            OutlinedTextField(
+                value = uiState.myComments,
+                onValueChange = { viewModel.updateMyComments(it) },
+                label = { Text(stringResource(Res.string.my_comments)) },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = false,
+                minLines = 3,
+                maxLines = 6
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -417,6 +442,94 @@ fun DetailScreen(
                 selectedDays = uiState.selectedReminderDays,
                 onToggle = { viewModel.toggleReminder(it) }
             )
+
+            // Custom date reminder
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Switch(
+                    checked = uiState.customReminderEnabled,
+                    onCheckedChange = { viewModel.toggleCustomReminder(it) },
+                    enabled = uiState.expiryDate != null,
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = Color.White,
+                        checkedTrackColor = accentRed,
+                        checkedBorderColor = accentRed
+                    )
+                )
+                Text(
+                    text = stringResource(Res.string.reminder_custom_date),
+                    modifier = Modifier.weight(1f)
+                        .then(Modifier.padding(start = 12.dp))
+                )
+            }
+
+            if (uiState.customReminderEnabled) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Box {
+                    OutlinedTextField(
+                        value = uiState.customReminderDate?.let {
+                            "${it.dayOfMonth.toString().padStart(2, '0')}/${it.monthNumber.toString().padStart(2, '0')}/${it.year}"
+                        } ?: "",
+                        onValueChange = {},
+                        readOnly = true,
+                        label = { Text(stringResource(Res.string.reminder_custom_date)) },
+                        placeholder = { Text("dd/mm/yyyy") },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Box(
+                        modifier = Modifier
+                            .matchParentSize()
+                            .clickable(
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() }
+                            ) { showCustomDatePicker = true }
+                    )
+                }
+
+                if (showCustomDatePicker) {
+                    val today = DateTimeClock.System.todayIn(TimeZone.currentSystemDefault())
+                    val todayMillis = today.atStartOfDayIn(TimeZone.UTC).toEpochMilliseconds()
+                    val expiryMillis = uiState.expiryDate
+                        ?.atStartOfDayIn(TimeZone.UTC)
+                        ?.toEpochMilliseconds()
+                    val customDatePickerState = rememberDatePickerState(
+                        initialSelectedDateMillis = uiState.customReminderDate
+                            ?.atStartOfDayIn(TimeZone.UTC)
+                            ?.toEpochMilliseconds(),
+                        selectableDates = object : androidx.compose.material3.SelectableDates {
+                            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+                                return utcTimeMillis >= todayMillis &&
+                                    (expiryMillis == null || utcTimeMillis <= expiryMillis)
+                            }
+                        }
+                    )
+                    DatePickerDialog(
+                        onDismissRequest = { showCustomDatePicker = false },
+                        confirmButton = {
+                            TextButton(onClick = {
+                                customDatePickerState.selectedDateMillis?.let { millis ->
+                                    val date = Instant.fromEpochMilliseconds(millis)
+                                        .toLocalDateTime(TimeZone.UTC).date
+                                    viewModel.updateCustomReminderDate(date)
+                                }
+                                showCustomDatePicker = false
+                            }) {
+                                Text(stringResource(Res.string.confirm))
+                            }
+                        },
+                        dismissButton = {
+                            TextButton(onClick = { showCustomDatePicker = false }) {
+                                Text(stringResource(Res.string.cancel))
+                            }
+                        }
+                    ) {
+                        DatePicker(state = customDatePickerState)
+                    }
+                }
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 

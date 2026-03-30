@@ -28,6 +28,7 @@
     <string name="delete_document">Delete Document</string>
     <string name="document_image">Document image</string>
     <string name="close">Close</string>
+    <string name="my_comments">My comments</string>
 
     <!-- Camera screen -->
     <string name="camera_permission_required">Camera permission is required to scan documents.</string>
@@ -113,6 +114,7 @@
     <string name="reminder_7_days">7 days before</string>
     <string name="reminder_1_day">1 day before</string>
     <string name="reminder_day_of">Day of expiry</string>
+    <string name="reminder_custom_date">Custom date</string>
 
     <!-- Add document bottom sheet -->
     <string name="add_document">Add Document</string>
@@ -147,8 +149,8 @@
     <string name="status_over_30_days">> 30 days</string>
     <string name="upcoming_deadlines">Upcoming deadlines</string>
     <string name="all_documents_ok">All documents are up to date</string>
-    <string name="all_documents_ok_subtitle">We\'ll let you know when something needs attention.</string>
-    <string name="no_documents_pulpit_title">You don\'t have any documents yet</string>
+    <string name="all_documents_ok_subtitle">We'll let you know when something needs attention.</string>
+    <string name="no_documents_pulpit_title">You don't have any documents yet</string>
     <string name="no_documents_pulpit_subtitle">Add your first to track deadlines and get reminders on time.</string>
     <string name="add_document_button">+ Add document</string>
 

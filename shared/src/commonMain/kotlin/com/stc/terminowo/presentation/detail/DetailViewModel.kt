@@ -5,6 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.stc.terminowo.domain.model.Document
 import com.stc.terminowo.domain.model.DocumentCategory
 import com.stc.terminowo.domain.model.ReminderInterval
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.daysUntil
+import kotlinx.datetime.minus
+import kotlinx.datetime.todayIn
 import com.stc.terminowo.domain.repository.DocumentRepository
 import com.stc.terminowo.domain.usecase.ScheduleRemindersUseCase
 import com.stc.terminowo.platform.NotificationPermissionHandler
@@ -37,6 +41,9 @@ data class DetailUiState(
     val reminderTime: LocalTime = LocalTime(9, 0),
     val createdAt: LocalDateTime? = null,
     val rawOcrResponse: String? = null,
+    val myComments: String = "",
+    val customReminderEnabled: Boolean = false,
+    val customReminderDate: LocalDate? = null,
     val isSaving: Boolean = false,
     val isDeleting: Boolean = false,
     val savedSuccessfully: Boolean = false,
@@ -56,6 +63,11 @@ class DetailViewModel(
     fun loadExistingDocument(documentId: String) {
         viewModelScope.launch {
             val document = documentRepository.getDocumentById(documentId) ?: return@launch
+            val standardDays = ReminderInterval.entries.map { it.days }.toSet()
+            val customDaysBefore = document.reminderDays.firstOrNull { it !in standardDays }
+            val customDate = if (customDaysBefore != null && document.expiryDate != null) {
+                document.expiryDate.minus(customDaysBefore, DateTimeUnit.DAY)
+            } else null
             _uiState.update {
                 it.copy(
                     isNewDocument = false,
@@ -65,10 +77,13 @@ class DetailViewModel(
                     confidence = document.confidence,
                     imagePath = document.imagePath,
                     thumbnailPath = document.thumbnailPath,
-                    selectedReminderDays = document.reminderDays.toSet(),
+                    selectedReminderDays = document.reminderDays.filter { d -> d in standardDays }.toSet(),
                     category = document.category,
                     reminderTime = document.reminderTime,
-                    createdAt = document.createdAt
+                    createdAt = document.createdAt,
+                    myComments = document.myComments,
+                    customReminderEnabled = customDate != null,
+                    customReminderDate = customDate
                 )
             }
         }
@@ -105,7 +120,19 @@ class DetailViewModel(
     }
 
     fun updateExpiryDate(date: LocalDate?) {
-        _uiState.update { it.copy(expiryDate = date) }
+        _uiState.update { state ->
+            val customStillValid = date != null && state.customReminderDate != null &&
+                state.customReminderDate <= date
+            state.copy(
+                expiryDate = date,
+                customReminderDate = if (customStillValid) state.customReminderDate else null,
+                customReminderEnabled = if (customStillValid) state.customReminderEnabled else false
+            )
+        }
+    }
+
+    fun updateMyComments(comments: String) {
+        _uiState.update { it.copy(myComments = comments) }
     }
 
     fun updateCategory(category: DocumentCategory) {
@@ -122,6 +149,19 @@ class DetailViewModel(
             if (current.contains(days)) current.remove(days) else current.add(days)
             state.copy(selectedReminderDays = current)
         }
+    }
+
+    fun toggleCustomReminder(enabled: Boolean) {
+        _uiState.update { state ->
+            state.copy(
+                customReminderEnabled = enabled,
+                customReminderDate = if (enabled) state.customReminderDate else null
+            )
+        }
+    }
+
+    fun updateCustomReminderDate(date: LocalDate) {
+        _uiState.update { it.copy(customReminderDate = date) }
     }
 
     fun save() {
@@ -141,6 +181,14 @@ class DetailViewModel(
         viewModelScope.launch {
             try {
                 val now = DateTimeClock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+                val allReminderDays = buildList {
+                    addAll(state.selectedReminderDays)
+                    if (state.customReminderEnabled && state.customReminderDate != null && state.expiryDate != null) {
+                        val daysBefore = state.customReminderDate.daysUntil(state.expiryDate)
+                        if (daysBefore >= 0) add(daysBefore)
+                    }
+                }.sorted()
+
                 val document = Document(
                     id = state.documentId,
                     name = state.name,
@@ -148,10 +196,11 @@ class DetailViewModel(
                     thumbnailPath = state.thumbnailPath,
                     expiryDate = state.expiryDate,
                     confidence = state.confidence,
-                    reminderDays = state.selectedReminderDays.toList().sorted(),
+                    reminderDays = allReminderDays,
                     category = state.category,
                     reminderTime = state.reminderTime,
-                    createdAt = state.createdAt ?: now
+                    createdAt = state.createdAt ?: now,
+                    myComments = state.myComments
                 )
 
                 if (state.isNewDocument) {

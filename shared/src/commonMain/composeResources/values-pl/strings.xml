@@ -28,6 +28,7 @@
     <string name="delete_document">Usu\u0144 dokument</string>
     <string name="document_image">Zdj\u0119cie dokumentu</string>
     <string name="close">Zamknij</string>
+    <string name="my_comments">Moje komentarze</string>
 
     <!-- Camera screen -->
     <string name="camera_permission_required">Wymagane uprawnienie do kamery, aby skanowa\u0107 dokumenty.</string>
@@ -113,6 +114,7 @@
     <string name="reminder_7_days">7 dni wcze\u015Bniej</string>
     <string name="reminder_1_day">1 dzie\u0144 wcze\u015Bniej</string>
     <string name="reminder_day_of">W dniu wyga\u015Bni\u0119cia</string>
+    <string name="reminder_custom_date">W\u0142asna data</string>
 
     <!-- Add document bottom sheet -->
     <string name="add_document">Dodaj dokument</string>

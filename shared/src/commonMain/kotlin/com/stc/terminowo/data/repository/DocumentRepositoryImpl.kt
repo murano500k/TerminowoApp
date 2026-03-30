@@ -45,7 +45,8 @@ class DocumentRepositoryImpl(
                 reminderDays = document.reminderDays.joinToString(","),
                 category = document.category.key,
                 createdAt = document.createdAt.toString(),
-                reminderTime = document.reminderTime.toString()
+                reminderTime = document.reminderTime.toString(),
+                myComments = document.myComments
             )
         }
     }
@@ -58,6 +59,7 @@ class DocumentRepositoryImpl(
                 reminderDays = document.reminderDays.joinToString(","),
                 category = document.category.key,
                 reminderTime = document.reminderTime.toString(),
+                myComments = document.myComments,
                 id = document.id
             )
         }
@@ -93,6 +95,7 @@ private fun com.stc.terminowo.data.local.db.DocumentEntity.toDomain(): Document 
         reminderDays = reminderDays.split(",").mapNotNull { it.trim().toIntOrNull() },
         category = DocumentCategory.fromKey(category),
         reminderTime = try { LocalTime.parse(reminderTime) } catch (_: Exception) { LocalTime(9, 0) },
-        createdAt = LocalDateTime.parse(createdAt)
+        createdAt = LocalDateTime.parse(createdAt),
+        myComments = myComments
     )
 }

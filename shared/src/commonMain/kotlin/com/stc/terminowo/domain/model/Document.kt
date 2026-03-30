@@ -14,5 +14,6 @@ data class Document(
     val reminderDays: List<Int>,
     val category: DocumentCategory = DocumentCategory.OTHER,
     val reminderTime: LocalTime = LocalTime(9, 0),
-    val createdAt: LocalDateTime
+    val createdAt: LocalDateTime,
+    val myComments: String = ""
 )

@@ -1,0 +1,1 @@
+ALTER TABLE DocumentEntity ADD COLUMN myComments TEXT NOT NULL DEFAULT '';
