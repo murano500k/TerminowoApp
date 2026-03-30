@@ -24,7 +24,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -32,7 +31,6 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -55,6 +53,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.stc.terminowo.platform.isIos
 import com.stc.terminowo.presentation.components.AppTopBar
+import com.stc.terminowo.presentation.components.SettingsMenu
 import com.stc.terminowo.presentation.components.DocumentListItem
 import com.stc.terminowo.presentation.main.DocumentStatusFilter
 import com.stc.terminowo.presentation.theme.LocalExtendedColors
@@ -104,14 +103,7 @@ fun DashboardScreen(
                     onNotificationsClick = onNotificationsClick,
                     unreadNotificationCount = unreadNotificationCount,
                     showSearchIcon = uiState.totalCount > 1,
-                    trailingActions = {
-                        IconButton(onClick = { /* TODO: settings */ }) {
-                            Icon(
-                                imageVector = Icons.Default.MoreVert,
-                                contentDescription = null
-                            )
-                        }
-                    }
+                    trailingActions = { SettingsMenu() }
                 )
 
                 if (!isSearchActive) {
@@ -310,7 +302,7 @@ private fun CircularScoreIndicator(
 
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
         Canvas(modifier = Modifier.fillMaxSize()) {
-            val strokeWidth = 10.dp.toPx()
+            val strokeWidth = 6.dp.toPx()
             val arcSize = size.minDimension - strokeWidth
             val topLeft = Offset(
                 (size.width - arcSize) / 2f,

@@ -9,15 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
@@ -42,12 +35,12 @@ import com.stc.terminowo.presentation.components.ConfirmationDialog
 import com.stc.terminowo.presentation.components.DocumentListItem
 import com.stc.terminowo.presentation.components.FilterEmptyState
 import com.stc.terminowo.presentation.components.SearchOverlay
+import com.stc.terminowo.presentation.components.SettingsMenu
 import com.stc.terminowo.presentation.components.SwipeToRevealDeleteItem
 import com.stc.terminowo.presentation.theme.LocalExtendedColors
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import terminowo.shared.generated.resources.Res
-import androidx.compose.ui.platform.LocalUriHandler
 import terminowo.shared.generated.resources.delete_all_confirm_message
 import terminowo.shared.generated.resources.delete_all_confirm_title
 import terminowo.shared.generated.resources.delete_all_documents
@@ -56,11 +49,8 @@ import terminowo.shared.generated.resources.delete_document_confirm_title
 import terminowo.shared.generated.resources.delete_files_confirm_message
 import terminowo.shared.generated.resources.delete_files_confirm_title
 import terminowo.shared.generated.resources.delete_files_only
-import terminowo.shared.generated.resources.menu_privacy_policy
-import terminowo.shared.generated.resources.menu_terms_of_service
 import terminowo.shared.generated.resources.nav_documents
 import terminowo.shared.generated.resources.scan_document
-import terminowo.shared.generated.resources.settings
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -81,9 +71,7 @@ fun DocumentsScreen(
     val searchQuery by viewModel.searchQuery.collectAsState()
     val searchResults by viewModel.searchResults.collectAsState()
 
-    val uriHandler = LocalUriHandler.current
     var isSearchActive by remember { mutableStateOf(false) }
-    var isSettingsMenuExpanded by remember { mutableStateOf(false) }
 
     val accentRed = LocalExtendedColors.current.accentRed
 
@@ -128,17 +116,8 @@ fun DocumentsScreen(
                     unreadNotificationCount = unreadNotificationCount,
                     showSearchIcon = uiState.allCount > 1,
                     trailingActions = {
-                        Box {
-                            IconButton(onClick = { isSettingsMenuExpanded = true }) {
-                                Icon(
-                                    imageVector = Icons.Default.MoreVert,
-                                    contentDescription = stringResource(Res.string.settings)
-                                )
-                            }
-                            DropdownMenu(
-                                expanded = isSettingsMenuExpanded,
-                                onDismissRequest = { isSettingsMenuExpanded = false }
-                            ) {
+                        SettingsMenu(
+                            extraItems = { onDismiss ->
                                 DropdownMenuItem(
                                     text = {
                                         Text(
@@ -147,7 +126,7 @@ fun DocumentsScreen(
                                         )
                                     },
                                     onClick = {
-                                        isSettingsMenuExpanded = false
+                                        onDismiss()
                                         viewModel.requestDeleteFiles()
                                     }
                                 )
@@ -159,26 +138,12 @@ fun DocumentsScreen(
                                         )
                                     },
                                     onClick = {
-                                        isSettingsMenuExpanded = false
+                                        onDismiss()
                                         viewModel.requestDeleteAll()
                                     }
                                 )
-                                DropdownMenuItem(
-                                    text = { Text(text = stringResource(Res.string.menu_terms_of_service)) },
-                                    onClick = {
-                                        isSettingsMenuExpanded = false
-                                        uriHandler.openUri("https://terminowo.app/docs/terms-of-service.html")
-                                    }
-                                )
-                                DropdownMenuItem(
-                                    text = { Text(text = stringResource(Res.string.menu_privacy_policy)) },
-                                    onClick = {
-                                        isSettingsMenuExpanded = false
-                                        uriHandler.openUri("https://terminowo.app/docs/privacy-policy.html")
-                                    }
-                                )
                             }
-                        }
+                        )
                     }
                 )
 
