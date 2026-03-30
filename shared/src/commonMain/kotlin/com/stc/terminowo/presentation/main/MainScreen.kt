@@ -114,7 +114,7 @@ fun DocumentsScreen(
                     onSearchActiveChange = { isSearchActive = it },
                     onNotificationsClick = onNotificationsClick,
                     unreadNotificationCount = unreadNotificationCount,
-                    showSearchIcon = uiState.allCount > 1,
+                    showSearchIcon = true,
                     trailingActions = {
                         SettingsMenu(
                             extraItems = { onDismiss ->
