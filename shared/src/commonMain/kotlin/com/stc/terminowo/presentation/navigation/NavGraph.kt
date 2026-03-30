@@ -1,5 +1,6 @@
 package com.stc.terminowo.presentation.navigation
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -256,6 +257,33 @@ fun NavGraph() {
                             }
                         }
                     )
+
+                    if (isIos) {
+                        Box(
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(vertical = 8.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .width(88.dp)
+                                    .height(52.dp)
+                                    .background(
+                                        color = accentRed,
+                                        shape = RoundedCornerShape(999.dp)
+                                    )
+                                    .clickable { showAddSheet = true },
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Add,
+                                    contentDescription = stringResource(Res.string.add_document),
+                                    tint = Color.White
+                                )
+                            }
+                        }
+                    }
 
                     val documentsSelected = currentDest?.hasRoute<Screen.Documents>() == true
                     NavigationBarItem(
