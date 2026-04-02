@@ -171,9 +171,7 @@
     <!-- Consent / Legal -->
     <string name="consent_title">Terms &amp; Privacy</string>
     <string name="consent_tos_heading">Terms of Service</string>
-    <string name="consent_tos_summary">By using Terminowo you agree that:\n\n\u2022 You are responsible for the documents you scan and data on your device.\n\u2022 OCR results are provided as-is and may contain errors \u2014 always verify against the original.\n\u2022 Notification delivery depends on your device settings and is not guaranteed.\n\u2022 The app is provided without warranties of any kind.\n\u2022 The developer is not liable for missed deadlines or inaccurate OCR results.</string>
     <string name="consent_privacy_heading">Privacy Policy</string>
-    <string name="consent_privacy_summary">How we handle your data:\n\n\u2022 All data is stored locally on your device and never uploaded to our servers.\n\u2022 Document images are sent to Google Document AI for text extraction only \u2014 they are not retained.\n\u2022 No analytics, telemetry, or location data is collected.\n\u2022 The free version may display ads; ad networks may collect device identifiers.\n\u2022 Uninstalling the app deletes all stored data.</string>
     <string name="consent_accept_tos">I accept the Terms of Service</string>
     <string name="consent_accept_privacy">I accept the Privacy Policy</string>
     <string name="consent_continue">Continue</string>

@@ -34,11 +34,9 @@ import terminowo.shared.generated.resources.consent_accept_privacy
 import terminowo.shared.generated.resources.consent_accept_tos
 import terminowo.shared.generated.resources.consent_continue
 import terminowo.shared.generated.resources.consent_privacy_heading
-import terminowo.shared.generated.resources.consent_privacy_summary
 import terminowo.shared.generated.resources.consent_read_full
 import terminowo.shared.generated.resources.consent_title
 import terminowo.shared.generated.resources.consent_tos_heading
-import terminowo.shared.generated.resources.consent_tos_summary
 
 private const val TOS_URL = "https://terminowo.app/docs/terms-of-service.html"
 private const val PRIVACY_URL = "https://terminowo.app/docs/privacy-policy.html"
@@ -80,13 +78,6 @@ fun ConsentScreen(
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold
                 )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = stringResource(Res.string.consent_tos_summary),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Spacer(modifier = Modifier.height(4.dp))
                 TextButton(onClick = { uriHandler.openUri(TOS_URL) }) {
                     Text(
                         text = stringResource(Res.string.consent_read_full),
@@ -102,13 +93,6 @@ fun ConsentScreen(
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold
                 )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = stringResource(Res.string.consent_privacy_summary),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Spacer(modifier = Modifier.height(4.dp))
                 TextButton(onClick = { uriHandler.openUri(PRIVACY_URL) }) {
                     Text(
                         text = stringResource(Res.string.consent_read_full),
