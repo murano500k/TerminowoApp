@@ -5,6 +5,7 @@
 .cxx
 .externalNativeBuild
 .kotlin
+*.xcuserstate
 
 local.properties
 **/Secrets.xcconfig
