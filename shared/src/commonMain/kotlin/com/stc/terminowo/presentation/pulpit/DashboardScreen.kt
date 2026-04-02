@@ -530,7 +530,8 @@ private fun UpcomingDeadlinesHeader(onClick: () -> Unit) {
 private fun EmptyState(onAddClick: () -> Unit) {
     Column(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .padding(horizontal = 32.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
