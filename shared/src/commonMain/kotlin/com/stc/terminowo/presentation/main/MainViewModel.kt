@@ -7,6 +7,7 @@ import com.stc.terminowo.domain.model.DocumentStatus
 import com.stc.terminowo.domain.model.status
 import com.stc.terminowo.domain.repository.DocumentRepository
 import com.stc.terminowo.platform.ImageStorage
+import com.stc.terminowo.platform.NotificationScheduler
 import com.stc.terminowo.presentation.components.DocumentSearchHelper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -34,7 +35,8 @@ data class DocumentsUiState(
 
 class DocumentsViewModel(
     private val documentRepository: DocumentRepository,
-    private val imageStorage: ImageStorage
+    private val imageStorage: ImageStorage,
+    private val notificationScheduler: NotificationScheduler
 ) : ViewModel() {
 
     private val _selectedFilter = MutableStateFlow(DocumentStatusFilter.ALL)
@@ -125,6 +127,7 @@ class DocumentsViewModel(
         viewModelScope.launch {
             val docs = allDocuments.first()
             for (doc in docs) {
+                try { notificationScheduler.cancelReminders(doc.id) } catch (_: Exception) {}
                 try { imageStorage.deleteImage(doc.imagePath) } catch (_: Exception) {}
                 try { imageStorage.deleteImage(doc.thumbnailPath) } catch (_: Exception) {}
             }
