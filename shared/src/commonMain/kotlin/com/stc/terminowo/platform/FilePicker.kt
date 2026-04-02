@@ -4,4 +4,5 @@ data class PickedFile(val bytes: ByteArray, val mimeType: String, val fileName: 
 
 expect class FilePicker {
     suspend fun pickFile(): PickedFile?
+    suspend fun pickPhotoFromGallery(): PickedFile?
 }

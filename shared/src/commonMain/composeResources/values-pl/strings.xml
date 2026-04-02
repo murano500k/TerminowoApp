@@ -120,6 +120,7 @@
     <string name="add_document">Dodaj dokument</string>
     <string name="take_photo">Zr\u00F3b zdj\u0119cie</string>
     <string name="choose_file">Wybierz plik</string>
+    <string name="pick_from_gallery">Wybierz zdjęcie z galerii</string>
 
     <!-- Time picker -->
     <string name="notification_time">Czas powiadomienia</string>

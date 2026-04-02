@@ -18,6 +18,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material3.NavigationBarItemDefaults
@@ -77,6 +78,7 @@ import terminowo.shared.generated.resources.enter_manually
 import terminowo.shared.generated.resources.nav_documents
 import terminowo.shared.generated.resources.document_added
 import terminowo.shared.generated.resources.nav_pulpit
+import terminowo.shared.generated.resources.pick_from_gallery
 import terminowo.shared.generated.resources.take_photo
 import kotlin.uuid.Uuid
 
@@ -155,6 +157,25 @@ fun NavGraph() {
                         navController.navigate(Screen.Camera)
                     }
                 )
+
+                if (isIos) {
+                    AddDocumentOption(
+                        icon = Icons.Default.Image,
+                        label = stringResource(Res.string.pick_from_gallery),
+                        onClick = {
+                            showAddSheet = false
+                            scope.launch {
+                                val picked = filePicker.pickPhotoFromGallery() ?: return@launch
+                                val timestamp = DateTimeClock.System.now().toEpochMilliseconds()
+                                val fileName = "gallery_$timestamp.jpg"
+                                val savedPath = imageStorage.saveImage(picked.bytes, fileName)
+                                navController.navigate(
+                                    Screen.ImagePreview(savedPath, picked.mimeType)
+                                )
+                            }
+                        }
+                    )
+                }
 
                 AddDocumentOption(
                     icon = Icons.Default.Description,

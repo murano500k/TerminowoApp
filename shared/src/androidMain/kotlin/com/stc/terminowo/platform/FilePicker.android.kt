@@ -11,6 +11,8 @@ actual class FilePicker(private val context: Context) {
         var pickerLauncher: ((onResult: (Uri?) -> Unit) -> Unit)? = null
     }
 
+    actual suspend fun pickPhotoFromGallery(): PickedFile? = null
+
     actual suspend fun pickFile(): PickedFile? = suspendCancellableCoroutine { cont ->
         val launcher = pickerLauncher
         if (launcher == null) {

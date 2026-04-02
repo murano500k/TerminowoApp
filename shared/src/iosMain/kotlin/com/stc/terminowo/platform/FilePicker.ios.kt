@@ -5,10 +5,19 @@ import kotlinx.cinterop.addressOf
 import kotlinx.cinterop.usePinned
 import kotlinx.coroutines.suspendCancellableCoroutine
 import platform.Foundation.NSData
+import platform.Foundation.NSNumber
 import platform.Foundation.NSURL
 import platform.Foundation.dataWithContentsOfURL
+import platform.Foundation.setValue
+import platform.UIKit.UIApplication
 import platform.UIKit.UIDocumentPickerDelegateProtocol
 import platform.UIKit.UIDocumentPickerViewController
+import platform.UIKit.UIImage
+import platform.UIKit.UIImageJPEGRepresentation
+import platform.UIKit.UIImagePickerController
+import platform.UIKit.UIImagePickerControllerDelegateProtocol
+import platform.UIKit.UIImagePickerControllerOriginalImage
+import platform.UIKit.UINavigationControllerDelegateProtocol
 import platform.UniformTypeIdentifiers.UTTypeImage
 import platform.UniformTypeIdentifiers.UTTypePDF
 import platform.darwin.NSObject
@@ -16,6 +25,62 @@ import platform.posix.memcpy
 import kotlin.coroutines.resume
 
 actual class FilePicker {
+
+    private var delegateHolder: NSObject? = null
+
+    @OptIn(ExperimentalForeignApi::class)
+    actual suspend fun pickPhotoFromGallery(): PickedFile? = suspendCancellableCoroutine { cont ->
+        val rootVC = UIApplication.sharedApplication.keyWindow?.rootViewController
+        if (rootVC == null) {
+            cont.resume(null)
+            return@suspendCancellableCoroutine
+        }
+
+        val picker = UIImagePickerController()
+        // sourceType 0 = Photo Library
+        picker.setValue(NSNumber(int = 0), forKey = "sourceType")
+
+        val delegate = object : NSObject(), UIImagePickerControllerDelegateProtocol,
+            UINavigationControllerDelegateProtocol {
+
+            override fun imagePickerController(
+                picker: UIImagePickerController,
+                didFinishPickingMediaWithInfo: Map<Any?, *>
+            ) {
+                val image = didFinishPickingMediaWithInfo[UIImagePickerControllerOriginalImage] as? UIImage
+                val bytes = image?.let { img ->
+                    UIImageJPEGRepresentation(img, 0.95)?.let { data ->
+                        val size = data.length.toInt()
+                        if (size == 0) return@let null
+                        val byteArray = ByteArray(size)
+                        byteArray.usePinned { pinned ->
+                            memcpy(pinned.addressOf(0), data.bytes, data.length)
+                        }
+                        byteArray
+                    }
+                }
+                picker.dismissViewControllerAnimated(true, completion = null)
+                if (bytes != null) {
+                    cont.resume(PickedFile(bytes, "image/jpeg", "gallery_photo.jpg"))
+                } else {
+                    cont.resume(null)
+                }
+            }
+
+            override fun imagePickerControllerDidCancel(picker: UIImagePickerController) {
+                picker.dismissViewControllerAnimated(true, completion = null)
+                cont.resume(null)
+            }
+        }
+
+        delegateHolder = delegate
+        picker.delegate = delegate
+        rootVC.presentViewController(picker, animated = true, completion = null)
+
+        cont.invokeOnCancellation {
+            picker.dismissViewControllerAnimated(false, completion = null)
+        }
+    }
 
     @OptIn(ExperimentalForeignApi::class)
     actual suspend fun pickFile(): PickedFile? = suspendCancellableCoroutine { cont ->
