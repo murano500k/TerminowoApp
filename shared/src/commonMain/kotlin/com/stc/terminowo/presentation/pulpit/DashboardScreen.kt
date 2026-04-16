@@ -51,10 +51,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.draw.blur
 import com.stc.terminowo.platform.isIos
 import androidx.compose.material3.DropdownMenuItem
 import com.stc.terminowo.presentation.components.AppTopBar
 import com.stc.terminowo.presentation.components.ConfirmationDialog
+import com.stc.terminowo.presentation.components.SearchOverlay
 import com.stc.terminowo.presentation.components.SettingsMenu
 import com.stc.terminowo.presentation.components.DocumentListItem
 import com.stc.terminowo.presentation.main.DocumentStatusFilter
@@ -76,7 +78,6 @@ import terminowo.shared.generated.resources.delete_files_confirm_title
 import terminowo.shared.generated.resources.delete_files_only
 import terminowo.shared.generated.resources.no_documents_pulpit_subtitle
 import terminowo.shared.generated.resources.no_documents_pulpit_title
-import terminowo.shared.generated.resources.no_results
 import terminowo.shared.generated.resources.pulpit_title
 import terminowo.shared.generated.resources.scan_document
 import terminowo.shared.generated.resources.status_expired
@@ -120,95 +121,63 @@ fun DashboardScreen(
         )
     }
 
-    Scaffold(
-        topBar = {
-            Column {
-                AppTopBar(
-                    isSearchActive = isSearchActive,
-                    searchQuery = searchQuery,
-                    onSearchQueryChange = { viewModel.onSearchQueryChange(it) },
-                    onSearchActiveChange = { isSearchActive = it },
-                    onNotificationsClick = onNotificationsClick,
-                    unreadNotificationCount = unreadNotificationCount,
-                    showSearchIcon = true,
-                    trailingActions = {
-                        SettingsMenu(
-                            extraItems = { onDismiss ->
-                                DropdownMenuItem(
-                                    text = {
-                                        Text(
-                                            text = stringResource(Res.string.delete_files_only),
-                                            color = MaterialTheme.colorScheme.error
-                                        )
-                                    },
-                                    onClick = {
-                                        onDismiss()
-                                        viewModel.requestDeleteFiles()
-                                    }
-                                )
-                                DropdownMenuItem(
-                                    text = {
-                                        Text(
-                                            text = stringResource(Res.string.delete_all_documents),
-                                            color = MaterialTheme.colorScheme.error
-                                        )
-                                    },
-                                    onClick = {
-                                        onDismiss()
-                                        viewModel.requestDeleteAll()
-                                    }
-                                )
-                            }
-                        )
-                    }
-                )
+    Box(modifier = Modifier.fillMaxSize()) {
+        Scaffold(
+            modifier = if (isSearchActive) Modifier.blur(12.dp) else Modifier,
+            topBar = {
+                Column {
+                    AppTopBar(
+                        isSearchActive = isSearchActive,
+                        searchQuery = searchQuery,
+                        onSearchQueryChange = { viewModel.onSearchQueryChange(it) },
+                        onSearchActiveChange = { isSearchActive = it },
+                        onNotificationsClick = onNotificationsClick,
+                        unreadNotificationCount = unreadNotificationCount,
+                        showSearchIcon = true,
+                        trailingActions = {
+                            SettingsMenu(
+                                extraItems = { onDismiss ->
+                                    DropdownMenuItem(
+                                        text = {
+                                            Text(
+                                                text = stringResource(Res.string.delete_files_only),
+                                                color = MaterialTheme.colorScheme.error
+                                            )
+                                        },
+                                        onClick = {
+                                            onDismiss()
+                                            viewModel.requestDeleteFiles()
+                                        }
+                                    )
+                                    DropdownMenuItem(
+                                        text = {
+                                            Text(
+                                                text = stringResource(Res.string.delete_all_documents),
+                                                color = MaterialTheme.colorScheme.error
+                                            )
+                                        },
+                                        onClick = {
+                                            onDismiss()
+                                            viewModel.requestDeleteAll()
+                                        }
+                                    )
+                                }
+                            )
+                        }
+                    )
 
-                if (!isSearchActive) {
-                    Text(
-                        text = stringResource(Res.string.pulpit_title),
-                        style = MaterialTheme.typography.headlineMedium,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
-                    )
-                }
-            }
-        },
-        floatingActionButton = {}
-    ) { paddingValues ->
-        if (isSearchActive) {
-            if (searchQuery.isNotBlank() && searchResults.isEmpty()) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = stringResource(Res.string.no_results),
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-            } else {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues)
-                        .padding(horizontal = 16.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    items(
-                        items = searchResults,
-                        key = { it.id }
-                    ) { document ->
-                        DocumentListItem(
-                            document = document,
-                            onClick = { onDocumentClick(document.id) }
+                    if (!isSearchActive) {
+                        Text(
+                            text = stringResource(Res.string.pulpit_title),
+                            style = MaterialTheme.typography.headlineMedium,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
                         )
                     }
                 }
-            }
-        } else {
+            },
+            floatingActionButton = {}
+        ) { paddingValues ->
             DashboardContent(
                 uiState = uiState,
                 onDocumentClick = onDocumentClick,
@@ -216,6 +185,23 @@ fun DashboardScreen(
                 onNavigateToDocumentsWithFilter = onNavigateToDocumentsWithFilter,
                 onAddDocumentClick = onAddDocumentClick,
                 modifier = Modifier.padding(paddingValues)
+            )
+        }
+
+        if (isSearchActive) {
+            SearchOverlay(
+                query = searchQuery,
+                results = searchResults,
+                onQueryChange = { viewModel.onSearchQueryChange(it) },
+                onClose = {
+                    isSearchActive = false
+                    viewModel.onSearchQueryChange("")
+                },
+                onDocumentClick = { id ->
+                    isSearchActive = false
+                    viewModel.onSearchQueryChange("")
+                    onDocumentClick(id)
+                }
             )
         }
     }
