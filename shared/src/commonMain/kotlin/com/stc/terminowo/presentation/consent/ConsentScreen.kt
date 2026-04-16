@@ -66,7 +66,7 @@ fun ConsentScreen(
 
                 Text(
                     text = stringResource(Res.string.consent_title),
-                    style = MaterialTheme.typography.headlineMedium,
+                    style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold
                 )
 

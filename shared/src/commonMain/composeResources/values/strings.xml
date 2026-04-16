@@ -170,7 +170,7 @@
     <string name="time_ago_weeks">%1$d weeks ago</string>
 
     <!-- Consent / Legal -->
-    <string name="consent_title">Terms &amp; Privacy</string>
+    <string name="consent_title">Terms &amp; Privacy Policy</string>
     <string name="consent_tos_heading">Terms of Service</string>
     <string name="consent_privacy_heading">Privacy Policy</string>
     <string name="consent_accept_tos">I accept the Terms of Service</string>

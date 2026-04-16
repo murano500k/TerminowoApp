@@ -170,7 +170,7 @@
     <string name="time_ago_weeks">%1$d tyg. temu</string>
 
     <!-- Consent / Legal -->
-    <string name="consent_title">Regulaminy</string>
+    <string name="consent_title">Warunki i polityka prywatno\u015Bci</string>
     <string name="consent_tos_heading">Regulamin</string>
     <string name="consent_privacy_heading">Polityka prywatno\u015Bci</string>
     <string name="consent_accept_tos">Akceptuj\u0119 Regulamin</string>
