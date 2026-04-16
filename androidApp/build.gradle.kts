@@ -50,8 +50,8 @@ android {
         applicationId = "com.stc.terminowo"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 4
-        versionName = "1.1.2"
+        versionCode = 5
+        versionName = "1.1.3"
 
         buildConfigField("String", "PROXY_URL", "\"${localProperty("PROXY_URL")}\"")
         buildConfigField("String", "PROXY_API_KEY", "\"${localProperty("PROXY_API_KEY")}\"")
