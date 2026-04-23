@@ -1,5 +1,7 @@
 package com.stc.terminowo.presentation.consent
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -24,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -50,7 +53,16 @@ fun ConsentScreen(
     var privacyAccepted by remember { mutableStateOf(false) }
     val accentRed = LocalExtendedColors.current.accentRed
 
-    Scaffold { paddingValues ->
+    Box(modifier = Modifier.fillMaxSize()) {
+        ConsentBackground()
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.60f))
+        )
+        Scaffold(
+            containerColor = Color.Transparent
+        ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -158,6 +170,7 @@ fun ConsentScreen(
                     )
                 }
             }
+        }
         }
     }
 }

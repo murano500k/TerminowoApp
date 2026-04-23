@@ -51,6 +51,10 @@ kotlin {
             // Navigation
             implementation(libs.navigation.compose)
 
+            // Compottie (Lottie for Compose Multiplatform)
+            implementation(libs.compottie)
+            implementation(libs.compottie.resources)
+
             // Koin
             implementation(project.dependencies.platform(libs.koin.bom))
             implementation(libs.koin.core)

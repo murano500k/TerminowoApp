@@ -12,6 +12,7 @@ navigation-compose = "2.8.0-alpha10"
 kotlinx-datetime = "0.6.2"
 kotlinx-serialization = "1.7.3"
 kotlinx-coroutines = "1.9.0"
+compottie = "2.0.0-rc04"
 
 # Android
 android-compileSdk = "36"
@@ -47,6 +48,10 @@ camerak = { module = "io.github.kashif-mehmood-km:camerak", version.ref = "camer
 
 # Navigation
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigation-compose" }
+
+# Compottie (Lottie for Compose Multiplatform)
+compottie = { module = "io.github.alexzhirkevich:compottie", version.ref = "compottie" }
+compottie-resources = { module = "io.github.alexzhirkevich:compottie-resources", version.ref = "compottie" }
 
 # KotlinX
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
