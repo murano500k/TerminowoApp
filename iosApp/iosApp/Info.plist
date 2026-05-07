@@ -26,6 +26,12 @@
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>FacebookAppID</key>
+	<string>$(FB_APP_ID)</string>
+	<key>FacebookClientToken</key>
+	<string>$(FB_CLIENT_TOKEN)</string>
+	<key>FacebookDisplayName</key>
+	<string>Terminowo</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Terminowo needs camera access to scan documents</string>
 	<key>ProxyAPIKey</key>

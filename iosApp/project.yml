@@ -8,6 +8,11 @@ settings:
   base:
     ENABLE_USER_SCRIPT_SANDBOXING: "NO"
 
+packages:
+  Facebook:
+    url: https://github.com/facebook/facebook-ios-sdk
+    from: "18.0.3"
+
 targets:
   iosApp:
     type: application
@@ -36,6 +41,8 @@ targets:
         SWIFT_VERSION: "5.0"
     dependencies:
       - sdk: libsqlite3.tbd
+      - package: Facebook
+        product: FacebookCore
     preBuildScripts:
       - name: "Validate Secrets"
         script: |

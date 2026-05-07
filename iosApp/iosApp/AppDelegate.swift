@@ -1,4 +1,5 @@
 import UIKit
+import FBSDKCoreKit
 import shared
 
 @main
@@ -10,6 +11,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
+        ApplicationDelegate.shared.application(
+            application,
+            didFinishLaunchingWithOptions: launchOptions
+        )
+        AppEvents.shared.activateApp()
+
         let proxyUrl = Bundle.main.infoDictionary?["ProxyURL"] as? String ?? ""
         let apiKey = Bundle.main.infoDictionary?["ProxyAPIKey"] as? String ?? ""
         MainViewControllerKt.doInitKoin(proxyUrl: proxyUrl, apiKey: apiKey)
