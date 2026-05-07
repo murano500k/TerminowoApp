@@ -1,6 +1,8 @@
 package com.stc.terminowo
 
 import android.app.Application
+import com.facebook.FacebookSdk
+import com.facebook.appevents.AppEventsLogger
 import com.stc.terminowo.data.remote.ProxyConfig
 import com.stc.terminowo.di.appModules
 import org.koin.android.ext.koin.androidContext
@@ -23,6 +25,9 @@ class TerminowoApp : Application() {
                 return "${element.className.substringAfterLast('.')}.${element.methodName}"
             }
         })
+
+        FacebookSdk.fullyInitialize()
+        AppEventsLogger.activateApp(this)
 
         startKoin {
             androidLogger()

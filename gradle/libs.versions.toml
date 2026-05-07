@@ -21,6 +21,7 @@ android-targetSdk = "35"
 androidx-activityCompose = "1.9.3"
 play-services-auth = "21.3.0"
 timber = "5.0.1"
+facebook-android-sdk = "18.2.3"
 
 [libraries]
 # Koin (BOM)
@@ -62,6 +63,7 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 google-play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "play-services-auth" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+facebook-android-sdk = { module = "com.facebook.android:facebook-android-sdk", version.ref = "facebook-android-sdk" }
 
 # Testing
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }

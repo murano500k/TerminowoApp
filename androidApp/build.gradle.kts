@@ -38,6 +38,9 @@ kotlin {
 
             // Logging
             implementation(libs.timber)
+
+            // Facebook SDK (Meta app events)
+            implementation(libs.facebook.android.sdk)
         }
     }
 }
@@ -50,11 +53,14 @@ android {
         applicationId = "com.stc.terminowo"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 5
-        versionName = "1.1.3"
+        versionCode = 6
+        versionName = "1.1.4"
 
         buildConfigField("String", "PROXY_URL", "\"${localProperty("PROXY_URL")}\"")
         buildConfigField("String", "PROXY_API_KEY", "\"${localProperty("PROXY_API_KEY")}\"")
+
+        resValue("string", "facebook_app_id", localProperty("FB_APP_ID"))
+        resValue("string", "facebook_client_token", localProperty("FB_CLIENT_TOKEN"))
 
         ndk {
             debugSymbolLevel = "FULL"
