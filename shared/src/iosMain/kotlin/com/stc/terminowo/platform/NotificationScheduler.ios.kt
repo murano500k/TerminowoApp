@@ -4,6 +4,8 @@ import com.stc.terminowo.domain.model.ReminderInterval
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import platform.Foundation.NSDateComponents
+import platform.Foundation.NSString
+import platform.UserNotifications.localizedUserNotificationStringForKey
 import platform.UserNotifications.UNAuthorizationOptionAlert
 import platform.UserNotifications.UNAuthorizationOptionBadge
 import platform.UserNotifications.UNAuthorizationOptionSound
@@ -30,12 +32,20 @@ actual class NotificationScheduler {
         daysBefore: Int
     ) {
         val content = UNMutableNotificationContent().apply {
-            setTitle("Document Expiring Soon")
+            setTitle(
+                NSString.localizedUserNotificationStringForKey("notification_title", null)
+            )
             setBody(
                 when (daysBefore) {
-                    0 -> "$documentName expires today!"
-                    1 -> "$documentName expires tomorrow!"
-                    else -> "$documentName expires in $daysBefore days"
+                    0 -> NSString.localizedUserNotificationStringForKey(
+                        "notification_expires_today", listOf(documentName)
+                    )
+                    1 -> NSString.localizedUserNotificationStringForKey(
+                        "notification_expires_tomorrow", listOf(documentName)
+                    )
+                    else -> NSString.localizedUserNotificationStringForKey(
+                        "notification_expires_in_days", listOf(documentName, daysBefore)
+                    )
                 }
             )
             setSound(UNNotificationSound.defaultSound)

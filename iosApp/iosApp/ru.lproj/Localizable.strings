@@ -1,0 +1,4 @@
+"notification_title" = "Срок документа истекает";
+"notification_expires_today" = "%@ истекает сегодня!";
+"notification_expires_tomorrow" = "%@ истекает завтра!";
+"notification_expires_in_days" = "%1$@ истекает через %2$d дней";
