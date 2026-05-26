@@ -3,27 +3,28 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 63;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1C81D6F669B7BB6D2FFCCEB3 /* FacebookCore in Frameworks */ = {isa = PBXBuildFile; productRef = B9181B739EB43DA5747D392C /* FacebookCore */; };
 		22EA1CB33A17DCC6FC82406D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F543015C899423D4B01CEB2E /* Assets.xcassets */; };
+		86A6000310FA931D64BB4C68 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A7F3482AB68B54C1CB27AB9D /* Localizable.strings */; };
 		F7C33B50A94DA01F2E82C280 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 245434685F34A9A15B1AC406 /* libsqlite3.tbd */; };
 		FDE52B8D57A097A60A4CF366 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6C1F485E0CF8BB70C9DDD2 /* AppDelegate.swift */; };
-		AA0000000000000000000002 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000001 /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		245434685F34A9A15B1AC406 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
-		86038AE1032E284E79B32AD6 /* iosApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iosApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		86038AE1032E284E79B32AD6 /* iosApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = iosApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B6C1F485E0CF8BB70C9DDD2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9E952615EB910B75418E8063 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
+		AE48325B78C4D984E844A424 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C117AD187833E2513BD2F553 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		C35CD2C849A242A9332863DC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		E3DB6A8DAA62B6331929A2D8 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/Localizable.strings; sourceTree = "<group>"; };
+		E6559F0A3CFE28996C11B97C /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F543015C899423D4B01CEB2E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		AA0000000000000000000003 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		AA0000000000000000000004 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
-		AA0000000000000000000005 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
-		AA0000000000000000000006 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +33,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F7C33B50A94DA01F2E82C280 /* libsqlite3.tbd in Frameworks */,
+				1C81D6F669B7BB6D2FFCCEB3 /* FacebookCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -44,7 +46,7 @@
 				8B6C1F485E0CF8BB70C9DDD2 /* AppDelegate.swift */,
 				F543015C899423D4B01CEB2E /* Assets.xcassets */,
 				C117AD187833E2513BD2F553 /* Info.plist */,
-				AA0000000000000000000001 /* Localizable.strings */,
+				A7F3482AB68B54C1CB27AB9D /* Localizable.strings */,
 			);
 			path = iosApp;
 			sourceTree = "<group>";
@@ -104,6 +106,7 @@
 			);
 			name = iosApp;
 			packageProductDependencies = (
+				B9181B739EB43DA5747D392C /* FacebookCore */,
 			);
 			productName = iosApp;
 			productReference = 86038AE1032E284E79B32AD6 /* iosApp.app */;
@@ -119,12 +122,12 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					78B53CC79860CBFC2F5543C6 = {
+						DevelopmentTeam = DMPH957CKJ;
 						ProvisioningStyle = Automatic;
 					};
 				};
 			};
 			buildConfigurationList = FF7CA1CA754D017066F1822F /* Build configuration list for PBXProject "iosApp" */;
-			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -136,6 +139,11 @@
 			);
 			mainGroup = 38B69C3F79CD97858CF7B609;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				CA44D6C17D1F71CF56987920 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 94C98B8B3A2BFC1966447269 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -150,7 +158,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				22EA1CB33A17DCC6FC82406D /* Assets.xcassets in Resources */,
-				AA0000000000000000000002 /* Localizable.strings in Resources */,
+				86A6000310FA931D64BB4C68 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -212,7 +220,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ \"$PLATFORM_NAME\" = \"iphonesimulator\" ]; then\n  if [ \"$CURRENT_ARCH\" = \"arm64\" ]; then\n    KOTLIN_TARGET=\"IosSimulatorArm64\"\n    KOTLIN_TARGET_LOWER=\"iosSimulatorArm64\"\n  else\n    KOTLIN_TARGET=\"IosX64\"\n    KOTLIN_TARGET_LOWER=\"iosX64\"\n  fi\nelse\n  KOTLIN_TARGET=\"IosArm64\"\n  KOTLIN_TARGET_LOWER=\"iosArm64\"\nfi\nif [ \"$CONFIGURATION\" = \"Release\" ]; then\n  LINK_TASK=\"linkReleaseFramework${KOTLIN_TARGET}\"\nelse\n  LINK_TASK=\"linkDebugFramework${KOTLIN_TARGET}\"\nfi\ncd \"$SRCROOT/..\"\n./gradlew \":shared:${LINK_TASK}\" \":shared:${KOTLIN_TARGET_LOWER}AggregateResources\"\n";
+			shellScript = "if [ \"$PLATFORM_NAME\" = \"iphonesimulator\" ]; then\n  if [ \"$CURRENT_ARCH\" = \"arm64\" ]; then\n    KOTLIN_TARGET=\"IosSimulatorArm64\"\n    KOTLIN_TARGET_LOWER=\"iosSimulatorArm64\"\n  else\n    KOTLIN_TARGET=\"IosX64\"\n    KOTLIN_TARGET_LOWER=\"iosX64\"\n  fi\nelse\n  KOTLIN_TARGET=\"IosArm64\"\n  KOTLIN_TARGET_LOWER=\"iosArm64\"\nfi\ncd \"$SRCROOT/..\"\n./gradlew \":shared:linkDebugFramework${KOTLIN_TARGET}\" \":shared:${KOTLIN_TARGET_LOWER}AggregateResources\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -228,13 +236,13 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		AA0000000000000000000001 /* Localizable.strings */ = {
+		A7F3482AB68B54C1CB27AB9D /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				AA0000000000000000000003 /* en */,
-				AA0000000000000000000004 /* pl */,
-				AA0000000000000000000005 /* ru */,
-				AA0000000000000000000006 /* uk */,
+				C35CD2C849A242A9332863DC /* en */,
+				E6559F0A3CFE28996C11B97C /* pl */,
+				AE48325B78C4D984E844A424 /* ru */,
+				E3DB6A8DAA62B6331929A2D8 /* uk */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -382,7 +390,11 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				OTHER_LINKER_FLAGS = "$(inherited) -framework shared";
+				OTHER_LINKER_FLAGS = (
+					"$(inherited)",
+					"-framework",
+					shared,
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.stc.terminowoapp;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
@@ -395,20 +407,25 @@
 			baseConfigurationReference = 9E952615EB910B75418E8063 /* Secrets.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = DMPH957CKJ;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../shared/build/bin/iosArm64/releaseFramework",
-					"$(SRCROOT)/../shared/build/bin/iosSimulatorArm64/releaseFramework",
-					"$(SRCROOT)/../shared/build/bin/iosX64/releaseFramework",
+					"$(SRCROOT)/../shared/build/bin/iosArm64/debugFramework",
+					"$(SRCROOT)/../shared/build/bin/iosSimulatorArm64/debugFramework",
+					"$(SRCROOT)/../shared/build/bin/iosX64/debugFramework",
 				);
 				INFOPLIST_FILE = iosApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				OTHER_LINKER_FLAGS = "$(inherited) -framework shared";
+				OTHER_LINKER_FLAGS = (
+					"$(inherited)",
+					"-framework",
+					shared,
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.stc.terminowoapp;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
@@ -438,6 +455,25 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		CA44D6C17D1F71CF56987920 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/facebook/facebook-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 18.0.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B9181B739EB43DA5747D392C /* FacebookCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CA44D6C17D1F71CF56987920 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
+			productName = FacebookCore;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 242FB5348943441C388468CE /* Project object */;
 }

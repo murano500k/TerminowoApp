@@ -24,11 +24,11 @@ targets:
       Release: Secrets.xcconfig
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.stc.terminowo
+        PRODUCT_BUNDLE_IDENTIFIER: com.stc.terminowoapp
         INFOPLIST_FILE: iosApp/Info.plist
         CODE_SIGN_IDENTITY: "Apple Development"
         CODE_SIGN_STYLE: Automatic
-        DEVELOPMENT_TEAM: "64RYVQ9R2P"
+        DEVELOPMENT_TEAM: "DMPH957CKJ"
         FRAMEWORK_SEARCH_PATHS:
           - "$(inherited)"
           - "$(SRCROOT)/../shared/build/bin/iosArm64/debugFramework"
