@@ -29,16 +29,23 @@ targets:
         CODE_SIGN_IDENTITY: "Apple Development"
         CODE_SIGN_STYLE: Automatic
         DEVELOPMENT_TEAM: "DMPH957CKJ"
-        FRAMEWORK_SEARCH_PATHS:
+        FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]:
           - "$(inherited)"
           - "$(SRCROOT)/../shared/build/bin/iosArm64/debugFramework"
+        FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*][arch=arm64]:
+          - "$(inherited)"
           - "$(SRCROOT)/../shared/build/bin/iosSimulatorArm64/debugFramework"
+        FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*][arch=x86_64]:
+          - "$(inherited)"
           - "$(SRCROOT)/../shared/build/bin/iosX64/debugFramework"
         OTHER_LINKER_FLAGS:
           - "$(inherited)"
           - "-framework"
           - "shared"
         SWIFT_VERSION: "5.0"
+    scheme:
+      testTargets:
+        - iosAppUITests
     dependencies:
       - sdk: libsqlite3.tbd
       - package: Facebook
@@ -53,8 +60,9 @@ targets:
         basedOnDependencyAnalysis: false
       - name: "Build Shared Framework"
         script: |
+          # CURRENT_ARCH is undefined in script phases; NATIVE_ARCH is the host arch
           if [ "$PLATFORM_NAME" = "iphonesimulator" ]; then
-            if [ "$CURRENT_ARCH" = "arm64" ]; then
+            if [ "$NATIVE_ARCH" = "arm64" ]; then
               KOTLIN_TARGET="IosSimulatorArm64"
               KOTLIN_TARGET_LOWER="iosSimulatorArm64"
             else
@@ -72,7 +80,7 @@ targets:
       - name: "Copy Compose Resources"
         script: |
           if [ "$PLATFORM_NAME" = "iphonesimulator" ]; then
-            if [ "$CURRENT_ARCH" = "arm64" ]; then
+            if [ "$NATIVE_ARCH" = "arm64" ]; then
               KOTLIN_TARGET_LOWER="iosSimulatorArm64"
             else
               KOTLIN_TARGET_LOWER="iosX64"
@@ -88,3 +96,20 @@ targets:
             cp -R "$RESOURCES_SRC/." "$RESOURCES_DST/"
           fi
         basedOnDependencyAnalysis: false
+
+  iosAppUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: iosAppUITests
+    dependencies:
+      - target: iosApp
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_NSPhotoLibraryUsageDescription: "UI tests add and remove test images in the photo library."
+        PRODUCT_BUNDLE_IDENTIFIER: com.stc.terminowoapp.uitests
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: "DMPH957CKJ"
+        SWIFT_VERSION: "5.0"
+        TEST_TARGET_NAME: iosApp

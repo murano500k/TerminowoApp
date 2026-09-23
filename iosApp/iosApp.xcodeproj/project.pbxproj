@@ -9,14 +9,30 @@
 /* Begin PBXBuildFile section */
 		1C81D6F669B7BB6D2FFCCEB3 /* FacebookCore in Frameworks */ = {isa = PBXBuildFile; productRef = B9181B739EB43DA5747D392C /* FacebookCore */; };
 		22EA1CB33A17DCC6FC82406D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F543015C899423D4B01CEB2E /* Assets.xcassets */; };
+		26FD0DAFB48EB06F26221DC4 /* AddDocumentUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5427227DADA96D6F376FF2 /* AddDocumentUITests.swift */; };
+		43D5D2985F53464EF37A173E /* polisa_photo.heic in Resources */ = {isa = PBXBuildFile; fileRef = DACE7A40D1E128F0D69A004D /* polisa_photo.heic */; };
 		6B2031D9196667F65FD358E5 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 37A6BA4C5AAF06904D9C889E /* InfoPlist.strings */; };
 		86A6000310FA931D64BB4C68 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A7F3482AB68B54C1CB27AB9D /* Localizable.strings */; };
+		8C426B9282679BE04C7E4EF2 /* polisa_screenshot.png in Resources */ = {isa = PBXBuildFile; fileRef = 048D8CEBE409C9221E649456 /* polisa_screenshot.png */; };
 		F7C33B50A94DA01F2E82C280 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 245434685F34A9A15B1AC406 /* libsqlite3.tbd */; };
 		FDE52B8D57A097A60A4CF366 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6C1F485E0CF8BB70C9DDD2 /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		AF7B34C8ADC44424B579AC0A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 242FB5348943441C388468CE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 78B53CC79860CBFC2F5543C6;
+			remoteInfo = iosApp;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		048D8CEBE409C9221E649456 /* polisa_screenshot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = polisa_screenshot.png; sourceTree = "<group>"; };
 		245434685F34A9A15B1AC406 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		323906AFB18147ABEDEBDB38 /* iosAppUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = iosAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3D5427227DADA96D6F376FF2 /* AddDocumentUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDocumentUITests.swift; sourceTree = "<group>"; };
 		648249AC0B89A7CB99CDEEB6 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		699B07C40BD723F87323A277 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		86038AE1032E284E79B32AD6 /* iosApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = iosApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -27,6 +43,7 @@
 		AE48325B78C4D984E844A424 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C117AD187833E2513BD2F553 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C35CD2C849A242A9332863DC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		DACE7A40D1E128F0D69A004D /* polisa_photo.heic */ = {isa = PBXFileReference; path = polisa_photo.heic; sourceTree = "<group>"; };
 		E3DB6A8DAA62B6331929A2D8 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E6559F0A3CFE28996C11B97C /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F543015C899423D4B01CEB2E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -57,6 +74,15 @@
 			path = iosApp;
 			sourceTree = "<group>";
 		};
+		31D50F4A2EFD96A40A85ABB7 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				DACE7A40D1E128F0D69A004D /* polisa_photo.heic */,
+				048D8CEBE409C9221E649456 /* polisa_screenshot.png */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		3666012298E772D226418813 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -70,6 +96,7 @@
 			children = (
 				1DB4B685CAEE8BEFEBBAEF94 /* iosApp */,
 				CF8B5820D148C621402A3EA6 /* iosApp */,
+				FC16215C5E8EEAF655CB992F /* iosAppUITests */,
 				3666012298E772D226418813 /* Frameworks */,
 				94C98B8B3A2BFC1966447269 /* Products */,
 			);
@@ -79,6 +106,7 @@
 			isa = PBXGroup;
 			children = (
 				86038AE1032E284E79B32AD6 /* iosApp.app */,
+				323906AFB18147ABEDEBDB38 /* iosAppUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -90,6 +118,15 @@
 			);
 			name = iosApp;
 			path = .;
+			sourceTree = "<group>";
+		};
+		FC16215C5E8EEAF655CB992F /* iosAppUITests */ = {
+			isa = PBXGroup;
+			children = (
+				3D5427227DADA96D6F376FF2 /* AddDocumentUITests.swift */,
+				31D50F4A2EFD96A40A85ABB7 /* Resources */,
+			);
+			path = iosAppUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -118,6 +155,25 @@
 			productReference = 86038AE1032E284E79B32AD6 /* iosApp.app */;
 			productType = "com.apple.product-type.application";
 		};
+		C6FCE5742C7A4D59A165E213 /* iosAppUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 23A9D56B778ED352702A9EC4 /* Build configuration list for PBXNativeTarget "iosAppUITests" */;
+			buildPhases = (
+				230C1ACAE727061B7F5FBD3D /* Sources */,
+				E429FCAA13AE411E6D207100 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1155A4D5B3A0F847BB943AC1 /* PBXTargetDependency */,
+			);
+			name = iosAppUITests;
+			packageProductDependencies = (
+			);
+			productName = iosAppUITests;
+			productReference = 323906AFB18147ABEDEBDB38 /* iosAppUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -130,6 +186,11 @@
 					78B53CC79860CBFC2F5543C6 = {
 						DevelopmentTeam = DMPH957CKJ;
 						ProvisioningStyle = Automatic;
+					};
+					C6FCE5742C7A4D59A165E213 = {
+						DevelopmentTeam = DMPH957CKJ;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 78B53CC79860CBFC2F5543C6;
 					};
 				};
 			};
@@ -154,6 +215,7 @@
 			projectRoot = "";
 			targets = (
 				78B53CC79860CBFC2F5543C6 /* iosApp */,
+				C6FCE5742C7A4D59A165E213 /* iosAppUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -166,6 +228,15 @@
 				22EA1CB33A17DCC6FC82406D /* Assets.xcassets in Resources */,
 				6B2031D9196667F65FD358E5 /* InfoPlist.strings in Resources */,
 				86A6000310FA931D64BB4C68 /* Localizable.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E429FCAA13AE411E6D207100 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43D5D2985F53464EF37A173E /* polisa_photo.heic in Resources */,
+				8C426B9282679BE04C7E4EF2 /* polisa_screenshot.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -208,7 +279,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ \"$PLATFORM_NAME\" = \"iphonesimulator\" ]; then\n  if [ \"$CURRENT_ARCH\" = \"arm64\" ]; then\n    KOTLIN_TARGET_LOWER=\"iosSimulatorArm64\"\n  else\n    KOTLIN_TARGET_LOWER=\"iosX64\"\n  fi\nelse\n  KOTLIN_TARGET_LOWER=\"iosArm64\"\nfi\nRESOURCES_SRC=\"$SRCROOT/../shared/build/kotlin-multiplatform-resources/aggregated-resources/${KOTLIN_TARGET_LOWER}\"\nRESOURCES_DST=\"${BUILT_PRODUCTS_DIR}/${CONTENTS_FOLDER_PATH}/compose-resources\"\nrm -rf \"$RESOURCES_DST\"\nif [ -d \"$RESOURCES_SRC\" ]; then\n  mkdir -p \"$RESOURCES_DST\"\n  cp -R \"$RESOURCES_SRC/.\" \"$RESOURCES_DST/\"\nfi\n";
+			shellScript = "if [ \"$PLATFORM_NAME\" = \"iphonesimulator\" ]; then\n  if [ \"$NATIVE_ARCH\" = \"arm64\" ]; then\n    KOTLIN_TARGET_LOWER=\"iosSimulatorArm64\"\n  else\n    KOTLIN_TARGET_LOWER=\"iosX64\"\n  fi\nelse\n  KOTLIN_TARGET_LOWER=\"iosArm64\"\nfi\nRESOURCES_SRC=\"$SRCROOT/../shared/build/kotlin-multiplatform-resources/aggregated-resources/${KOTLIN_TARGET_LOWER}\"\nRESOURCES_DST=\"${BUILT_PRODUCTS_DIR}/${CONTENTS_FOLDER_PATH}/compose-resources\"\nrm -rf \"$RESOURCES_DST\"\nif [ -d \"$RESOURCES_SRC\" ]; then\n  mkdir -p \"$RESOURCES_DST\"\n  cp -R \"$RESOURCES_SRC/.\" \"$RESOURCES_DST/\"\nfi\n";
 		};
 		8278ADF19FCC7AE5D49882E8 /* Build Shared Framework */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -227,11 +298,19 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ \"$PLATFORM_NAME\" = \"iphonesimulator\" ]; then\n  if [ \"$CURRENT_ARCH\" = \"arm64\" ]; then\n    KOTLIN_TARGET=\"IosSimulatorArm64\"\n    KOTLIN_TARGET_LOWER=\"iosSimulatorArm64\"\n  else\n    KOTLIN_TARGET=\"IosX64\"\n    KOTLIN_TARGET_LOWER=\"iosX64\"\n  fi\nelse\n  KOTLIN_TARGET=\"IosArm64\"\n  KOTLIN_TARGET_LOWER=\"iosArm64\"\nfi\ncd \"$SRCROOT/..\"\n./gradlew \":shared:linkDebugFramework${KOTLIN_TARGET}\" \":shared:${KOTLIN_TARGET_LOWER}AggregateResources\"\n";
+			shellScript = "# CURRENT_ARCH is undefined in script phases; NATIVE_ARCH is the host arch\nif [ \"$PLATFORM_NAME\" = \"iphonesimulator\" ]; then\n  if [ \"$NATIVE_ARCH\" = \"arm64\" ]; then\n    KOTLIN_TARGET=\"IosSimulatorArm64\"\n    KOTLIN_TARGET_LOWER=\"iosSimulatorArm64\"\n  else\n    KOTLIN_TARGET=\"IosX64\"\n    KOTLIN_TARGET_LOWER=\"iosX64\"\n  fi\nelse\n  KOTLIN_TARGET=\"IosArm64\"\n  KOTLIN_TARGET_LOWER=\"iosArm64\"\nfi\ncd \"$SRCROOT/..\"\n./gradlew \":shared:linkDebugFramework${KOTLIN_TARGET}\" \":shared:${KOTLIN_TARGET_LOWER}AggregateResources\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		230C1ACAE727061B7F5FBD3D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				26FD0DAFB48EB06F26221DC4 /* AddDocumentUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		297B59D9CE634556D6007C40 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -241,6 +320,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		1155A4D5B3A0F847BB943AC1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 78B53CC79860CBFC2F5543C6 /* iosApp */;
+			targetProxy = AF7B34C8ADC44424B579AC0A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		37A6BA4C5AAF06904D9C889E /* InfoPlist.strings */ = {
@@ -325,6 +412,27 @@
 			};
 			name = Release;
 		};
+		68B872497F35811E133D4018 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = DMPH957CKJ;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "UI tests add and remove test images in the photo library.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.stc.terminowoapp.uitests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = iosApp;
+			};
+			name = Release;
+		};
 		6C824A6EB4BAD43AE2A4BB29 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -389,6 +497,27 @@
 			};
 			name = Debug;
 		};
+		87B17B5399C9FFE987AA9050 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = DMPH957CKJ;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "UI tests add and remove test images in the photo library.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.stc.terminowoapp.uitests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = iosApp;
+			};
+			name = Debug;
+		};
 		9221A1FDC06803E8A2FC6E61 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9E952615EB910B75418E8063 /* Secrets.xcconfig */;
@@ -397,10 +526,16 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = DMPH957CKJ;
-				FRAMEWORK_SEARCH_PATHS = (
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
 					"$(inherited)",
 					"$(SRCROOT)/../shared/build/bin/iosArm64/debugFramework",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*][arch=arm64]" = (
+					"$(inherited)",
 					"$(SRCROOT)/../shared/build/bin/iosSimulatorArm64/debugFramework",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*][arch=x86_64]" = (
+					"$(inherited)",
 					"$(SRCROOT)/../shared/build/bin/iosX64/debugFramework",
 				);
 				INFOPLIST_FILE = iosApp/Info.plist;
@@ -428,10 +563,16 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = DMPH957CKJ;
-				FRAMEWORK_SEARCH_PATHS = (
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
 					"$(inherited)",
 					"$(SRCROOT)/../shared/build/bin/iosArm64/debugFramework",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*][arch=arm64]" = (
+					"$(inherited)",
 					"$(SRCROOT)/../shared/build/bin/iosSimulatorArm64/debugFramework",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*][arch=x86_64]" = (
+					"$(inherited)",
 					"$(SRCROOT)/../shared/build/bin/iosX64/debugFramework",
 				);
 				INFOPLIST_FILE = iosApp/Info.plist;
@@ -454,6 +595,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		23A9D56B778ED352702A9EC4 /* Build configuration list for PBXNativeTarget "iosAppUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				87B17B5399C9FFE987AA9050 /* Debug */,
+				68B872497F35811E133D4018 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		29DCA9F0B3A40325067EB163 /* Build configuration list for PBXNativeTarget "iosApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

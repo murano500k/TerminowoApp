@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.WindowCompat
 import com.google.android.gms.auth.api.identity.Identity
@@ -21,12 +22,20 @@ class MainActivity : ComponentActivity() {
 
     private var pendingPermissionCallback: ((Boolean) -> Unit)? = null
     private var pendingFilePickCallback: ((android.net.Uri?) -> Unit)? = null
+    private var pendingGalleryPickCallback: ((android.net.Uri?) -> Unit)? = null
 
     private val filePickerLauncher = registerForActivityResult(
         ActivityResultContracts.OpenDocument()
     ) { uri ->
         pendingFilePickCallback?.invoke(uri)
         pendingFilePickCallback = null
+    }
+
+    private val galleryPickerLauncher = registerForActivityResult(
+        ActivityResultContracts.PickVisualMedia()
+    ) { uri ->
+        pendingGalleryPickCallback?.invoke(uri)
+        pendingGalleryPickCallback = null
     }
 
     private val notificationPermissionLauncher = registerForActivityResult(
@@ -67,6 +76,12 @@ class MainActivity : ComponentActivity() {
             pendingFilePickCallback = onResult
             filePickerLauncher.launch(arrayOf("image/*", "application/pdf"))
         }
+        FilePicker.galleryLauncher = { onResult ->
+            pendingGalleryPickCallback = onResult
+            galleryPickerLauncher.launch(
+                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+            )
+        }
         if (FeatureFlags.GOOGLE_SIGN_IN_ENABLED) {
             GoogleAuthProvider.consentLauncher = { request: IntentSenderRequest ->
                 authConsentLauncher.launch(request)
@@ -97,6 +112,7 @@ class MainActivity : ComponentActivity() {
         super.onDestroy()
         NotificationPermissionHandler.permissionLauncher = null
         FilePicker.pickerLauncher = null
+        FilePicker.galleryLauncher = null
         if (FeatureFlags.GOOGLE_SIGN_IN_ENABLED) {
             GoogleAuthProvider.consentLauncher = null
         }
