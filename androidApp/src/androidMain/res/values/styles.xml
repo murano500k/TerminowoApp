@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.Terminowo" parent="android:Theme.Material.Light.NoActionBar" />
+    <!--
+        Edge-to-edge is configured through theme attributes instead of
+        androidx.activity.enableEdgeToEdge(), which calls Window.setStatusBarColor,
+        Window.setNavigationBarColor and LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+        (deprecated in Android 15 and flagged by Google Play).
+    -->
+    <style name="Theme.Terminowo" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@color/navigation_bar_scrim</item>
+    </style>
 </resources>

@@ -1,13 +1,14 @@
 package com.stc.terminowo
 
 import android.Manifest
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.WindowCompat
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.common.api.ApiException
 import com.stc.terminowo.App
@@ -71,9 +72,24 @@ class MainActivity : ComponentActivity() {
                 authConsentLauncher.launch(request)
             }
         }
-        enableEdgeToEdge()
+        setUpEdgeToEdge()
         setContent {
             App()
+        }
+    }
+
+    /**
+     * Draws behind the system bars without androidx.activity.enableEdgeToEdge(), whose
+     * pre-Android 15 fallbacks use APIs deprecated in Android 15 (flagged by Google Play).
+     * Bar colors and cutout mode come from the theme (see styles.xml in res/values, values-v29, values-v30).
+     */
+    private fun setUpEdgeToEdge() {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        val isDarkTheme = (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) ==
+            Configuration.UI_MODE_NIGHT_YES
+        WindowCompat.getInsetsController(window, window.decorView).apply {
+            isAppearanceLightStatusBars = !isDarkTheme
+            isAppearanceLightNavigationBars = !isDarkTheme
         }
     }
 
