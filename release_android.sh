@@ -4,8 +4,9 @@ set -euo pipefail
 GRADLE_FILE="androidApp/build.gradle.kts"
 
 # Extract current versionCode and versionName
-CURRENT_CODE=$(grep -oP 'versionCode\s*=\s*\K\d+' "$GRADLE_FILE")
-CURRENT_NAME=$(grep -oP 'versionName\s*=\s*"\K[^"]+' "$GRADLE_FILE")
+# (perl instead of grep -P / sed -i so this works with macOS BSD tools)
+CURRENT_CODE=$(perl -ne 'print $1 if /versionCode\s*=\s*(\d+)/' "$GRADLE_FILE")
+CURRENT_NAME=$(perl -ne 'print $1 if /versionName\s*=\s*"([^"]+)"/' "$GRADLE_FILE")
 
 echo "=== Current version: $CURRENT_NAME (code $CURRENT_CODE) ==="
 
@@ -28,8 +29,8 @@ fi
 echo "=== Bumping to: $NEW_NAME (code $NEW_CODE) ==="
 
 # Update build.gradle.kts
-sed -i "s/versionCode\s*=\s*$CURRENT_CODE/versionCode = $NEW_CODE/" "$GRADLE_FILE"
-sed -i "s/versionName\s*=\s*\"$CURRENT_NAME\"/versionName = \"$NEW_NAME\"/" "$GRADLE_FILE"
+perl -pi -e "s/versionCode\\s*=\\s*$CURRENT_CODE\\b/versionCode = $NEW_CODE/" "$GRADLE_FILE"
+perl -pi -e "s/versionName\\s*=\\s*\"\\Q$CURRENT_NAME\\E\"/versionName = \"$NEW_NAME\"/" "$GRADLE_FILE"
 
 echo "=== Building release bundle ==="
 ./gradlew :androidApp:bundleRelease

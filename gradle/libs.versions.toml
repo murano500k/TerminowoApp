@@ -17,7 +17,7 @@ compottie = "2.0.0-rc04"
 # Android
 android-compileSdk = "36"
 android-minSdk = "26"
-android-targetSdk = "35"
+android-targetSdk = "36"
 androidx-activityCompose = "1.9.3"
 play-services-auth = "21.3.0"
 timber = "5.0.1"
