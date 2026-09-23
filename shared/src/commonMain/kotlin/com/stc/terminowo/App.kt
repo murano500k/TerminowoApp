@@ -2,10 +2,12 @@ package com.stc.terminowo
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import com.stc.terminowo.domain.repository.AppSettingsRepository
+import com.stc.terminowo.domain.usecase.ResyncRemindersUseCase
 import com.stc.terminowo.presentation.consent.ConsentScreen
 import com.stc.terminowo.presentation.navigation.NavGraph
 import com.stc.terminowo.presentation.theme.TerminowoTheme
@@ -18,6 +20,12 @@ fun App() {
         val appSettingsRepository: AppSettingsRepository = koinInject()
         val termsAccepted by appSettingsRepository.isTermsAccepted().collectAsState(initial = null)
         val scope = rememberCoroutineScope()
+        val resyncReminders: ResyncRemindersUseCase = koinInject()
+
+        LaunchedEffect(Unit) {
+            // Refresh scheduled notification text in the current device language
+            try { resyncReminders() } catch (_: Exception) {}
+        }
 
         when (termsAccepted) {
             null -> { /* Loading — show nothing while reading DB */ }

@@ -1,4 +1,4 @@
 "notification_title" = "Строк документа спливає";
 "notification_expires_today" = "%@ закінчується сьогодні!";
 "notification_expires_tomorrow" = "%@ закінчується завтра!";
-"notification_expires_in_days" = "%1$@ закінчується через %2$d днів";
+"notification_expires_in_days" = "%1$@ закінчується через %2$@ днів";

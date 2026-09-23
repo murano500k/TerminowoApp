@@ -1,4 +1,4 @@
 "notification_title" = "Document Expiring Soon";
 "notification_expires_today" = "%@ expires today!";
 "notification_expires_tomorrow" = "%@ expires tomorrow!";
-"notification_expires_in_days" = "%1$@ expires in %2$d days";
+"notification_expires_in_days" = "%1$@ expires in %2$@ days";

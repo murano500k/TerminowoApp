@@ -28,19 +28,7 @@ actual class NotificationScheduler(
     }
 
     init {
-        createNotificationChannel()
-    }
-
-    private fun createNotificationChannel() {
-        val channel = NotificationChannel(
-            CHANNEL_ID,
-            context.getString(R.string.notification_channel_name),
-            NotificationManager.IMPORTANCE_HIGH
-        ).apply {
-            description = context.getString(R.string.notification_channel_description)
-        }
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.createNotificationChannel(channel)
+        createNotificationChannel(context)
     }
 
     actual fun scheduleReminder(
@@ -109,11 +97,31 @@ actual class NotificationScheduler(
     }
 }
 
+/**
+ * Creates the reminder channel, or refreshes its name/description in the current
+ * device language if it already exists (user-set importance is preserved).
+ */
+internal fun createNotificationChannel(context: Context) {
+    val channel = NotificationChannel(
+        NotificationScheduler.CHANNEL_ID,
+        context.getString(R.string.notification_channel_name),
+        NotificationManager.IMPORTANCE_HIGH
+    ).apply {
+        description = context.getString(R.string.notification_channel_description)
+    }
+    val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    notificationManager.createNotificationChannel(channel)
+}
+
 class ReminderReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val documentName = intent.getStringExtra(NotificationScheduler.EXTRA_DOC_NAME) ?: "Document"
         val daysBefore = intent.getIntExtra(NotificationScheduler.EXTRA_DAYS_BEFORE, 0)
         val notificationId = intent.getIntExtra(NotificationScheduler.EXTRA_NOTIFICATION_ID, 0)
+
+        // The alarm may wake a fresh process where NotificationScheduler was never
+        // created; without the channel the notification is silently dropped.
+        createNotificationChannel(context)
 
         val title = context.getString(R.string.notification_title)
         val body = when (daysBefore) {

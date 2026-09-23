@@ -43,8 +43,10 @@ actual class NotificationScheduler {
                     1 -> NSString.localizedUserNotificationStringForKey(
                         "notification_expires_tomorrow", listOf(documentName)
                     )
+                    // Passed as a string: localizedUserNotificationString only
+                    // substitutes object (%@) placeholders, %d renders empty.
                     else -> NSString.localizedUserNotificationStringForKey(
-                        "notification_expires_in_days", listOf(documentName, daysBefore)
+                        "notification_expires_in_days", listOf(documentName, daysBefore.toString())
                     )
                 }
             )

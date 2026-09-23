@@ -95,6 +95,16 @@ android {
         }
     }
 
+    bundle {
+        language {
+            // Keep all translations in the base APK. Otherwise Play installs only the
+            // device languages present at install time: Compose UI strings (assets)
+            // follow a later language change, but notification strings (res/values-*)
+            // fall back to English.
+            enableSplit = false
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
