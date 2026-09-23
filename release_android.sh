@@ -3,6 +3,18 @@ set -euo pipefail
 
 GRADLE_FILE="androidApp/build.gradle.kts"
 
+# Every release AAB is archived on the Linux build box.
+RELEASE_HOST="artem@192.168.1.16"
+RELEASE_HOST_IP="${RELEASE_HOST#*@}"
+RELEASE_DIR="/home/artem/projects/TerminowoApp/google_release"
+
+# True when one of this machine's IPv4 addresses is the release host's.
+is_release_host() {
+    { ip -4 -o addr show 2>/dev/null | awk '{print $4}'
+      ifconfig 2>/dev/null | awk '/inet /{print $2}'
+    } | cut -d/ -f1 | grep -qx "$RELEASE_HOST_IP"
+}
+
 # Extract current versionCode and versionName
 # (perl instead of grep -P / sed -i so this works with macOS BSD tools)
 CURRENT_CODE=$(perl -ne 'print $1 if /versionCode\s*=\s*(\d+)/' "$GRADLE_FILE")
@@ -37,11 +49,27 @@ echo "=== Building release bundle ==="
 
 AAB_PATH="androidApp/build/outputs/bundle/release/androidApp-release.aab"
 SIZE=$(du -h "$AAB_PATH" | cut -f1)
+ARCHIVE_NAME="terminowo-$NEW_NAME-$NEW_CODE.aab"
+
+echo ""
+echo "=== Archiving to $RELEASE_HOST:$RELEASE_DIR ==="
+if is_release_host; then
+    mkdir -p "$RELEASE_DIR"
+    cp "$AAB_PATH" "$RELEASE_DIR/$ARCHIVE_NAME"
+    ARCHIVED="$RELEASE_DIR/$ARCHIVE_NAME (local copy)"
+elif ssh -o ConnectTimeout=10 "$RELEASE_HOST" "mkdir -p '$RELEASE_DIR'" &&
+     scp -q "$AAB_PATH" "$RELEASE_HOST:$RELEASE_DIR/$ARCHIVE_NAME"; then
+    ARCHIVED="$RELEASE_HOST:$RELEASE_DIR/$ARCHIVE_NAME"
+else
+    # The bundle is still usable locally, so don't fail the release over it.
+    ARCHIVED="FAILED - copy it manually: scp $AAB_PATH $RELEASE_HOST:$RELEASE_DIR/$ARCHIVE_NAME"
+fi
 
 echo ""
 echo "=== Release bundle ready ==="
-echo "  Version: $NEW_NAME (code $NEW_CODE)"
-echo "  File:    $AAB_PATH ($SIZE)"
+echo "  Version:  $NEW_NAME (code $NEW_CODE)"
+echo "  File:     $AAB_PATH ($SIZE)"
+echo "  Archived: $ARCHIVED"
 echo ""
 echo "Upload to Google Play Console:"
 echo "  https://play.google.com/console"

@@ -31,7 +31,7 @@ Mobile app (Terminowo) that scans documents, extracts expiry dates via OCR, stor
 
 **UI tests (iOS)**: `./run_ios_uitests.sh` runs XCUITest on the connected device (needs Settings → Developer → Enable UI Automation, device unlocked). The app exposes Compose semantics to XCUITest only when launched with `-uiTesting`. Gallery tests add a test image to the photo library, verify it's the newest picker cell before tapping, and delete it afterwards. They don't run on the simulator from a sandboxed Claude Code session (SQLite in the simulator fails with EPERM).
 
-**Release (Android)**: Use `./release_android.sh` to build a signed AAB for Google Play. Auto-bumps `versionCode` and patches `versionName` (or pass explicit version as argument). Output: `androidApp/build/outputs/bundle/release/androidApp-release.aab`.
+**Release (Android)**: Use `./release_android.sh` to build a signed AAB for Google Play. Auto-bumps `versionCode` and patches `versionName` (or pass explicit version as argument). Output: `androidApp/build/outputs/bundle/release/androidApp-release.aab`. The script then archives it as `terminowo-<versionName>-<versionCode>.aab` in `artem@192.168.1.16:/home/artem/projects/TerminowoApp/google_release/` (via scp, or a local copy when run on that machine); a failed copy only prints a warning.
 
 **Release (iOS)**: Use `./publish_testflight.sh` to build a signed release IPA, archive it, and upload to App Store Connect.
 
@@ -108,7 +108,7 @@ Backend proxy (GCP Cloud Function) → `DocumentAiMapper` with 3-strategy date e
 - **CameraK requires compileSdk 36**: Transitively pulls `activity-compose:1.11.0`.
 - **iOS targets**: Configured in shared/build.gradle.kts but only compile on macOS (skipped on Linux).
 - **Alarmee removed**: Required Kotlin 2.2.20+. Notifications use native AlarmManager via expect/actual instead.
-- **ProGuard**: Release builds have minification enabled. Rules keep Ktor, kotlinx-serialization, and serializer classes (`androidApp/proguard-rules.pro`). **Bug**: ProGuard rules still reference `com.docscanner.**` instead of `com.stc.terminowo.**` — needs fixing before release builds work correctly.
+- **ProGuard**: Release builds have minification enabled. Rules keep Ktor, kotlinx-serialization, and serializer classes (`androidApp/proguard-rules.pro`).
 
 ## What's Not Done Yet
 
