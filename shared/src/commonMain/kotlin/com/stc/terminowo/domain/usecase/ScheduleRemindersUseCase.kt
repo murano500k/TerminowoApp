@@ -4,7 +4,6 @@ import com.stc.terminowo.domain.model.AppNotification
 import com.stc.terminowo.domain.model.Document
 import com.stc.terminowo.domain.repository.NotificationRepository
 import com.stc.terminowo.platform.NotificationScheduler
-import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atTime
@@ -16,12 +15,12 @@ import kotlinx.datetime.todayIn
 
 class ScheduleRemindersUseCase(
     private val notificationScheduler: NotificationScheduler,
-    private val notificationRepository: NotificationRepository
+    private val notificationRepository: NotificationRepository,
+    private val cancelReminders: CancelRemindersUseCase
 ) {
-    operator fun invoke(document: Document) {
-        // Cancel existing reminders and clear old notification records
-        notificationScheduler.cancelReminders(document.id)
-        runBlocking { notificationRepository.deleteByDocumentId(document.id) }
+    suspend operator fun invoke(document: Document) {
+        // Cancel existing reminders (including a previous custom date) and clear old notification records
+        cancelReminders(document.id, document.reminderDays)
 
         val expiryDate = document.expiryDate ?: return
         val tz = TimeZone.currentSystemDefault()
@@ -52,20 +51,18 @@ class ScheduleRemindersUseCase(
             )
 
             // Record notification for in-app display
-            runBlocking {
-                notificationRepository.insertNotification(
-                    AppNotification(
-                        id = "${document.id}_$daysBefore",
-                        documentId = document.id,
-                        documentName = document.name,
-                        category = document.category,
-                        expiryDate = document.expiryDate,
-                        daysBefore = daysBefore,
-                        scheduledAt = scheduledDateTime,
-                        isRead = false
-                    )
+            notificationRepository.insertNotification(
+                AppNotification(
+                    id = "${document.id}_$daysBefore",
+                    documentId = document.id,
+                    documentName = document.name,
+                    category = document.category,
+                    expiryDate = document.expiryDate,
+                    daysBefore = daysBefore,
+                    scheduledAt = scheduledDateTime,
+                    isRead = false
                 )
-            }
+            )
         }
     }
 }

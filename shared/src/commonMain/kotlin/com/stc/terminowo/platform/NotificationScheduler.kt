@@ -12,6 +12,7 @@ expect class NotificationScheduler {
         daysBefore: Int
     )
 
-    fun cancelReminders(documentId: String)
+    /** Cancels the standard intervals plus [reminderDays] (e.g. custom-date reminders). */
+    fun cancelReminders(documentId: String, reminderDays: Collection<Int>)
     fun cancelAllReminders()
 }

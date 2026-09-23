@@ -60,6 +60,14 @@ class NotificationRepositoryImpl(
         }
     }
 
+    override suspend fun getScheduledDaysBefore(documentId: String): List<Int> {
+        return withContext(Dispatchers.Default) {
+            queries.getNotificationDaysBeforeByDocumentId(documentId)
+                .executeAsList()
+                .map { it.toInt() }
+        }
+    }
+
     override suspend fun deleteByDocumentId(documentId: String) {
         withContext(Dispatchers.Default) {
             queries.deleteNotificationsByDocumentId(documentId)

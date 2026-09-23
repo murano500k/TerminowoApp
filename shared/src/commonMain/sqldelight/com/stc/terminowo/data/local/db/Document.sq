@@ -78,6 +78,11 @@ UPDATE NotificationEntity
 SET isRead = 1
 WHERE isRead = 0 AND scheduledAt <= ?;
 
+getNotificationDaysBeforeByDocumentId:
+SELECT DISTINCT daysBefore
+FROM NotificationEntity
+WHERE documentId = ?;
+
 deleteNotificationsByDocumentId:
 DELETE FROM NotificationEntity
 WHERE documentId = ?;

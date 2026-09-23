@@ -8,5 +8,6 @@ interface NotificationRepository {
     fun getUnreadCount(): Flow<Long>
     suspend fun insertNotification(notification: AppNotification)
     suspend fun markAllAsRead()
+    suspend fun getScheduledDaysBefore(documentId: String): List<Int>
     suspend fun deleteByDocumentId(documentId: String)
 }

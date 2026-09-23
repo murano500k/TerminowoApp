@@ -10,6 +10,7 @@ import kotlinx.datetime.daysUntil
 import kotlinx.datetime.minus
 import kotlinx.datetime.todayIn
 import com.stc.terminowo.domain.repository.DocumentRepository
+import com.stc.terminowo.domain.usecase.CancelRemindersUseCase
 import com.stc.terminowo.domain.usecase.ScheduleRemindersUseCase
 import com.stc.terminowo.platform.NotificationPermissionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -54,6 +55,7 @@ data class DetailUiState(
 class DetailViewModel(
     private val documentRepository: DocumentRepository,
     private val scheduleRemindersUseCase: ScheduleRemindersUseCase,
+    private val cancelRemindersUseCase: CancelRemindersUseCase,
     private val notificationPermissionHandler: NotificationPermissionHandler
 ) : ViewModel() {
 
@@ -231,6 +233,7 @@ class DetailViewModel(
 
         viewModelScope.launch {
             try {
+                try { cancelRemindersUseCase(state.documentId) } catch (_: Exception) {}
                 documentRepository.deleteDocument(state.documentId)
                 _uiState.update { it.copy(isDeleting = false, deletedSuccessfully = true) }
             } catch (e: Exception) {

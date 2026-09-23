@@ -77,8 +77,10 @@ actual class NotificationScheduler {
         center.addNotificationRequest(request, withCompletionHandler = null)
     }
 
-    actual fun cancelReminders(documentId: String) {
-        val identifiers = ReminderInterval.entries.map { "${documentId}_${it.days}" }
+    actual fun cancelReminders(documentId: String, reminderDays: Collection<Int>) {
+        val identifiers = (ReminderInterval.entries.map { it.days } + reminderDays)
+            .distinct()
+            .map { "${documentId}_$it" }
         center.removePendingNotificationRequestsWithIdentifiers(identifiers)
     }
 

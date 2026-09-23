@@ -1,5 +1,9 @@
 package com.stc.terminowo.presentation.components
 
+import terminowo.shared.generated.resources.delete
+import terminowo.shared.generated.resources.Res
+import org.jetbrains.compose.resources.stringResource
+import androidx.compose.ui.platform.testTag
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
@@ -30,6 +34,7 @@ import kotlin.math.roundToInt
 internal fun SwipeToRevealDeleteItem(
     onDeleteClick: () -> Unit,
     modifier: Modifier = Modifier,
+    deleteButtonTestTag: String = "swipeDelete",
     content: @Composable () -> Unit
 ) {
     val revealWidthDp = 72.dp
@@ -54,11 +59,11 @@ internal fun SwipeToRevealDeleteItem(
                     scope.launch { offsetX.animateTo(0f) }
                     onDeleteClick()
                 },
-                modifier = Modifier.width(revealWidthDp)
+                modifier = Modifier.width(revealWidthDp).testTag(deleteButtonTestTag)
             ) {
                 Icon(
                     imageVector = Icons.Default.Delete,
-                    contentDescription = null,
+                    contentDescription = stringResource(Res.string.delete),
                     tint = Color.White
                 )
             }
