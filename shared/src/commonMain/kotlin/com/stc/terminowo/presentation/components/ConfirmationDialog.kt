@@ -1,5 +1,7 @@
 package com.stc.terminowo.presentation.components
 
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -22,7 +24,7 @@ fun ConfirmationDialog(
         title = { Text(title) },
         text = { Text(text) },
         confirmButton = {
-            TextButton(onClick = onConfirm) {
+            TextButton(onClick = onConfirm, modifier = Modifier.testTag("confirmDialogConfirm")) {
                 Text(stringResource(Res.string.delete), color = MaterialTheme.colorScheme.error)
             }
         },

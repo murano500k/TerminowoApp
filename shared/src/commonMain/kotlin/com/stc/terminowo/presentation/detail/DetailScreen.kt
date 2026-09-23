@@ -1,5 +1,8 @@
 package com.stc.terminowo.presentation.detail
 
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.ui.platform.testTag
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -222,10 +225,10 @@ fun DetailScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .clickable(
-                    indication = null,
-                    interactionSource = remember { MutableInteractionSource() }
-                ) { focusManager.clearFocus() }
+                // Tap outside a text field dismisses the keyboard. Not clickable():
+                // that makes the whole form one accessibility button and hides its
+                // controls from VoiceOver and UI tests on iOS.
+                .pointerInput(Unit) { detectTapGestures { focusManager.clearFocus() } }
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp)
         ) {
@@ -453,6 +456,7 @@ fun DetailScreen(
                 Switch(
                     checked = uiState.customReminderEnabled,
                     onCheckedChange = { viewModel.toggleCustomReminder(it) },
+                    modifier = Modifier.testTag("customReminderSwitch"),
                     enabled = uiState.expiryDate != null,
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = Color.White,
@@ -483,6 +487,7 @@ fun DetailScreen(
                     Box(
                         modifier = Modifier
                             .matchParentSize()
+                            .testTag("customReminderDateField")
                             .clickable(
                                 indication = null,
                                 interactionSource = remember { MutableInteractionSource() }
@@ -517,7 +522,7 @@ fun DetailScreen(
                                     viewModel.updateCustomReminderDate(date)
                                 }
                                 showCustomDatePicker = false
-                            }) {
+                            }, modifier = Modifier.testTag("customDatePickerConfirm")) {
                                 Text(stringResource(Res.string.confirm))
                             }
                         },
@@ -587,7 +592,7 @@ fun DetailScreen(
             // Save button
             Button(
                 onClick = { viewModel.save() },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().testTag("saveDocumentButton"),
                 enabled = !uiState.isSaving && uiState.name.isNotBlank() && uiState.expiryDate != null,
                 shape = RoundedCornerShape(24.dp)
             ) {
@@ -598,7 +603,7 @@ fun DetailScreen(
                 Spacer(modifier = Modifier.height(12.dp))
                 OutlinedButton(
                     onClick = { viewModel.delete() },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().testTag("deleteDocumentButton"),
                     enabled = !uiState.isDeleting,
                     shape = RoundedCornerShape(24.dp),
                     colors = ButtonDefaults.outlinedButtonColors(

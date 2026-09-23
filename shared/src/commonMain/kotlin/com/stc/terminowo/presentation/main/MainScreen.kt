@@ -1,5 +1,6 @@
 package com.stc.terminowo.presentation.main
 
+import androidx.compose.ui.platform.testTag
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -140,7 +141,8 @@ fun DocumentsScreen(
                                     onClick = {
                                         onDismiss()
                                         viewModel.requestDeleteAll()
-                                    }
+                                    },
+                                    modifier = Modifier.testTag("menuDeleteAll")
                                 )
                             }
                         )
@@ -221,7 +223,8 @@ fun DocumentsScreen(
                 items(items = uiState.documents, key = { it.id }) { document ->
                     SwipeToRevealDeleteItem(
                         onDeleteClick = { viewModel.requestDelete(document) },
-                        modifier = Modifier.animateItem()
+                        modifier = Modifier.animateItem(),
+                        deleteButtonTestTag = "swipeDelete_${document.id}"
                     ) {
                         DocumentListItem(
                             document = document,

@@ -1,5 +1,7 @@
 package com.stc.terminowo.presentation.components
 
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.material.icons.Icons
@@ -29,7 +31,7 @@ fun SettingsMenu(
     val uriHandler = LocalUriHandler.current
 
     Box {
-        IconButton(onClick = { expanded = true }) {
+        IconButton(onClick = { expanded = true }, modifier = Modifier.testTag("settingsMenu")) {
             Icon(
                 imageVector = Icons.Default.MoreVert,
                 contentDescription = stringResource(Res.string.settings)

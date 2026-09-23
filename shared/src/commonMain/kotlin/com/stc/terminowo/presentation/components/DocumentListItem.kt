@@ -1,5 +1,6 @@
 package com.stc.terminowo.presentation.components
 
+import androidx.compose.ui.platform.testTag
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -53,6 +54,7 @@ fun DocumentListItem(
     Card(
         modifier = modifier
             .fillMaxWidth()
+            .testTag("document_${document.id}")
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),

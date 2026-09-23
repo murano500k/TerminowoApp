@@ -15,6 +15,7 @@
 		86A6000310FA931D64BB4C68 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A7F3482AB68B54C1CB27AB9D /* Localizable.strings */; };
 		8C426B9282679BE04C7E4EF2 /* polisa_screenshot.png in Resources */ = {isa = PBXBuildFile; fileRef = 048D8CEBE409C9221E649456 /* polisa_screenshot.png */; };
 		F7C33B50A94DA01F2E82C280 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 245434685F34A9A15B1AC406 /* libsqlite3.tbd */; };
+		FBC1EC6F236C31B898AD9F6F /* ReminderCancellationUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630F09E99913DDF7F0096230 /* ReminderCancellationUITests.swift */; };
 		FDE52B8D57A097A60A4CF366 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6C1F485E0CF8BB70C9DDD2 /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
@@ -33,6 +34,7 @@
 		245434685F34A9A15B1AC406 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		323906AFB18147ABEDEBDB38 /* iosAppUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = iosAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D5427227DADA96D6F376FF2 /* AddDocumentUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDocumentUITests.swift; sourceTree = "<group>"; };
+		630F09E99913DDF7F0096230 /* ReminderCancellationUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderCancellationUITests.swift; sourceTree = "<group>"; };
 		648249AC0B89A7CB99CDEEB6 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		699B07C40BD723F87323A277 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		86038AE1032E284E79B32AD6 /* iosApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = iosApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -124,6 +126,7 @@
 			isa = PBXGroup;
 			children = (
 				3D5427227DADA96D6F376FF2 /* AddDocumentUITests.swift */,
+				630F09E99913DDF7F0096230 /* ReminderCancellationUITests.swift */,
 				31D50F4A2EFD96A40A85ABB7 /* Resources */,
 			);
 			path = iosAppUITests;
@@ -308,6 +311,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				26FD0DAFB48EB06F26221DC4 /* AddDocumentUITests.swift in Sources */,
+				FBC1EC6F236C31B898AD9F6F /* ReminderCancellationUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
