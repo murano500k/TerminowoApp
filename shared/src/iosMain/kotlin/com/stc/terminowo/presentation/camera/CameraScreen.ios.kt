@@ -11,6 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.stc.terminowo.platform.ImageStorage
+import com.stc.terminowo.platform.topViewController
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.addressOf
 import kotlinx.cinterop.usePinned
@@ -20,7 +21,6 @@ import org.koin.compose.koinInject
 import platform.Foundation.NSData
 import platform.Foundation.NSNumber
 import platform.Foundation.setValue
-import platform.UIKit.UIApplication
 import platform.UIKit.UIImage
 import platform.UIKit.UIImageJPEGRepresentation
 import platform.UIKit.UIImagePickerController
@@ -50,7 +50,7 @@ actual fun CameraScreen(
     val delegateHolder = remember { DelegateHolder() }
 
     LaunchedEffect(Unit) {
-        val rootVC = UIApplication.sharedApplication.keyWindow?.rootViewController
+        val rootVC = topViewController()
         if (rootVC == null) {
             onBack()
             return@LaunchedEffect

@@ -158,24 +158,22 @@ fun NavGraph() {
                     }
                 )
 
-                if (isIos) {
-                    AddDocumentOption(
-                        icon = Icons.Default.Image,
-                        label = stringResource(Res.string.pick_from_gallery),
-                        onClick = {
-                            showAddSheet = false
-                            scope.launch {
-                                val picked = filePicker.pickPhotoFromGallery() ?: return@launch
-                                val timestamp = DateTimeClock.System.now().toEpochMilliseconds()
-                                val fileName = "gallery_$timestamp.jpg"
-                                val savedPath = imageStorage.saveImage(picked.bytes, fileName)
-                                navController.navigate(
-                                    Screen.ImagePreview(savedPath, picked.mimeType)
-                                )
-                            }
+                AddDocumentOption(
+                    icon = Icons.Default.Image,
+                    label = stringResource(Res.string.pick_from_gallery),
+                    onClick = {
+                        showAddSheet = false
+                        scope.launch {
+                            val picked = filePicker.pickPhotoFromGallery() ?: return@launch
+                            val timestamp = DateTimeClock.System.now().toEpochMilliseconds()
+                            val fileName = "gallery_$timestamp.jpg"
+                            val savedPath = imageStorage.saveImage(picked.bytes, fileName)
+                            navController.navigate(
+                                Screen.ImagePreview(savedPath, picked.mimeType)
+                            )
                         }
-                    )
-                }
+                    }
+                )
 
                 AddDocumentOption(
                     icon = Icons.Default.Description,
