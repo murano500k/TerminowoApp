@@ -19,6 +19,7 @@
     <string name="category">Category</string>
     <string name="expiry_date_format">Expiry Date</string>
     <string name="select_expiry_date">Select Expiry Date</string>
+    <string name="date_placeholder">dd/mm/yyyy</string>
     <string name="expiry_date_required">Expiry date is required</string>
     <string name="ocr_confidence">OCR confidence: %1$d%</string>
     <string name="reminders">Reminders</string>
@@ -166,8 +167,14 @@
     <string name="time_ago_just_now">just now</string>
     <string name="time_ago_minutes">%1$d min ago</string>
     <string name="time_ago_hours">%1$d h ago</string>
-    <string name="time_ago_days">%1$d days ago</string>
-    <string name="time_ago_weeks">%1$d weeks ago</string>
+    <plurals name="time_ago_days">
+        <item quantity="one">%1$d day ago</item>
+        <item quantity="other">%1$d days ago</item>
+    </plurals>
+    <plurals name="time_ago_weeks">
+        <item quantity="one">%1$d week ago</item>
+        <item quantity="other">%1$d weeks ago</item>
+    </plurals>
 
     <!-- Consent / Legal -->
     <string name="consent_title">Terms &amp; Privacy Policy</string>

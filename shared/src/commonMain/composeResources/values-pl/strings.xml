@@ -19,11 +19,12 @@
     <string name="category">Kategoria</string>
     <string name="expiry_date_format">Data wa\u017Cno\u015Bci</string>
     <string name="select_expiry_date">Wybierz dat\u0119 wa\u017Cno\u015Bci</string>
+    <string name="date_placeholder">dd/mm/rrrr</string>
     <string name="expiry_date_required">Data wa\u017Cno\u015Bci jest wymagana</string>
     <string name="ocr_confidence">Pewno\u015B\u0107 OCR: %1$d%</string>
     <string name="reminders">Przypomnienia</string>
     <string name="save_document">Zapisz dokument</string>
-    <string name="document_added">%1$s dodano</string>
+    <string name="document_added">Dodano: %1$s</string>
     <string name="update_document">Aktualizuj dokument</string>
     <string name="delete_document">Usu\u0144 dokument</string>
     <string name="document_image">Zdj\u0119cie dokumentu</string>
@@ -31,14 +32,14 @@
     <string name="my_comments">Moje komentarze</string>
 
     <!-- Camera screen -->
-    <string name="camera_permission_required">Wymagane uprawnienie do kamery, aby skanowa\u0107 dokumenty.</string>
+    <string name="camera_permission_required">Aby skanowa\u0107 dokumenty, potrzebny jest dost\u0119p do aparatu.</string>
     <string name="go_back">Wr\u00F3\u0107</string>
     <string name="failed_read_captured_image">Nie uda\u0142o si\u0119 odczyta\u0107 zdj\u0119cia</string>
-    <string name="capture_failed">B\u0142\u0105d przechwytywania</string>
+    <string name="capture_failed">Nie uda\u0142o si\u0119 zrobi\u0107 zdj\u0119cia</string>
     <string name="scan">Skanuj</string>
 
     <!-- Image preview screen -->
-    <string name="review_image">Przegl\u0105d zdj\u0119cia</string>
+    <string name="review_image">Podgl\u0105d zdj\u0119cia</string>
     <string name="captured_document">Zeskanowany dokument</string>
     <string name="failed_load_image">Nie uda\u0142o si\u0119 za\u0142adowa\u0107 zdj\u0119cia</string>
     <string name="retake">Powt\u00F3rz</string>
@@ -129,8 +130,8 @@
     <!-- Empty states per filter -->
     <string name="empty_list_title">Twoja lista jest pusta</string>
     <string name="empty_list_subtitle">Ka\u017Cdy dodany dokument pojawi si\u0119 tutaj \u2014 paszport, ubezpieczenie, przegl\u0105d auta i wszystko inne.</string>
-    <string name="empty_active_title">\u017Badnych aktywnych dokument\u00F3w</string>
-    <string name="empty_active_subtitle">Dokumenty z wa\u017Cno\u015Bci\u0105 powy\u017Cej 30 dni pojawi\u0105 si\u0119 w tej zak\u0142adce.</string>
+    <string name="empty_active_title">Brak aktywnych dokument\u00F3w</string>
+    <string name="empty_active_subtitle">Dokumenty wa\u017Cne d\u0142u\u017Cej ni\u017C 30 dni pojawi\u0105 si\u0119 w tej zak\u0142adce.</string>
     <string name="empty_urgent_title">Nic pilnego \u2014 \u015Bwietnie!</string>
     <string name="empty_urgent_subtitle">Dokumenty wygasaj\u0105ce w ci\u0105gu 30 dni pojawi\u0105 si\u0119 tutaj.</string>
     <string name="empty_expired_title">Brak wygas\u0142ych dokument\u00F3w</string>
@@ -150,7 +151,7 @@
     <string name="status_over_30_days">> 30 dni</string>
     <string name="upcoming_deadlines">Zbli\u017Caj\u0105ce si\u0119 terminy</string>
     <string name="all_documents_ok">Wszystkie dokumenty s\u0105 aktualne</string>
-    <string name="all_documents_ok_subtitle">Daj zna\u0107, kiedy co\u015B b\u0119dzie wymaga\u0142o uwagi.</string>
+    <string name="all_documents_ok_subtitle">Damy Ci zna\u0107, gdy co\u015B b\u0119dzie wymaga\u0142o uwagi.</string>
     <string name="no_documents_pulpit_title">Nie masz jeszcze \u017Cadnych dokument\u00F3w</string>
     <string name="no_documents_pulpit_subtitle">Dodaj pierwszy, \u017Ceby \u015Bledzi\u0107 terminy i dostawa\u0107 przypomnienia na czas.</string>
     <string name="add_document_button">+ Dodaj dokument</string>
@@ -163,11 +164,21 @@
     <string name="notifications_title">Powiadomienia</string>
     <string name="notifications_empty">Brak powiadomie\u0144</string>
     <string name="notifications_expires_label">Wygasa</string>
-    <string name="time_ago_just_now">w\u0142a\u015Bnie</string>
+    <string name="time_ago_just_now">przed chwil\u0105</string>
     <string name="time_ago_minutes">%1$d min temu</string>
     <string name="time_ago_hours">%1$d godz. temu</string>
-    <string name="time_ago_days">%1$d dni temu</string>
-    <string name="time_ago_weeks">%1$d tyg. temu</string>
+    <plurals name="time_ago_days">
+        <item quantity="one">%1$d dzie\u0144 temu</item>
+        <item quantity="few">%1$d dni temu</item>
+        <item quantity="many">%1$d dni temu</item>
+        <item quantity="other">%1$d dni temu</item>
+    </plurals>
+    <plurals name="time_ago_weeks">
+        <item quantity="one">%1$d tydzie\u0144 temu</item>
+        <item quantity="few">%1$d tygodnie temu</item>
+        <item quantity="many">%1$d tygodni temu</item>
+        <item quantity="other">%1$d tygodni temu</item>
+    </plurals>
 
     <!-- Consent / Legal -->
     <string name="consent_title">Warunki i polityka prywatno\u015Bci</string>
@@ -176,7 +187,7 @@
     <string name="consent_accept_tos">Akceptuj\u0119 Regulamin</string>
     <string name="consent_accept_privacy">Akceptuj\u0119 Polityk\u0119 prywatno\u015Bci</string>
     <string name="consent_continue">Dalej</string>
-    <string name="consent_read_full">Pe\u0142na wersja</string>
+    <string name="consent_read_full">Przeczytaj pe\u0142n\u0105 wersj\u0119</string>
     <string name="menu_terms_of_service">Regulamin</string>
     <string name="menu_privacy_policy">Polityka prywatno\u015Bci</string>
 

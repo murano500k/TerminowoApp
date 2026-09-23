@@ -127,7 +127,9 @@ class ReminderReceiver : BroadcastReceiver() {
         val body = when (daysBefore) {
             0 -> context.getString(R.string.notification_expires_today, documentName)
             1 -> context.getString(R.string.notification_expires_tomorrow, documentName)
-            else -> context.getString(R.string.notification_expires_in_days, documentName, daysBefore)
+            else -> context.resources.getQuantityString(
+                R.plurals.notification_expires_in_days, daysBefore, documentName, daysBefore
+            )
         }
 
         val notification = NotificationCompat.Builder(context, NotificationScheduler.CHANNEL_ID)

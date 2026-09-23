@@ -47,6 +47,7 @@ import kotlinx.datetime.Clock as DateTimeClock
 import kotlinx.datetime.daysUntil
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.datetime.todayIn
+import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import terminowo.shared.generated.resources.Res
@@ -218,7 +219,7 @@ private fun formatTimeAgo(dateTime: LocalDateTime): String {
                 else -> stringResource(Res.string.time_ago_hours, hoursDiff)
             }
         }
-        daysDiff in 1..6 -> stringResource(Res.string.time_ago_days, daysDiff)
-        else -> stringResource(Res.string.time_ago_weeks, daysDiff / 7)
+        daysDiff in 1..6 -> pluralStringResource(Res.plurals.time_ago_days, daysDiff, daysDiff)
+        else -> (daysDiff / 7).let { pluralStringResource(Res.plurals.time_ago_weeks, it, it) }
     }
 }

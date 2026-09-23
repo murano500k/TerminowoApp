@@ -4,5 +4,8 @@
     <string name="notification_title">Document Expiring Soon</string>
     <string name="notification_expires_today">%1$s expires today!</string>
     <string name="notification_expires_tomorrow">%1$s expires tomorrow!</string>
-    <string name="notification_expires_in_days">%1$s expires in %2$d days</string>
+    <plurals name="notification_expires_in_days">
+        <item quantity="one">%1$s expires in %2$d day</item>
+        <item quantity="other">%1$s expires in %2$d days</item>
+    </plurals>
 </resources>

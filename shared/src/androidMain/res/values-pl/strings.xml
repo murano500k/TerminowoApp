@@ -4,5 +4,10 @@
     <string name="notification_title">Dokument wkr\u00F3tce wygasa</string>
     <string name="notification_expires_today">%1$s wygasa dzisiaj!</string>
     <string name="notification_expires_tomorrow">%1$s wygasa jutro!</string>
-    <string name="notification_expires_in_days">%1$s wygasa za %2$d dni</string>
+    <plurals name="notification_expires_in_days">
+        <item quantity="one">%1$s wygasa za %2$d dzie\u0144</item>
+        <item quantity="few">%1$s wygasa za %2$d dni</item>
+        <item quantity="many">%1$s wygasa za %2$d dni</item>
+        <item quantity="other">%1$s wygasa za %2$d dni</item>
+    </plurals>
 </resources>

@@ -46,7 +46,7 @@ actual class NotificationScheduler {
                     // Passed as a string: localizedUserNotificationString only
                     // substitutes object (%@) placeholders, %d renders empty.
                     else -> NSString.localizedUserNotificationStringForKey(
-                        "notification_expires_in_days", listOf(documentName, daysBefore.toString())
+                        expiresInDaysKey(daysBefore), listOf(documentName, daysBefore.toString())
                     )
                 }
             )
@@ -84,5 +84,19 @@ actual class NotificationScheduler {
 
     actual fun cancelAllReminders() {
         center.removeAllPendingNotificationRequests()
+    }
+}
+
+// localizedUserNotificationString has no plural support and resolves the
+// language at delivery time, so pick a key by Slavic plural form (ru/uk/pl);
+// daysBefore >= 2 here, so "one" only covers 21, 31, ... Each language's
+// Localizable.strings fills all three keys with its own wording.
+private fun expiresInDaysKey(days: Int): String {
+    val mod10 = days % 10
+    val mod100 = days % 100
+    return when {
+        mod10 == 1 && mod100 != 11 -> "notification_expires_in_days_one"
+        mod10 in 2..4 && mod100 !in 12..14 -> "notification_expires_in_days_few"
+        else -> "notification_expires_in_days"
     }
 }

@@ -2,3 +2,5 @@
 "notification_expires_today" = "%@ истекает сегодня!";
 "notification_expires_tomorrow" = "%@ истекает завтра!";
 "notification_expires_in_days" = "%1$@ истекает через %2$@ дней";
+"notification_expires_in_days_one" = "%1$@ истекает через %2$@ день";
+"notification_expires_in_days_few" = "%1$@ истекает через %2$@ дня";

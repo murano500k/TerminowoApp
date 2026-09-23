@@ -93,6 +93,7 @@ import terminowo.shared.generated.resources.category
 import terminowo.shared.generated.resources.close
 import terminowo.shared.generated.resources.confirm
 import terminowo.shared.generated.resources.cancel
+import terminowo.shared.generated.resources.date_placeholder
 import terminowo.shared.generated.resources.default_document_name
 import terminowo.shared.generated.resources.delete_document
 import terminowo.shared.generated.resources.document_details
@@ -340,7 +341,7 @@ fun DetailScreen(
                     onValueChange = {},
                     readOnly = true,
                     label = { Text(stringResource(Res.string.expiry_date_format)) },
-                    placeholder = { Text("dd/mm/yyyy") },
+                    placeholder = { Text(stringResource(Res.string.date_placeholder)) },
                     modifier = Modifier.fillMaxWidth(),
                     isError = uiState.expiryDate == null,
                     supportingText = {
@@ -476,7 +477,7 @@ fun DetailScreen(
                         onValueChange = {},
                         readOnly = true,
                         label = { Text(stringResource(Res.string.reminder_custom_date)) },
-                        placeholder = { Text("dd/mm/yyyy") },
+                        placeholder = { Text(stringResource(Res.string.date_placeholder)) },
                         modifier = Modifier.fillMaxWidth()
                     )
                     Box(
