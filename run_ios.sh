@@ -34,6 +34,7 @@ xcodebuild \
     -configuration Debug \
     -destination "id=$device_id" \
     -derivedDataPath "$IOS_PROJECT_DIR/build" \
+    -allowProvisioningUpdates \
     build 2>&1 | tail -20
 
 echo ""
