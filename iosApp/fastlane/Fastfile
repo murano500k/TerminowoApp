@@ -4,6 +4,7 @@ platform :ios do
   desc "Submit the latest build to App Store with release notes; auto-release on approval."
   lane :publish do
     notes = ENV["ASC_RELEASE_NOTES"] || "Bug fixes and improvements"
+    notes_pl = ENV["ASC_RELEASE_NOTES_PL"] || notes
     version = ENV["ASC_APP_VERSION"]
     build   = ENV["ASC_BUILD_NUMBER"]
 
@@ -29,7 +30,7 @@ platform :ios do
       precheck_include_in_app_purchases: false,
       release_notes: {
         "en-US" => notes,
-        "pl"    => notes
+        "pl"    => notes_pl
       }
     )
   end

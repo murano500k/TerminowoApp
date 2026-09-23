@@ -13,6 +13,7 @@ set -euo pipefail
 #   ./publish_testflight.sh --publish                # also submit to App Store for review
 #   ./publish_testflight.sh --publish-only           # submit existing build to App Store (no rebuild)
 #   ./publish_testflight.sh --publish --release-notes "What's new..."
+#   ./publish_testflight.sh --publish --release-notes "What's new..." --release-notes-pl "Co nowego..."
 #
 # Required env vars (loaded from ~/.zshrc):
 #   KEYCHAIN_PASSWORD       — for codesigning
@@ -64,6 +65,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         --release-notes)
             RELEASE_NOTES="$2"
+            shift 2
+            ;;
+        --release-notes-pl)
+            RELEASE_NOTES_PL="$2"
             shift 2
             ;;
         -h|--help)
@@ -210,6 +215,7 @@ if [[ "$PUBLISH" == true ]]; then
     ASC_APP_VERSION="$MARKETING_VERSION" \
     ASC_BUILD_NUMBER="$NEW_BUILD" \
     ASC_RELEASE_NOTES="$RELEASE_NOTES" \
+    ASC_RELEASE_NOTES_PL="${RELEASE_NOTES_PL:-$RELEASE_NOTES}" \
     ASC_API_KEY_ID="$ASC_API_KEY_ID" \
     ASC_API_ISSUER_ID="$ASC_API_ISSUER_ID" \
     ASC_API_KEY_PATH="$ASC_KEY_PATH" \
