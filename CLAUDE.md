@@ -16,6 +16,8 @@ Mobile app (Terminowo) that scans documents, extracts expiry dates via OCR, stor
 ./gradlew :androidApp:installDebug                     # Install on device/emulator
 ./run_android.sh                                       # Build + install + launch Android (checks for connected device)
 ./run_ios.sh                                           # Build + install + launch iOS (checks for connected iPhone/iPad)
+./run_ios_uitests.sh                                   # Run iOS UI tests (iosAppUITests) on the connected iPhone/iPad
+./run_ios_uitests.sh AddDocumentUITests/testGalleryHeicPhotoIsScanned  # Single UI test
 ./release_android.sh                                   # Bump version + build signed release AAB for Google Play
 ./release_android.sh 1.2.0                             # Same, but with explicit versionName
 ./publish_testflight.sh                                # iOS: auto-bump build + upload to TestFlight
@@ -26,6 +28,8 @@ Mobile app (Terminowo) that scans documents, extracts expiry dates via OCR, stor
 **Manual testing (Android)**: Use `./run_android.sh` to deploy and test on a connected Android device. Builds debug APK, installs, and launches.
 
 **Manual testing (iOS)**: Use `./run_ios.sh` to deploy and test on a connected iOS device. Builds shared framework (`linkDebugFrameworkIosArm64` + `iosArm64AggregateResources`), then builds the Xcode project and installs via `devicectl`.
+
+**UI tests (iOS)**: `./run_ios_uitests.sh` runs XCUITest on the connected device (needs Settings → Developer → Enable UI Automation, device unlocked). The app exposes Compose semantics to XCUITest only when launched with `-uiTesting`. Gallery tests add a test image to the photo library, verify it's the newest picker cell before tapping, and delete it afterwards. They don't run on the simulator from a sandboxed Claude Code session (SQLite in the simulator fails with EPERM).
 
 **Release (Android)**: Use `./release_android.sh` to build a signed AAB for Google Play. Auto-bumps `versionCode` and patches `versionName` (or pass explicit version as argument). Output: `androidApp/build/outputs/bundle/release/androidApp-release.aab`.
 
