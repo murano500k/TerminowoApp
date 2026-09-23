@@ -27,7 +27,7 @@ class ResyncRemindersUseCase(
 
         documentRepository.getAllDocuments().first().forEach { document ->
             val expiryDate = document.expiryDate ?: return@forEach
-            notificationScheduler.cancelReminders(document.id)
+            notificationScheduler.cancelReminders(document.id, document.reminderDays)
 
             document.reminderDays.forEach { daysBefore ->
                 val reminderDateTime = expiryDate
