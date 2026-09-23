@@ -151,4 +151,24 @@ class DocumentAiMapperTest {
         val result = mapper.extractCategory(null)
         assertNull(result)
     }
+
+    @Test
+    fun `fullText collapses line breaks and repeated whitespace`() {
+        val response = ProcessResponse(
+            document = DocumentAiDocument(text = "  ORZECZENIE LEKARSKIE\nJan\n\nKowalski\t ur. 1985  ")
+        )
+
+        val result = mapper.mapToScanResult(response, null)
+
+        assertEquals("ORZECZENIE LEKARSKIE Jan Kowalski ur. 1985", result.fullText)
+    }
+
+    @Test
+    fun `fullText is null when OCR text is blank`() {
+        val response = ProcessResponse(document = DocumentAiDocument(text = " \n "))
+
+        val result = mapper.mapToScanResult(response, null)
+
+        assertNull(result.fullText)
+    }
 }

@@ -46,7 +46,8 @@ class DocumentRepositoryImpl(
                 category = document.category.key,
                 createdAt = document.createdAt.toString(),
                 reminderTime = document.reminderTime.toString(),
-                myComments = document.myComments
+                myComments = document.myComments,
+                ocrText = document.ocrText
             )
         }
     }
@@ -96,6 +97,7 @@ private fun com.stc.terminowo.data.local.db.DocumentEntity.toDomain(): Document 
         category = DocumentCategory.fromKey(category),
         reminderTime = try { LocalTime.parse(reminderTime) } catch (_: Exception) { LocalTime(9, 0) },
         createdAt = LocalDateTime.parse(createdAt),
-        myComments = myComments
+        myComments = myComments,
+        ocrText = ocrText
     )
 }

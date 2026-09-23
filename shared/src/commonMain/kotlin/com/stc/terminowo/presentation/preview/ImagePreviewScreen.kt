@@ -90,7 +90,7 @@ fun ImagePreviewScreen(
         confidence: Float?,
         imagePath: String,
         thumbnailPath: String,
-        rawOcrResponse: String?,
+        ocrText: String?,
         documentId: String,
         category: String?
     ) -> Unit,
@@ -166,7 +166,7 @@ fun ImagePreviewScreen(
                         scanResult.confidence,
                         imagePath,
                         thumbnailPath,
-                        scanResult.rawResponse,
+                        scanResult.fullText,
                         docId,
                         scanResult.detectedCategory?.key
                     )

@@ -82,7 +82,7 @@ Clean Architecture in `:shared` (KMP) and `:androidApp` modules. Package: `com.s
 
 ## Database
 
-SQLDelight schema at `shared/src/commonMain/sqldelight/.../Document.sq`. Schema version 3. Dates as ISO 8601, reminders as CSV, category as text key. See [ARCHITECTURE.md](ARCHITECTURE.md#database-schema) for full schema.
+SQLDelight schema at `shared/src/commonMain/sqldelight/.../Document.sq`. Schema version 7. Dates as ISO 8601, reminders as CSV, category as text key. See [ARCHITECTURE.md](ARCHITECTURE.md#database-schema) for full schema.
 
 ## Document AI OCR
 

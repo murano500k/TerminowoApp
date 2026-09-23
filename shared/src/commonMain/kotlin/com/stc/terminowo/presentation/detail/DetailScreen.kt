@@ -122,7 +122,7 @@ fun DetailScreen(
     newDocConfidence: Float?,
     newDocImagePath: String?,
     newDocThumbnailPath: String?,
-    newDocRawResponse: String?,
+    newDocOcrText: String?,
     newDocId: String?,
     newDocCategory: String? = null,
     onSaved: (documentName: String) -> Unit,
@@ -162,7 +162,7 @@ fun DetailScreen(
                 confidence = newDocConfidence,
                 imagePath = newDocImagePath ?: "",
                 thumbnailPath = newDocThumbnailPath ?: "",
-                rawOcrResponse = newDocRawResponse,
+                ocrText = newDocOcrText ?: "",
                 documentId = newDocId,
                 category = newDocCategory
             )
