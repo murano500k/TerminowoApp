@@ -15,5 +15,6 @@ data class Document(
     val category: DocumentCategory = DocumentCategory.OTHER,
     val reminderTime: LocalTime = LocalTime(9, 0),
     val createdAt: LocalDateTime,
-    val myComments: String = ""
+    val myComments: String = "",
+    val ocrText: String = ""
 )

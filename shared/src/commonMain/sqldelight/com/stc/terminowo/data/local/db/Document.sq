@@ -10,7 +10,8 @@ CREATE TABLE DocumentEntity (
     category TEXT NOT NULL DEFAULT 'other',
     createdAt TEXT NOT NULL,
     reminderTime TEXT NOT NULL DEFAULT '09:00',
-    myComments TEXT NOT NULL DEFAULT ''
+    myComments TEXT NOT NULL DEFAULT '',
+    ocrText TEXT NOT NULL DEFAULT ''
 );
 
 getAllDocuments:
@@ -26,8 +27,8 @@ FROM DocumentEntity
 WHERE id = ?;
 
 insertDocument:
-INSERT INTO DocumentEntity(id, name, imagePath, thumbnailPath, expiryDate, rawOcrResponse, confidence, reminderDays, category, createdAt, reminderTime, myComments)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+INSERT INTO DocumentEntity(id, name, imagePath, thumbnailPath, expiryDate, rawOcrResponse, confidence, reminderDays, category, createdAt, reminderTime, myComments, ocrText)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 updateDocument:
 UPDATE DocumentEntity
@@ -42,7 +43,7 @@ deleteAllDocuments:
 DELETE FROM DocumentEntity;
 
 clearAllFilePaths:
-UPDATE DocumentEntity SET imagePath = '', thumbnailPath = '' WHERE imagePath != '' OR thumbnailPath != '';
+UPDATE DocumentEntity SET imagePath = '', thumbnailPath = '', ocrText = '' WHERE imagePath != '' OR thumbnailPath != '' OR ocrText != '';
 
 -- Notification table
 CREATE TABLE NotificationEntity (

@@ -21,11 +21,15 @@ class DocumentAiMapper {
             extractedName = documentName,
             expiryDate = expiryDate,
             confidence = expiryEntity?.confidence,
-            fullText = response.document?.text,
+            fullText = normalizeText(response.document?.text),
             rawResponse = rawJson,
             detectedCategory = detectedCategory
         )
     }
+
+    /** Collapses OCR line breaks and repeated whitespace so multi-line phrases stay searchable. */
+    fun normalizeText(text: String?): String? =
+        text?.replace(WHITESPACE, " ")?.trim()?.takeIf { it.isNotEmpty() }
 
     private fun extractDate(entity: DocumentAiEntity): LocalDate? {
         // Strategy 1: Use structured dateValue from normalizedValue
@@ -141,3 +145,5 @@ class DocumentAiMapper {
         return null
     }
 }
+
+private val WHITESPACE = Regex("\\s+")

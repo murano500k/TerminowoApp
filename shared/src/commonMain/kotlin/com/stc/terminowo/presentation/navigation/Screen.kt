@@ -22,7 +22,7 @@ sealed interface Screen {
         val confidence: Float?,
         val imagePath: String,
         val thumbnailPath: String,
-        val rawOcrResponse: String?,
+        val ocrText: String?,
         val documentId: String,
         val category: String? = null
     ) : Screen

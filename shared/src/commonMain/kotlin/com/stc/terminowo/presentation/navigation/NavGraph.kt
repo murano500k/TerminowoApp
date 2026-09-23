@@ -215,7 +215,7 @@ fun NavGraph() {
                                 confidence = null,
                                 imagePath = "",
                                 thumbnailPath = "",
-                                rawOcrResponse = null,
+                                ocrText = null,
                                 documentId = uuid,
                                 category = null
                             )
@@ -394,7 +394,7 @@ fun NavGraph() {
                             popUpTo<Screen.ImagePreview> { inclusive = true }
                         }
                     },
-                    onScanResult = { name, expiryDate, confidence, imgPath, thumbPath, rawResponse, docId, category ->
+                    onScanResult = { name, expiryDate, confidence, imgPath, thumbPath, ocrText, docId, category ->
                         navController.navigate(
                             Screen.DetailNew(
                                 name = name,
@@ -402,7 +402,7 @@ fun NavGraph() {
                                 confidence = confidence,
                                 imagePath = imgPath,
                                 thumbnailPath = thumbPath,
-                                rawOcrResponse = rawResponse,
+                                ocrText = ocrText,
                                 documentId = docId,
                                 category = category
                             )
@@ -424,7 +424,7 @@ fun NavGraph() {
                     newDocConfidence = route.confidence,
                     newDocImagePath = route.imagePath,
                     newDocThumbnailPath = route.thumbnailPath,
-                    newDocRawResponse = route.rawOcrResponse,
+                    newDocOcrText = route.ocrText,
                     newDocId = route.documentId,
                     newDocCategory = route.category,
                     onSaved = { docName ->
@@ -460,7 +460,7 @@ fun NavGraph() {
                     newDocConfidence = null,
                     newDocImagePath = null,
                     newDocThumbnailPath = null,
-                    newDocRawResponse = null,
+                    newDocOcrText = null,
                     newDocId = null,
                     newDocCategory = null,
                     onSaved = { _ -> navController.popBackStack() },

@@ -65,7 +65,7 @@ Models:
 
 | Class | Key Fields |
 |---|---|
-| `Document` | `id`, `name`, `imagePath`, `thumbnailPath`, `expiryDate: LocalDate?`, `confidence: Float?`, `reminderDays: List<Int>`, `category: DocumentCategory`, `reminderTime: LocalTime`, `createdAt` |
+| `Document` | `id`, `name`, `imagePath`, `thumbnailPath`, `expiryDate: LocalDate?`, `confidence: Float?`, `reminderDays: List<Int>`, `category: DocumentCategory`, `reminderTime: LocalTime`, `createdAt`, `myComments`, `ocrText` (normalized OCR text, searchable) |
 | `ScanResult` | `extractedName`, `expiryDate`, `confidence`, `fullText`, `rawResponse`, `detectedCategory` |
 | `DocumentCategory` | Enum: `INSURANCE`, `PAYMENT`, `AGREEMENT`, `DRIVER_LICENSE`, `TECHNICAL_INSPECTION`, `OTHER` (default). Stored by `key` field (e.g. `"insurance"`). |
 | `ReminderInterval` | Enum: `FOURTEEN_DAYS(14)`, `SEVEN_DAYS(7)`, `ONE_DAY(1)`, `DAY_OF(0)` |
@@ -179,7 +179,7 @@ Routes (all `@Serializable`):
 | `Screen.DocumentList` | `data class` | `categoryKey: String?` |
 | `Screen.Camera` | `data object` | — |
 | `Screen.ImagePreview` | `data class` | `imagePath: String` |
-| `Screen.DetailNew` | `data class` | `name`, `expiryDate`, `confidence`, `imagePath`, `thumbnailPath`, `rawOcrResponse`, `documentId`, `category` |
+| `Screen.DetailNew` | `data class` | `name`, `expiryDate`, `confidence`, `imagePath`, `thumbnailPath`, `ocrText`, `documentId`, `category` |
 | `Screen.DetailEdit` | `data class` | `documentId: String` |
 
 ## Database Schema
@@ -193,20 +193,26 @@ CREATE TABLE DocumentEntity (
     imagePath     TEXT NOT NULL,
     thumbnailPath TEXT NOT NULL,
     expiryDate    TEXT,                          -- ISO 8601 (nullable)
-    rawOcrResponse TEXT,
+    rawOcrResponse TEXT,                         -- unused (always NULL)
     confidence    REAL,
     reminderDays  TEXT NOT NULL DEFAULT '14,7,1,0',  -- CSV of ints
     category      TEXT NOT NULL DEFAULT 'other',     -- DocumentCategory.key
     createdAt     TEXT NOT NULL,
-    reminderTime  TEXT NOT NULL DEFAULT '09:00'      -- HH:MM format
+    reminderTime  TEXT NOT NULL DEFAULT '09:00',     -- HH:MM format
+    myComments    TEXT NOT NULL DEFAULT '',
+    ocrText       TEXT NOT NULL DEFAULT ''           -- whitespace-normalized OCR text, used by search
 );
 ```
 
-Generated class: `DocumentDatabase`. Current schema version: 3 (initial + 2 migrations).
+Generated class: `DocumentDatabase`. Current schema version: 7 (initial + 6 migrations).
 
 Migrations:
 - `1.sqm`: `ALTER TABLE DocumentEntity ADD COLUMN category TEXT NOT NULL DEFAULT 'other'`
 - `2.sqm`: `ALTER TABLE DocumentEntity ADD COLUMN reminderTime TEXT NOT NULL DEFAULT '09:00'`
+- `3.sqm`: `CREATE TABLE NotificationEntity`
+- `4.sqm`: `CREATE TABLE AppSettingsEntity`
+- `5.sqm`: `ALTER TABLE DocumentEntity ADD COLUMN myComments TEXT NOT NULL DEFAULT ''`
+- `6.sqm`: `ALTER TABLE DocumentEntity ADD COLUMN ocrText TEXT NOT NULL DEFAULT ''`
 
 ## OCR Pipeline
 

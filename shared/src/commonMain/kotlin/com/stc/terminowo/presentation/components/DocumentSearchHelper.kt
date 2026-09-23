@@ -19,10 +19,7 @@ class DocumentSearchHelper(
 
     val searchResults: StateFlow<List<Document>> = combine(allDocuments, _searchQuery) { docs, query ->
         if (query.isBlank()) emptyList()
-        else docs.filter {
-            it.name.contains(query, ignoreCase = true) ||
-            it.myComments.contains(query, ignoreCase = true)
-        }
+        else docs.filter { it.matchesSearch(query) }
     }.stateIn(
         scope = scope,
         started = SharingStarted.WhileSubscribed(5000),

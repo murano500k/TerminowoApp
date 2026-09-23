@@ -35,6 +35,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.stc.terminowo.domain.model.Document
 import org.jetbrains.compose.resources.stringResource
@@ -141,11 +145,34 @@ internal fun SearchOverlay(
                                     text = document.name,
                                     style = MaterialTheme.typography.titleSmall
                                 )
-                                Text(
-                                    text = stringResource(document.category.labelRes),
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
+                                val snippet = remember(document, query) { document.ocrSnippet(query) }
+                                if (snippet != null) {
+                                    val highlightColor = MaterialTheme.colorScheme.onSurface
+                                    Text(
+                                        text = remember(snippet, highlightColor) {
+                                            buildAnnotatedString {
+                                                append(snippet.text)
+                                                snippet.highlights.forEach { range ->
+                                                    addStyle(
+                                                        SpanStyle(fontWeight = FontWeight.Bold, color = highlightColor),
+                                                        range.first,
+                                                        range.last + 1
+                                                    )
+                                                }
+                                            }
+                                        },
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        maxLines = 2,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+                                } else {
+                                    Text(
+                                        text = stringResource(document.category.labelRes),
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
                             }
                         }
                     }

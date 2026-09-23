@@ -40,7 +40,7 @@ data class DetailUiState(
     val category: DocumentCategory = DocumentCategory.OTHER,
     val reminderTime: LocalTime = LocalTime(9, 0),
     val createdAt: LocalDateTime? = null,
-    val rawOcrResponse: String? = null,
+    val ocrText: String = "",
     val myComments: String = "",
     val customReminderEnabled: Boolean = false,
     val customReminderDate: LocalDate? = null,
@@ -82,6 +82,7 @@ class DetailViewModel(
                     reminderTime = document.reminderTime,
                     createdAt = document.createdAt,
                     myComments = document.myComments,
+                    ocrText = document.ocrText,
                     customReminderEnabled = customDate != null,
                     customReminderDate = customDate
                 )
@@ -96,7 +97,7 @@ class DetailViewModel(
         confidence: Float?,
         imagePath: String,
         thumbnailPath: String,
-        rawOcrResponse: String?,
+        ocrText: String,
         documentId: String,
         category: String? = null
     ) {
@@ -109,7 +110,7 @@ class DetailViewModel(
                 confidence = confidence,
                 imagePath = imagePath,
                 thumbnailPath = thumbnailPath,
-                rawOcrResponse = rawOcrResponse,
+                ocrText = ocrText,
                 category = DocumentCategory.fromKey(category)
             )
         }
@@ -200,7 +201,8 @@ class DetailViewModel(
                     category = state.category,
                     reminderTime = state.reminderTime,
                     createdAt = state.createdAt ?: now,
-                    myComments = state.myComments
+                    myComments = state.myComments,
+                    ocrText = state.ocrText
                 )
 
                 if (state.isNewDocument) {
