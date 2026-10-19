@@ -6,13 +6,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
+private const val MAX_CRASH_STACK_TRACE_LENGTH = 3000
+
 /**
  * Hands an uncaught Kotlin exception to [onCrash] before the runtime aborts, so the native
  * crash reporter can attach the Kotlin type, message and stack trace to the SIGABRT report
  * (otherwise it only sees `abort()` with no exception details).
  */
-private const val MAX_CRASH_STACK_TRACE_LENGTH = 3000
-
 @OptIn(ExperimentalNativeApi::class)
 fun installKotlinCrashHook(onCrash: (type: String, message: String, stackTrace: String) -> Unit) {
     setUnhandledExceptionHook { throwable ->
