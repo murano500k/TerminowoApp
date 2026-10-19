@@ -30,7 +30,7 @@ class NotificationRepositoryImpl(
         return queries.getDeliveredNotifications(nowIso())
             .asFlow()
             .mapToList(Dispatchers.Default)
-            .map { entities -> entities.map { it.toDomain() } }
+            .map { entities -> entities.mapNotNull { it.toDomainOrNull() } }
     }
 
     override fun getUnreadCount(): Flow<Long> {
@@ -75,15 +75,16 @@ class NotificationRepositoryImpl(
     }
 }
 
-private fun com.stc.terminowo.data.local.db.NotificationEntity.toDomain(): AppNotification {
+private fun com.stc.terminowo.data.local.db.NotificationEntity.toDomainOrNull(): AppNotification? {
+    val scheduledAt = runCatching { LocalDateTime.parse(scheduledAt) }.getOrNull() ?: return null
     return AppNotification(
         id = id,
         documentId = documentId,
         documentName = documentName,
         category = DocumentCategory.fromKey(category),
-        expiryDate = expiryDate?.let { LocalDate.parse(it) },
+        expiryDate = expiryDate?.let { runCatching { LocalDate.parse(it) }.getOrNull() },
         daysBefore = daysBefore.toInt(),
-        scheduledAt = LocalDateTime.parse(scheduledAt),
+        scheduledAt = scheduledAt,
         isRead = isRead != 0L
     )
 }

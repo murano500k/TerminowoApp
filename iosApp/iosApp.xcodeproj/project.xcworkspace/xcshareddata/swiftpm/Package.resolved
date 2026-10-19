@@ -1,5 +1,5 @@
 {
-  "originHash" : "ca3cf5f8f83d297b47d2cb0edff3e06f294951e2e06fa55cfc82831103499b2a",
+  "originHash" : "23072f61bb5e1661a33985ce852d44936ff4e2e31fd934d572f88bb8f247137e",
   "pins" : [
     {
       "identity" : "facebook-ios-sdk",
@@ -8,6 +8,15 @@
       "state" : {
         "revision" : "8c90832bf2302d9ecd0d23cb63b81f1fb9a36497",
         "version" : "18.0.3"
+      }
+    },
+    {
+      "identity" : "sentry-cocoa",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/getsentry/sentry-cocoa",
+      "state" : {
+        "revision" : "4bb2282661ee6ca2212aa01d19a1214394cd3c45",
+        "version" : "9.30.2"
       }
     }
   ],

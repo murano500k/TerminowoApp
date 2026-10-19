@@ -68,6 +68,9 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (BuildConfig.DEBUG && intent.getBooleanExtra("sentryTestCrash", false)) {
+            window.decorView.post { throw IllegalStateException("Sentry test crash from Kotlin") }
+        }
         NotificationPermissionHandler.permissionLauncher = { onResult ->
             pendingPermissionCallback = onResult
             notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)

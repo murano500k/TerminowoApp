@@ -20,6 +20,7 @@ set -euo pipefail
 #   ASC_API_KEY_ID          — App Store Connect API key ID
 #   ASC_API_ISSUER_ID       — App Store Connect issuer ID
 #   ASC_API_KEY_PATH        — optional, path to AuthKey_<ID>.p8 (auto-discovered otherwise)
+#   SENTRY_AUTH_TOKEN       — Sentry org auth token, for dSYM upload (needs `brew install getsentry/tools/sentry-cli`)
 #
 
 PROJECT_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -164,6 +165,16 @@ if [[ "$PUBLISH_ONLY" == false ]]; then
         exit 1
     fi
     echo "Archive created: $ARCHIVE_PATH"
+
+    # --- Step 4b: Upload debug symbols to Sentry (makes crash stack traces readable) ---
+    echo ""
+    echo "=== Uploading dSYMs to Sentry ==="
+    if [[ -n "${SENTRY_AUTH_TOKEN:-}" ]] && command -v sentry-cli >/dev/null 2>&1; then
+        sentry-cli debug-files upload --org artem-radchenko --project terminowo-ios "$ARCHIVE_PATH/dSYMs"
+    else
+        echo "WARNING: SENTRY_AUTH_TOKEN or sentry-cli missing - dSYMs NOT uploaded to Sentry."
+        echo "         Upload later: sentry-cli debug-files upload --org artem-radchenko --project terminowo-ios \"$ARCHIVE_PATH/dSYMs\""
+    fi
 
     # --- Step 5: Export and upload ---
     echo ""

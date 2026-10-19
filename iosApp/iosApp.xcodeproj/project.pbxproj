@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5E7A1C0D2B3F4A5E6C7D8E91 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 5E7A1C0D2B3F4A5E6C7D8E92 /* Sentry */; };
 		1C81D6F669B7BB6D2FFCCEB3 /* FacebookCore in Frameworks */ = {isa = PBXBuildFile; productRef = B9181B739EB43DA5747D392C /* FacebookCore */; };
 		22EA1CB33A17DCC6FC82406D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F543015C899423D4B01CEB2E /* Assets.xcassets */; };
 		26FD0DAFB48EB06F26221DC4 /* AddDocumentUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5427227DADA96D6F376FF2 /* AddDocumentUITests.swift */; };
@@ -58,6 +59,7 @@
 			files = (
 				F7C33B50A94DA01F2E82C280 /* libsqlite3.tbd in Frameworks */,
 				1C81D6F669B7BB6D2FFCCEB3 /* FacebookCore in Frameworks */,
+				5E7A1C0D2B3F4A5E6C7D8E91 /* Sentry in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -153,6 +155,7 @@
 			name = iosApp;
 			packageProductDependencies = (
 				B9181B739EB43DA5747D392C /* FacebookCore */,
+				5E7A1C0D2B3F4A5E6C7D8E92 /* Sentry */,
 			);
 			productName = iosApp;
 			productReference = 86038AE1032E284E79B32AD6 /* iosApp.app */;
@@ -211,6 +214,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				CA44D6C17D1F71CF56987920 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */,
+				5E7A1C0D2B3F4A5E6C7D8E93 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 94C98B8B3A2BFC1966447269 /* Products */;
@@ -637,6 +641,14 @@
 				minimumVersion = 18.0.3;
 			};
 		};
+		5E7A1C0D2B3F4A5E6C7D8E93 /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/getsentry/sentry-cocoa";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.30.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -644,6 +656,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = CA44D6C17D1F71CF56987920 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
 			productName = FacebookCore;
+		};
+		5E7A1C0D2B3F4A5E6C7D8E92 /* Sentry */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5E7A1C0D2B3F4A5E6C7D8E93 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = Sentry;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -91,12 +91,12 @@ private fun com.stc.terminowo.data.local.db.DocumentEntity.toDomain(): Document 
         name = name,
         imagePath = imagePath,
         thumbnailPath = thumbnailPath,
-        expiryDate = expiryDate?.let { LocalDate.parse(it) },
+        expiryDate = expiryDate?.let { runCatching { LocalDate.parse(it) }.getOrNull() },
         confidence = confidence?.toFloat(),
         reminderDays = reminderDays.split(",").mapNotNull { it.trim().toIntOrNull() },
         category = DocumentCategory.fromKey(category),
         reminderTime = try { LocalTime.parse(reminderTime) } catch (_: Exception) { LocalTime(9, 0) },
-        createdAt = LocalDateTime.parse(createdAt),
+        createdAt = runCatching { LocalDateTime.parse(createdAt) }.getOrDefault(LocalDateTime(1970, 1, 1, 0, 0)),
         myComments = myComments,
         ocrText = ocrText
     )

@@ -1,6 +1,7 @@
 import UIKit
 import UserNotifications
 import FBSDKCoreKit
+import Sentry
 import shared
 
 @main
@@ -12,6 +13,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
+        startCrashReporting()
+
         ApplicationDelegate.shared.application(
             application,
             didFinishLaunchingWithOptions: launchOptions
@@ -45,8 +48,43 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if uiTestMode, let window = window {
             installPendingRemindersLabel(in: window)
         }
+        if ProcessInfo.processInfo.arguments.contains("-sentryTestCrash") {
+            CrashHook_iosKt.triggerTestCrash()
+        }
         #endif
         return true
+    }
+
+    private func startCrashReporting() {
+        SentrySDK.start { options in
+            options.dsn = "https://baea974dada038223b1d80b6d88eff9a@o4512283986493440.ingest.de.sentry.io/4512283992981584"
+            #if DEBUG
+            options.environment = "debug"
+            #else
+            options.environment = "production"
+            #endif
+            options.sendDefaultPii = false
+            options.tracesSampleRate = 0.1
+        }
+
+        // Kotlin/Native aborts on an uncaught exception; record what was thrown so the
+        // SIGABRT crash report carries the Kotlin exception instead of just abort().
+        CrashHook_iosKt.installKotlinCrashHook { type, message, stackTrace in
+            SentrySDK.configureScope { scope in
+                scope.setTag(value: type, key: "kotlin.exception")
+                scope.setContext(
+                    value: ["type": type, "message": message, "stack_trace": stackTrace],
+                    key: "Kotlin exception"
+                )
+            }
+        }
+
+        CrashHook_iosKt.installErrorReporterSink { type, message, stackTrace in
+            let event = Event(level: .error)
+            event.exceptions = [Exception(value: message, type: type)]
+            event.context = ["Kotlin exception": ["stack_trace": stackTrace]]
+            SentrySDK.capture(event: event)
+        }
     }
 
     #if DEBUG
