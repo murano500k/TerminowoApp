@@ -23,6 +23,9 @@ set -euo pipefail
 #   SENTRY_AUTH_TOKEN       — Sentry org auth token, for dSYM upload (needs `brew install getsentry/tools/sentry-cli`)
 #
 
+# fastlane crashes on non-ASCII release notes (Polish) without a UTF-8 locale.
+export LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
+
 PROJECT_DIR="$(cd "$(dirname "$0")" && pwd)"
 IOS_PROJECT_DIR="$PROJECT_DIR/iosApp"
 SCHEME="iosApp"
