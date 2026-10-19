@@ -25,12 +25,12 @@
 
     <div class="section">
         <h2>Data Stored on Your Device</h2>
-        <p>All user data is stored locally on your device and is never uploaded to any server operated by us.</p>
+        <p>Your documents and their details are stored only on your device. We do not keep a copy of them on any server.</p>
         <ul>
             <li><strong>Document images</strong> &mdash; photos you take with the in-app camera are saved to app-private storage on your device.</li>
             <li><strong>Document metadata</strong> &mdash; expiry dates, document names, categories, and reminder preferences are stored in a local database.</li>
         </ul>
-        <p>We do not operate any backend servers. If you uninstall the app, all locally stored data is permanently deleted.</p>
+        <p>If you uninstall the app, all locally stored data is permanently deleted.</p>
     </div>
 
     <div class="section">
@@ -38,9 +38,11 @@
 
         <h3>Google Document AI</h3>
         <p>
-            When you scan a document, the image is sent to
+            When you scan a document, the image is sent over HTTPS through our server (a Google
+            Cloud function in the EU) to
             <a href="https://cloud.google.com/document-ai">Google Document AI</a>
-            for optical character recognition (OCR) to extract expiry dates. The image data is
+            for optical character recognition (OCR) to extract expiry dates. Our server only
+            forwards the request and does not store or log the image. The image data is
             processed by Google in accordance with the
             <a href="https://cloud.google.com/terms/service-terms">Google Cloud Platform Terms of Service</a>
             and <a href="https://policies.google.com/privacy">Google Privacy Policy</a>.
@@ -59,6 +61,18 @@
             advertising or tracking.
         </p>
 
+        <h3>Meta (Facebook) App Events</h3>
+        <p>
+            The app includes the Meta (Facebook) SDK, which reports that the app was installed and
+            opened. We use this only to measure how well our advertising campaigns bring new users.
+            The SDK sends technical data such as the app version, device model, operating system
+            version and, on Android, the device advertising ID (which you can reset or delete in your
+            device settings). On iOS the app does not ask for tracking permission, so the SDK does not
+            receive your device's advertising identifier (IDFA). No documents, images, document names
+            or recognized text are sent to Meta. This data is processed under
+            <a href="https://www.facebook.com/privacy/policy/">Meta's Privacy Policy</a>.
+        </p>
+
         <h3>Authentication</h3>
         <p>
             The app does not require a user account or sign-in. All functionality is available
@@ -70,10 +84,10 @@
     <div class="section">
         <h2>Data We Do NOT Collect</h2>
         <ul>
-            <li>No usage telemetry collected by us beyond the crash reports described above</li>
+            <li>No usage analytics beyond the crash reports and install/app-open events described above</li>
             <li>No location data</li>
             <li>No contacts, call logs, or personal files outside the app</li>
-            <li>No data is transmitted to servers owned or operated by us</li>
+            <li>No documents, images, or document details are stored on servers operated by us</li>
         </ul>
     </div>
 
@@ -118,13 +132,25 @@
                 <td>No</td>
                 <td>App functionality (fixing crashes)</td>
             </tr>
+            <tr>
+                <td>App interactions (app installs and opens)</td>
+                <td>Yes</td>
+                <td>Yes (Meta)</td>
+                <td>Analytics (advertising measurement)</td>
+            </tr>
+            <tr>
+                <td>Device or other IDs (advertising ID)</td>
+                <td>Yes</td>
+                <td>Yes (Meta)</td>
+                <td>Analytics (advertising measurement)</td>
+            </tr>
         </table>
         <p class="footnote">
             * Document images are sent to Google Document AI for processing but are not retained
             by Google or shared with other third parties.
         </p>
         <ul>
-            <li>Data is <strong>not</strong> used for advertising, marketing, or tracking.</li>
+            <li>Your documents, images and document details are <strong>never</strong> used for advertising or shared with Meta.</li>
             <li>Data is <strong>encrypted in transit</strong> (HTTPS).</li>
             <li>Users can request deletion by uninstalling the app or deleting documents within the app.</li>
         </ul>
@@ -134,8 +160,9 @@
         <h2>Apple App Store</h2>
         <p>
             For the purposes of Apple's App Tracking Transparency framework: this app does
-            <strong>not</strong> track you across other companies' apps or websites. No data is
-            used for tracking as defined by Apple.
+            <strong>not</strong> track you across other companies' apps or websites and does not
+            access your device's advertising identifier (IDFA). The data described above (crash
+            reports, install and app-open events) is not used for tracking as defined by Apple.
         </p>
     </div>
 
