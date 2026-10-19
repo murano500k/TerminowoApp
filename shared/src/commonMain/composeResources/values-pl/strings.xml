@@ -222,4 +222,7 @@
         <item quantity="many">%1$d dokument\u00F3w</item>
         <item quantity="other">%1$d dokument\u00F3w</item>
     </plurals>
+    <string name="startup_error_title">Nie można otworzyć dokumentów</string>
+    <string name="startup_error_message">Upewnij się, że w telefonie jest wolne miejsce, a następnie dotknij Spróbuj ponownie. Jeśli problem się powtarza, wyślij zrzut tego ekranu na contact@terminowo.app.</string>
+    <string name="startup_error_retry">Spróbuj ponownie</string>
 </resources>

@@ -222,4 +222,7 @@
         <item quantity="many">%1$d \u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u043E\u0432</item>
         <item quantity="other">%1$d \u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u043E\u0432</item>
     </plurals>
+    <string name="startup_error_title">Не удаётся открыть документы</string>
+    <string name="startup_error_message">Убедитесь, что на телефоне есть свободное место, и нажмите «Повторить». Если ошибка повторяется, отправьте снимок этого экрана на contact@terminowo.app.</string>
+    <string name="startup_error_retry">Повторить</string>
 </resources>
