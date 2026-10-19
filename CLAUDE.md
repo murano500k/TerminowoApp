@@ -104,6 +104,7 @@ Backend proxy (GCP Cloud Function) → `DocumentAiMapper` with 3-strategy date e
 
 ## Gotchas
 
+- **Sentry**: crash reporting via native SDKs (Sentry Cocoa over SPM, `sentry-android` + Gradle plugin), org `artem-radchenko` (EU region), projects `terminowo-ios` / `terminowo-android`. `installKotlinCrashHook` attaches uncaught Kotlin/Native exceptions to the iOS SIGABRT report; `ErrorReporter.capture()` reports handled errors. Symbol uploads need the Terminowo `SENTRY_AUTH_TOKEN`: `~/.zshrc` on the Mac (dSYMs in `publish_testflight.sh`, needs `sentry-cli`) and `local.properties` for ProGuard mappings (takes precedence over a shell `SENTRY_AUTH_TOKEN`, which on the Linux box belongs to another org). Debug-only test crash: `-sentryTestCrash` launch arg (iOS), `--ez sentryTestCrash true` (Android).
 - **Clock conflict**: `kotlinx.datetime.Clock` conflicts with `kotlin.time.Clock` in Kotlin 2.1.x. Always use `import kotlinx.datetime.Clock as DateTimeClock`.
 - **KMP source layout**: Android sources go in `androidMain/` not `main/` — applies to both `:shared` and `:androidApp` modules.
 - **Compiler flags**: `-Xexpect-actual-classes` is set in shared/build.gradle.kts. Opt-ins: `ExperimentalTime`, `ExperimentalUuidApi`.

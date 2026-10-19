@@ -10,8 +10,10 @@ RELEASE_DIR="/home/artem/projects/TerminowoApp/google_release"
 
 # True when one of this machine's IPv4 addresses is the release host's.
 is_release_host() {
-    { ip -4 -o addr show 2>/dev/null | awk '{print $4}'
-      ifconfig 2>/dev/null | awk '/inet /{print $2}'
+    # Either tool may be missing (no ifconfig on Linux, no ip on macOS); under pipefail
+    # a failed probe must not fail the whole check.
+    { ip -4 -o addr show 2>/dev/null | awk '{print $4}' || true
+      ifconfig 2>/dev/null | awk '/inet /{print $2}' || true
     } | cut -d/ -f1 | grep -qx "$RELEASE_HOST_IP"
 }
 

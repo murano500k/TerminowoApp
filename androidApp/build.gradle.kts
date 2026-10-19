@@ -57,8 +57,8 @@ android {
         applicationId = "com.stc.terminowo"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 8
-        versionName = "1.1.6"
+        versionCode = 10
+        versionName = "1.1.7"
 
         buildConfigField("String", "PROXY_URL", "\"${localProperty("PROXY_URL")}\"")
         buildConfigField("String", "PROXY_API_KEY", "\"${localProperty("PROXY_API_KEY")}\"")
@@ -117,7 +117,8 @@ android {
     }
 }
 
-val sentryAuthToken = System.getenv("SENTRY_AUTH_TOKEN") ?: localProperty("SENTRY_AUTH_TOKEN")
+// local.properties wins: a SENTRY_AUTH_TOKEN in the shell may belong to another Sentry org.
+val sentryAuthToken = localProperty("SENTRY_AUTH_TOKEN").ifEmpty { System.getenv("SENTRY_AUTH_TOKEN").orEmpty() }
 
 sentry {
     org.set("artem-radchenko")
