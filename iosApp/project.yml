@@ -12,6 +12,9 @@ packages:
   Facebook:
     url: https://github.com/facebook/facebook-ios-sdk
     from: "18.0.3"
+  Sentry:
+    url: https://github.com/getsentry/sentry-cocoa
+    from: "9.30.2"
 
 targets:
   iosApp:
@@ -50,6 +53,8 @@ targets:
       - sdk: libsqlite3.tbd
       - package: Facebook
         product: FacebookCore
+      - package: Sentry
+        product: Sentry
     preBuildScripts:
       - name: "Validate Secrets"
         script: |

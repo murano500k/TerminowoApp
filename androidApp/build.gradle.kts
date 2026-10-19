@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.sentryAndroid)
 }
 
 fun localProperty(key: String, default: String = ""): String {
@@ -41,6 +42,9 @@ kotlin {
 
             // Facebook SDK (Meta app events)
             implementation(libs.facebook.android.sdk)
+
+            // Crash reporting
+            implementation(libs.sentry.android)
         }
     }
 }
@@ -61,6 +65,8 @@ android {
 
         resValue("string", "facebook_app_id", localProperty("FB_APP_ID"))
         resValue("string", "facebook_client_token", localProperty("FB_CLIENT_TOKEN"))
+
+        buildConfigField("String", "SENTRY_DSN", "\"https://a4646bde2969fc40666087545e469cc2@o4512283986493440.ingest.de.sentry.io/4512283993047120\"")
 
         ndk {
             debugSymbolLevel = "FULL"
@@ -109,4 +115,19 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+}
+
+val sentryAuthToken = System.getenv("SENTRY_AUTH_TOKEN") ?: localProperty("SENTRY_AUTH_TOKEN")
+
+sentry {
+    org.set("artem-radchenko")
+    projectName.set("terminowo-android")
+    // Mapping files are uploaded only when a token is available, so local builds still work without one.
+    includeProguardMapping.set(true)
+    autoUploadProguardMapping.set(sentryAuthToken.isNotEmpty())
+    if (sentryAuthToken.isNotEmpty()) authToken.set(sentryAuthToken)
+    includeSourceContext.set(false)
+    autoInstallation.enabled.set(false)
+    tracingInstrumentation.enabled.set(false)
+    telemetry.set(false)
 }

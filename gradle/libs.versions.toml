@@ -22,6 +22,8 @@ androidx-activityCompose = "1.9.3"
 play-services-auth = "21.3.0"
 timber = "5.0.1"
 facebook-android-sdk = "18.2.3"
+sentry-android = "8.61.0"
+sentry-android-gradle = "6.24.0"
 
 [libraries]
 # Koin (BOM)
@@ -64,6 +66,7 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 google-play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "play-services-auth" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 facebook-android-sdk = { module = "com.facebook.android:facebook-android-sdk", version.ref = "facebook-android-sdk" }
+sentry-android = { module = "io.sentry:sentry-android", version.ref = "sentry-android" }
 
 # Testing
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -77,3 +80,4 @@ composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "k
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
+sentryAndroid = { id = "io.sentry.android.gradle", version.ref = "sentry-android-gradle" }
