@@ -35,6 +35,8 @@ Mobile app (Terminowo) that scans documents, extracts expiry dates via OCR, stor
 
 **Release (Android)**: Use `./release_android.sh` to build a signed AAB for Google Play. Auto-bumps `versionCode` and patches `versionName` (or pass explicit version as argument). Output: `androidApp/build/outputs/bundle/release/androidApp-release.aab`. The script then archives it as `terminowo-<versionName>-<versionCode>.aab` in `artem@192.168.1.16:/home/artem/projects/TerminowoApp/google_release/` (via scp, or a local copy when run on that machine); a failed copy only prints a warning.
 
+**Landing page (terminowo.app)**: `public_html/` is deployed to Hostinger by `.github/workflows/deploy-landing.yml` on every push to `main` that touches it (rsync over SSH, port 65002, user `u130397867`, web root `~/domains/terminowo.app/public_html`). Manual deploy: `rsync -rlc --delete --exclude=.htaccess --exclude=.well-known -e "ssh -i ~/.ssh/terminowo_hostinger_deploy -p 65002" public_html/ u130397867@46.202.142.126:domains/terminowo.app/public_html/`. Secrets: `HOSTINGER_SSH_KEY`, `HOSTINGER_KNOWN_HOSTS` (GitHub repo secrets); the key is `terminowo-deploy` in hPanel → SSH Access.
+
 **Release (iOS)**: Use `./publish_testflight.sh` to build a signed release IPA, archive it, and upload to App Store Connect.
 
 - Default: TestFlight only. Auto-increments `CFBundleVersion` (build number) in `iosApp/iosApp/Info.plist`.

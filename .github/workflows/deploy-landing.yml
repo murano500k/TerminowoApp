@@ -1,0 +1,31 @@
+name: Deploy landing page
+
+on:
+  push:
+    branches: [main]
+    paths: ["public_html/**"]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-landing
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up SSH
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "${{ secrets.HOSTINGER_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "${{ secrets.HOSTINGER_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+
+      - name: Sync public_html to Hostinger
+        run: |
+          rsync -rlc --delete --itemize-changes \
+            --exclude=.htaccess --exclude=.well-known \
+            -e "ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes -p 65002" \
+            public_html/ u130397867@46.202.142.126:domains/terminowo.app/public_html/
