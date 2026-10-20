@@ -60,6 +60,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             options.dsn = "https://baea974dada038223b1d80b6d88eff9a@o4512283986493440.ingest.de.sentry.io/4512283992981584"
             #if DEBUG
             options.environment = "debug"
+            // Reinstalling or stopping a dev build kills it in the foreground, which Sentry reports as a watchdog termination.
+            options.enableWatchdogTerminationTracking = false
             #else
             options.environment = "production"
             #endif
