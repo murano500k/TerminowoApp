@@ -67,6 +67,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             #endif
             options.sendDefaultPii = false
             options.tracesSampleRate = 0.1
+            // SDK app hang tracking reports idle-main-thread false positives (sentry-cocoa#9329);
+            // MetricKit hang diagnostics replace it.
+            options.enableAppHangTracking = false
+            options.enableMetricKit = true
         }
 
         // Kotlin/Native aborts on an uncaught exception; record what was thrown so the
