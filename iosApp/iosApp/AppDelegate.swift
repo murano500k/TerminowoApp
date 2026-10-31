@@ -7,7 +7,9 @@ import shared
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    var window: UIWindow?
+    #if DEBUG
+    static let uiTestSeedReminders = ProcessInfo.processInfo.arguments.contains("-uiTestSeedReminders")
+    #endif
 
     func application(
         _ application: UIApplication,
@@ -19,7 +21,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             application,
             didFinishLaunchingWithOptions: launchOptions
         )
-        AppEvents.shared.activateApp()
 
         let proxyUrl = Bundle.main.infoDictionary?["ProxyURL"] as? String ?? ""
         let apiKey = Bundle.main.infoDictionary?["ProxyAPIKey"] as? String ?? ""
@@ -27,26 +28,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         #if DEBUG
         // Reminder UI tests: replace all data with seeded documents (see UiTestSupport.kt)
-        let uiTestMode = ProcessInfo.processInfo.arguments.contains("-uiTestSeedReminders")
-        if uiTestMode {
+        if AppDelegate.uiTestSeedReminders {
             UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
             UiTestSupport.shared.resetAndSeed()
-        }
-        #endif
-
-        let viewController = MainViewControllerKt.MainViewController()
-
-        let tapGesture = UITapGestureRecognizer(target: viewController.view, action: #selector(UIView.endEditing(_:)))
-        tapGesture.cancelsTouchesInView = false
-        viewController.view.addGestureRecognizer(tapGesture)
-
-        window = UIWindow(frame: UIScreen.main.bounds)
-        window?.rootViewController = viewController
-        window?.makeKeyAndVisible()
-
-        #if DEBUG
-        if uiTestMode, let window = window {
-            installPendingRemindersLabel(in: window)
         }
         if ProcessInfo.processInfo.arguments.contains("-sentryTestCrash") {
             CrashHook_iosKt.triggerTestCrash()
@@ -92,6 +76,47 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             SentrySDK.capture(event: event)
         }
     }
+}
+
+class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+
+    var window: UIWindow?
+
+    func scene(
+        _ scene: UIScene,
+        willConnectTo session: UISceneSession,
+        options connectionOptions: UIScene.ConnectionOptions
+    ) {
+        guard let windowScene = scene as? UIWindowScene else { return }
+
+        let viewController = MainViewControllerKt.MainViewController()
+
+        let tapGesture = UITapGestureRecognizer(target: viewController.view, action: #selector(UIView.endEditing(_:)))
+        tapGesture.cancelsTouchesInView = false
+        viewController.view.addGestureRecognizer(tapGesture)
+
+        let window = UIWindow(windowScene: windowScene)
+        window.rootViewController = viewController
+        window.makeKeyAndVisible()
+        self.window = window
+
+        #if DEBUG
+        if AppDelegate.uiTestSeedReminders {
+            installPendingRemindersLabel(in: window)
+        }
+        #endif
+    }
+
+    func sceneDidBecomeActive(_ scene: UIScene) {
+        AppEvents.shared.activateApp()
+    }
+
+    #if DEBUG
+    func sceneDidDisconnect(_ scene: UIScene) {
+        pendingRemindersTimer?.invalidate()
+        pendingRemindersTimer = nil
+    }
+    #endif
 
     #if DEBUG
     private var pendingRemindersTimer: Timer?
@@ -115,10 +140,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             label.bottomAnchor.constraint(equalTo: window.safeAreaLayoutGuide.bottomAnchor),
         ])
 
-        pendingRemindersTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { _ in
+        pendingRemindersTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak window, weak label] _ in
             UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
                 let ids = requests.map(\.identifier).sorted().joined(separator: ",")
                 DispatchQueue.main.async {
+                    guard let window, let label else { return }
                     label.text = "pending:" + ids
                     window.bringSubviewToFront(label)
                 }
