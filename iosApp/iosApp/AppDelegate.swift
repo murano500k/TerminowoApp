@@ -7,6 +7,10 @@ import shared
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    #if DEBUG
+    static let uiTestSeedReminders = ProcessInfo.processInfo.arguments.contains("-uiTestSeedReminders")
+    #endif
+
     func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
@@ -17,7 +21,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             application,
             didFinishLaunchingWithOptions: launchOptions
         )
-        AppEvents.shared.activateApp()
 
         let proxyUrl = Bundle.main.infoDictionary?["ProxyURL"] as? String ?? ""
         let apiKey = Bundle.main.infoDictionary?["ProxyAPIKey"] as? String ?? ""
@@ -25,7 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         #if DEBUG
         // Reminder UI tests: replace all data with seeded documents (see UiTestSupport.kt)
-        if ProcessInfo.processInfo.arguments.contains("-uiTestSeedReminders") {
+        if AppDelegate.uiTestSeedReminders {
             UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
             UiTestSupport.shared.resetAndSeed()
         }
@@ -98,11 +101,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         self.window = window
 
         #if DEBUG
-        if ProcessInfo.processInfo.arguments.contains("-uiTestSeedReminders") {
+        if AppDelegate.uiTestSeedReminders {
             installPendingRemindersLabel(in: window)
         }
         #endif
     }
+
+    func sceneDidBecomeActive(_ scene: UIScene) {
+        AppEvents.shared.activateApp()
+    }
+
+    #if DEBUG
+    func sceneDidDisconnect(_ scene: UIScene) {
+        pendingRemindersTimer?.invalidate()
+        pendingRemindersTimer = nil
+    }
+    #endif
 
     #if DEBUG
     private var pendingRemindersTimer: Timer?
@@ -126,10 +140,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             label.bottomAnchor.constraint(equalTo: window.safeAreaLayoutGuide.bottomAnchor),
         ])
 
-        pendingRemindersTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { _ in
+        pendingRemindersTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak window, weak label] _ in
             UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
                 let ids = requests.map(\.identifier).sorted().joined(separator: ",")
                 DispatchQueue.main.async {
+                    guard let window, let label else { return }
                     label.text = "pending:" + ids
                     window.bringSubviewToFront(label)
                 }
