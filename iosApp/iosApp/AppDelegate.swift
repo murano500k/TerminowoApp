@@ -7,8 +7,6 @@ import shared
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    var window: UIWindow?
-
     func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
@@ -27,26 +25,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         #if DEBUG
         // Reminder UI tests: replace all data with seeded documents (see UiTestSupport.kt)
-        let uiTestMode = ProcessInfo.processInfo.arguments.contains("-uiTestSeedReminders")
-        if uiTestMode {
+        if ProcessInfo.processInfo.arguments.contains("-uiTestSeedReminders") {
             UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
             UiTestSupport.shared.resetAndSeed()
-        }
-        #endif
-
-        let viewController = MainViewControllerKt.MainViewController()
-
-        let tapGesture = UITapGestureRecognizer(target: viewController.view, action: #selector(UIView.endEditing(_:)))
-        tapGesture.cancelsTouchesInView = false
-        viewController.view.addGestureRecognizer(tapGesture)
-
-        window = UIWindow(frame: UIScreen.main.bounds)
-        window?.rootViewController = viewController
-        window?.makeKeyAndVisible()
-
-        #if DEBUG
-        if uiTestMode, let window = window {
-            installPendingRemindersLabel(in: window)
         }
         if ProcessInfo.processInfo.arguments.contains("-sentryTestCrash") {
             CrashHook_iosKt.triggerTestCrash()
@@ -91,6 +72,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             event.context = ["Kotlin exception": ["stack_trace": stackTrace]]
             SentrySDK.capture(event: event)
         }
+    }
+}
+
+class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+
+    var window: UIWindow?
+
+    func scene(
+        _ scene: UIScene,
+        willConnectTo session: UISceneSession,
+        options connectionOptions: UIScene.ConnectionOptions
+    ) {
+        guard let windowScene = scene as? UIWindowScene else { return }
+
+        let viewController = MainViewControllerKt.MainViewController()
+
+        let tapGesture = UITapGestureRecognizer(target: viewController.view, action: #selector(UIView.endEditing(_:)))
+        tapGesture.cancelsTouchesInView = false
+        viewController.view.addGestureRecognizer(tapGesture)
+
+        let window = UIWindow(windowScene: windowScene)
+        window.rootViewController = viewController
+        window.makeKeyAndVisible()
+        self.window = window
+
+        #if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("-uiTestSeedReminders") {
+            installPendingRemindersLabel(in: window)
+        }
+        #endif
     }
 
     #if DEBUG
