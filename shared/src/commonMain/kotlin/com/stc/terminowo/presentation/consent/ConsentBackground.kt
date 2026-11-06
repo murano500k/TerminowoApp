@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.layer.drawLayer
 import androidx.compose.ui.graphics.rememberGraphicsLayer
 import androidx.compose.ui.unit.IntSize
+import com.stc.terminowo.platform.ErrorReporter
 import com.stc.terminowo.platform.decodeImageBitmap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -58,7 +59,9 @@ fun ConsentBackground() {
     var scene by remember { mutableStateOf<TileScene?>(null) }
     LaunchedEffect(path) {
         scene = withContext(Dispatchers.Default) {
-            runCatching { parseTileScene(Res.readBytes(path).decodeToString()) }.getOrNull()
+            runCatching { parseTileScene(Res.readBytes(path).decodeToString()) }
+                .onFailure { ErrorReporter.capture(it) }
+                .getOrNull()
         }
     }
     val current = scene ?: return
