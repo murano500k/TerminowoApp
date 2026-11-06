@@ -37,7 +37,7 @@ fun ConsentBackground() {
     LaunchedEffect(composition) {
         val c = composition ?: return@LaunchedEffect
         val totalFrames = c.durationFrames
-        if (totalFrames <= 0f) return@LaunchedEffect
+        if (totalFrames < 1f || c.frameRate <= 0f) return@LaunchedEffect
         val startNanos = withFrameNanos { it }
         val frameMillis = (1000 / c.frameRate).toLong()
         while (true) {
