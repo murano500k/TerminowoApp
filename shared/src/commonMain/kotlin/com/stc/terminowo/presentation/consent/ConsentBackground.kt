@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.rememberGraphicsLayer
 import androidx.compose.ui.unit.IntSize
 import com.stc.terminowo.platform.decodeImageBitmap
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
@@ -74,6 +75,8 @@ fun ConsentBackground() {
                 val seconds = (now - startNanos) / 1_000_000_000.0
                 progress = ((seconds / current.durationSeconds) % 1.0).toFloat()
             }
+            // ~30 fps, the rate the animation was made at; every vsync redraws the whole screen.
+            delay(25)
         }
     }
 
